@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+/**
+ * Light ice. The ramp names are kept from the dark build and inverted in
+ * meaning, so component classes stay stable:
+ *   void → page,  abyss/slate-deep/rime → surfaces,
+ *   fog → secondary text,  frost → body text,  white-ice → headings.
+ */
+@theme {
+  --color-void: #ffffff;
+  --color-abyss: #f4f9fc;
+  --color-slate-deep: #ecf5fa;
+  --color-rime: #dfeef6;
+
+  --color-fog: #5f7386;
+  --color-frost: #2b4055;
+  --color-white-ice: #10203a;
+
+  /* pulled from the badge, so the mark and the page share one deep tone */
+  --color-ink: #10203a;
+  --color-paper: #ffffff;
+
+  /* single accent family: ice blue, deep enough to read on white */
+  --color-ice-100: #e4f3f9;
+  --color-ice-300: #8fd2e8;
+  --color-ice-500: #2e9dc8;
+  --color-ice-700: #16688c;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --ease-glide: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-frost);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: var(--color-ice-300);
+  color: var(--color-ink);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-abyss);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ice-300);
+  border-radius: 99px;
+  border: 3px solid var(--color-abyss);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ice-500);
+}
+
+/* Fixed, pointer-events-none grain. Never inside a scroll container. */
+@utility grain-layer {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+}
+
+/**
+ * Light glass: a hairline ice border, a white inner highlight along the top
+ * edge and a cool tinted shadow underneath. Shadows are tinted to the ice
+ * hue — neutral grey shadows go muddy against a cool white.
+ */
+@utility glass-edge {
+  border: 1px solid rgba(16, 32, 58, 0.07);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(16, 45, 70, 0.04),
+    0 16px 40px -18px rgba(16, 45, 70, 0.16);
+}
+
+@utility hairline {
+  border-color: rgba(16, 32, 58, 0.08);
+}
+
+@keyframes drift-slow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, -6%, 0) scale(1.12);
+  }
+}
+
+@keyframes drift-reverse {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.08);
+  }
+  50% {
+    transform: translate3d(-6%, 5%, 0) scale(1);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes shimmer-sweep {
+  from {
+    transform: translate3d(-140%, 0, 0);
+  }
+  to {
+    transform: translate3d(240%, 0, 0);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@utility animate-drift {
+  animation: drift-slow 26s var(--ease-glide) infinite;
+}
+@utility animate-drift-reverse {
+  animation: drift-reverse 34s var(--ease-glide) infinite;
+}
+@utility animate-shimmer {
+  animation: shimmer-sweep 2.4s var(--ease-glide) infinite;
+}
+@utility animate-breathe {
+  animation: breathe 2.8s ease-in-out infinite;
+}
+
+/* Cascade reveal driven by --index, no JS observer needed */
+@utility cascade {
+  opacity: 0;
+  animation: rise 0.9s var(--ease-glide) forwards;
+  animation-delay: calc(var(--index, 0) * 90ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

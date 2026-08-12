@@ -1,0 +1,69 @@
+import { BrandMark } from "./brand-mark";
+
+const COLUMNS = [
+  {
+    title: "Shop",
+    links: ["The Ice Tin", "Chillcore three-pack", "Gift card", "Stock alerts"],
+  },
+  {
+    title: "Support",
+    links: ["Shipping & returns", "Warranty claim", "Ice pack care", "Track order"],
+  },
+  {
+    title: "Company",
+    links: ["The workshop", "Stockists", "Press kit", "Careers"],
+  },
+];
+
+export function SiteFooter() {
+  return (
+    <footer className="border-t border-frost/8 bg-abyss/40">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20">
+        <div className="grid grid-cols-2 gap-10 sm:grid-cols-4 lg:grid-cols-[1.6fr_repeat(3,1fr)]">
+          <div className="col-span-2 sm:col-span-4 lg:col-span-1">
+            <BrandMark size={52} tagline />
+            <p className="mt-4 max-w-[38ch] text-sm leading-relaxed text-fog">
+              A three-floor snus can with a slim ice pack in the base. Made in
+              Sweden, shipped worldwide.
+            </p>
+            <p className="mt-6 font-mono text-[11px] leading-relaxed text-fog/60">
+              Verkstadsgatan 14, 118 62 Stockholm
+              <br />
+              +46 8 559 27 41
+            </p>
+          </div>
+
+          {COLUMNS.map((col) => (
+            <nav key={col.title}>
+              <h3 className="font-mono text-[11px] tracking-[0.2em] text-fog uppercase">
+                {col.title}
+              </h3>
+              <ul className="mt-5 flex flex-col gap-3">
+                {col.links.map((l) => (
+                  <li key={l}>
+                    <a
+                      href="#"
+                      className="text-sm text-frost/80 transition-colors duration-300 hover:text-ice-300"
+                    >
+                      {l}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
+        </div>
+
+        <div className="mt-16 flex flex-col gap-4 border-t border-frost/8 pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-[62ch] text-xs leading-relaxed text-fog/70">
+            Ice Tins Supply Co. sells empty metal cans and ice packs. We do not sell,
+            ship, or supply nicotine or tobacco in any form.
+          </p>
+          <p className="font-mono text-[11px] tracking-widest text-fog/50 uppercase">
+            © {new Date().getFullYear()} Ice Tins Supply Co.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
