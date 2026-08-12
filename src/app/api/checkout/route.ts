@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { CATALOG, FREE_SHIPPING_OVER, SHIPPING_FLAT } from "@/lib/catalog";
-import { stripe, stripeConfigured, siteOrigin } from "@/lib/stripe";
+import { stripe, inspectKey, keyDiagnosis, siteOrigin } from "@/lib/stripe";
 import { remaining } from "@/lib/stock";
 
 /**
@@ -15,10 +15,16 @@ import { remaining } from "@/lib/stock";
 type Line = { id: string; qty: number };
 
 export async function POST(request: Request) {
-  if (!stripeConfigured()) {
-    console.error("[checkout] STRIPE_SECRET_KEY is not set in this environment");
+  const key = inspectKey();
+  if (!key.ok) {
+    // one clear line in the log instead of an opaque 502 from Stripe later
+    console.error("[checkout]", keyDiagnosis(key));
     return NextResponse.json(
-      { error: "Payments are not configured yet. Check back shortly." },
+      {
+        error: "Payments are not configured yet. Check back shortly.",
+        // setup aid: the reason and the first three characters only, never the key
+        setup: { reason: key.reason, saw: key.saw },
+      },
       { status: 503 },
     );
   }
@@ -34,17 +40,29 @@ export async function POST(request: Request) {
   if (!lines.length)
     return NextResponse.json({ error: "Your bag is empty." }, { status: 400 });
 
-  const priced = [];
+  // collapse duplicate ids first — checking each line on its own lets the same
+  // product appear twice and clear the allocation test twice over
+  const wanted = new Map<string, number>();
   for (const l of lines) {
-    const p = CATALOG[l?.id];
     const qty = Math.floor(Number(l?.qty));
-    if (!p || !Number.isFinite(qty) || qty < 1 || qty > 99)
+    if (!CATALOG[l?.id] || !Number.isFinite(qty) || qty < 1 || qty > 99)
       return NextResponse.json(
         { error: "Your bag is out of date. Reload the page and try again." },
         { status: 400 },
       );
+    wanted.set(l.id, (wanted.get(l.id) ?? 0) + qty);
+  }
 
-    const left = remaining(p.id);
+  const priced = [];
+  for (const [id, qty] of wanted) {
+    const p = CATALOG[id];
+    if (qty > 99)
+      return NextResponse.json(
+        { error: `You cannot order more than 99 of ${p.name}.` },
+        { status: 400 },
+      );
+
+    const left = remaining(id);
     if (left < qty)
       return NextResponse.json(
         {
@@ -66,7 +84,6 @@ export async function POST(request: Request) {
   try {
     const session = await stripe().checkout.sessions.create({
       mode: "payment",
-      ui_mode: "hosted",
       line_items: priced.map((l) => ({
         quantity: l.qty,
         price_data: {
@@ -119,11 +136,15 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ url: session.url });
   } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "Could not reach the payment provider.";
-    console.error("[checkout] stripe session failed:", message);
+    const e = err as { type?: string; code?: string; message?: string; param?: string };
+    console.error("[checkout] stripe rejected the session:", e.type, e.code, e.message);
     return NextResponse.json(
-      { error: "Could not start checkout. Try again in a moment." },
+      {
+        error: "Could not start checkout. Try again in a moment.",
+        // Stripe's classification, not its message — safe to surface, and it
+        // turns "502" into something actionable during setup
+        setup: { type: e.type ?? null, code: e.code ?? null, param: e.param ?? null },
+      },
       { status: 502 },
     );
   }
