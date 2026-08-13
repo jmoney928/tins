@@ -1,5 +1,5 @@
 import { CATALOG } from "./catalog";
-import { db, dbConfigured } from "./db";
+import { db, dbConfig } from "./db";
 
 /**
  * Drop allocation.
@@ -22,7 +22,14 @@ export type StockRead =
 
 /** How many are left. Unlimited products report Infinity. */
 export async function remaining(sku: string): Promise<StockRead> {
-  if (!dbConfigured()) {
+  const cfg = dbConfig();
+
+  if (cfg.state === "partial") {
+    console.error(`[stock] ${cfg.missing} is missing — refusing to guess at stock.`);
+    return { ok: false, reason: "Could not check availability right now." };
+  }
+
+  if (cfg.state === "absent") {
     console.warn(
       "[stock] Supabase is not configured — using the in-memory fallback. Do not ship a drop on this.",
     );
@@ -75,7 +82,13 @@ export type SettleInput = {
  * Returns false when the session was already settled (a webhook retry).
  */
 export async function settleOrder(input: SettleInput): Promise<boolean> {
-  if (!dbConfigured()) {
+  const cfg = dbConfig();
+
+  if (cfg.state === "partial")
+    // throw so the webhook 500s and Stripe retries once this is fixed
+    throw new Error(`${cfg.missing} is missing — cannot record the order.`);
+
+  if (cfg.state === "absent") {
     for (const l of input.lines) {
       const now = fallback.get(l.sku);
       if (now !== undefined && now !== Number.POSITIVE_INFINITY)
