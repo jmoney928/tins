@@ -69,7 +69,8 @@ export const CATALOG: Record<string, Product> = {
   },
 };
 
-export const FREE_SHIPPING_OVER = 9000;
+/** Set so a tin plus a refill pack clears it — that is the order we want. */
+export const FREE_SHIPPING_OVER = 7500;
 export const SHIPPING_FLAT = 800;
 
 export const money = (cents: number) =>
