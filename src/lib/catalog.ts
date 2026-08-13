@@ -1,4 +1,7 @@
 /** Prices are in cents everywhere. Floats and money do not mix. */
+export const CURRENCY = "cad";
+export const CURRENCY_LABEL = "CAD";
+
 export type Product = {
   id: string;
   name: string;
@@ -19,7 +22,7 @@ export const CATALOG: Record<string, Product> = {
     id: "ice-tin",
     name: "The Ice Tin",
     tagline: "Cerakote over 6061-T6, bead-blasted matte black",
-    price: 6400,
+    price: 5999,
     image: "/tin-lid.jpg",
     gallery: ["/tin-lid.jpg", "/three-layer.png", "/xray-section.png"],
     blurb:
@@ -44,8 +47,8 @@ export const CATALOG: Record<string, Product> = {
   "chillcore-3": {
     id: "chillcore-3",
     name: "Chillcore three-pack",
-    tagline: "Three slim ice packs",
-    price: 2200,
+    tagline: "Three slim ice packs — one in, one freezing, one spare",
+    price: 1999,
     image: null,
     gallery: [],
     blurb:
@@ -71,3 +74,7 @@ export const SHIPPING_FLAT = 800;
 
 export const money = (cents: number) =>
   `$${(cents / 100).toFixed(2).replace(/\.00$/, "")}`;
+
+/** Amount plus the currency code, for anywhere the code is not already shown. */
+export const priceWithCurrency = (cents: number) =>
+  `${money(cents)} ${CURRENCY_LABEL}`;

@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s — Ice Tins",
   },
   description:
-    "A three-floor snus can holding 25 fresh pouches: spent on top, fresh in the middle, a slim ice pack underneath. Machined 6061-T6, stays cold for 6 hours. $64.",
+    "A three-floor snus can holding 25 fresh pouches: spent on top, fresh in the middle, a slim ice pack underneath. Machined 6061-T6, stays cold for 6 hours. $59.99 CAD.",
   keywords: [
     "snus can",
     "snus tin case",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Ice Tins Supply Co. — Cold to the last pouch",
     description:
-      "25 pouches across three floors, in the footprint of a standard can, with a slim ice pack in the base. Stays cold for 6 hours. $64.",
+      "25 pouches across three floors, in the footprint of a standard can, with a slim ice pack in the base. Stays cold for 6 hours. $59.99 CAD.",
     url: "https://icetins.com",
     siteName: "Ice Tins Supply Co.",
     type: "website",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Ice Tins Supply Co. — Cold to the last pouch",
     description:
-      "A three-floor machined snus can with a slim ice pack in the base. $64.",
+      "A three-floor machined snus can with a slim ice pack in the base. $59.99 CAD.",
   },
 };
 

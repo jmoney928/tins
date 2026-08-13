@@ -1,12 +1,16 @@
 import Image from "next/image";
 import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
-import { TIN, CORE, CORE_SPECS } from "@/lib/products";
+import { CATALOG, CURRENCY_LABEL, money } from "@/lib/catalog";
 import { AddButton } from "./add-button";
 import { QuickView } from "./quick-view";
 import { IceCore } from "./ice-core";
 import { Splatter } from "./splatter";
 
 export function Collection() {
+  // one source of truth: the same records Stripe is charged from
+  const tin = CATALOG["ice-tin"];
+  const core = CATALOG["chillcore-3"];
+
   return (
     <section id="collection" className="relative overflow-hidden py-24 sm:py-32">
       <Splatter
@@ -45,21 +49,23 @@ export function Collection() {
               className="h-full w-full object-cover"
             />
             <span className="absolute top-6 left-6 rounded-full border border-white/15 bg-ink/70 px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] text-ice-300 uppercase backdrop-blur-md">
-              {TIN.allocation}
+              {tin.remaining} left in Drop 01
             </span>
           </div>
 
           <div className="glass-edge flex flex-col rounded-[2rem] bg-paper/75 p-8 backdrop-blur-sm sm:p-10">
             <h3 className="text-2xl leading-tight tracking-tight text-white-ice">
-              {TIN.name}
+              {tin.name}
             </h3>
-            <p className="mt-3 max-w-[38ch] text-sm leading-relaxed text-fog">
-              {TIN.subtitle} Three floors in the footprint of a standard can,
-              with a slim ice pack in the base.
+            <p className="mt-2 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase">
+              {tin.tagline}
+            </p>
+            <p className="mt-4 max-w-[40ch] text-sm leading-relaxed text-fog">
+              {tin.blurb}
             </p>
 
             <ul className="mt-8 flex flex-col gap-3.5 border-t border-frost/8 pt-8">
-              {TIN.points.map((p) => (
+              {tin.points.map((p) => (
                 <li key={p} className="flex items-start gap-3 text-sm text-frost">
                   <CheckIcon
                     size={14}
@@ -73,8 +79,8 @@ export function Collection() {
 
             <div className="mt-auto flex items-center justify-between gap-4 border-t border-frost/8 pt-8">
               <span className="font-mono text-2xl tracking-tight text-white-ice">
-                ${TIN.price}
-                <span className="ml-2 text-xs text-fog">USD</span>
+                {money(tin.price)}
+                <span className="ml-2 text-xs text-fog">{CURRENCY_LABEL}</span>
               </span>
               <div className="flex items-center gap-3">
                 <QuickView productId="ice-tin" />
@@ -94,15 +100,15 @@ export function Collection() {
 
           <div className="min-w-0 flex-1">
             <h3 className="text-lg leading-tight tracking-tight text-white-ice">
-              {CORE.name}
+              {core.name}
             </h3>
             <p className="mt-1.5 max-w-[46ch] text-sm leading-relaxed text-fog">
-              {CORE.subtitle}
+              {core.tagline}
             </p>
           </div>
 
           <dl className="hidden items-center gap-6 xl:flex">
-            {CORE_SPECS.slice(0, 3).map((s) => (
+            {core.specs.slice(0, 3).map((s) => (
               <div key={s.k}>
                 <dt className="font-mono text-[10px] tracking-[0.16em] text-fog uppercase">
                   {s.k}
@@ -114,8 +120,8 @@ export function Collection() {
 
           <div className="flex shrink-0 items-center justify-between gap-5 border-t border-frost/8 pt-5 sm:border-t-0 sm:pt-0">
             <span className="font-mono text-lg tracking-tight text-white-ice">
-              ${CORE.price}
-              <span className="ml-2 text-xs text-fog">USD</span>
+              {money(core.price)}
+              <span className="ml-2 text-xs text-fog">{CURRENCY_LABEL}</span>
             </span>
             <AddButton productId="chillcore-3" label="Add pack" />
           </div>

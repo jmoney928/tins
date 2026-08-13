@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { CATALOG, FREE_SHIPPING_OVER, SHIPPING_FLAT } from "@/lib/catalog";
+import { CATALOG, CURRENCY, FREE_SHIPPING_OVER, SHIPPING_FLAT } from "@/lib/catalog";
 import { stripe, inspectKey, keyDiagnosis, siteOrigin } from "@/lib/stripe";
 import { remaining } from "@/lib/stock";
 
@@ -87,7 +87,7 @@ export async function POST(request: Request) {
       line_items: priced.map((l) => ({
         quantity: l.qty,
         price_data: {
-          currency: "usd",
+          currency: CURRENCY,
           unit_amount: l.product.price,
           product_data: {
             name: l.product.name,
@@ -109,7 +109,7 @@ export async function POST(request: Request) {
           shipping_rate_data: {
             type: "fixed_amount",
             display_name: shipping === 0 ? "Free shipping" : "Standard shipping",
-            fixed_amount: { amount: shipping, currency: "usd" },
+            fixed_amount: { amount: shipping, currency: CURRENCY },
             delivery_estimate: {
               minimum: { unit: "business_day", value: 3 },
               maximum: { unit: "business_day", value: 8 },
