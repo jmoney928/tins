@@ -62,14 +62,18 @@ export async function POST(request: Request) {
         { status: 400 },
       );
 
-    const left = remaining(id);
-    if (left < qty)
+    const stock = await remaining(id);
+    if (!stock.ok)
+      // the store is unreachable — refuse rather than sell what we cannot verify
+      return NextResponse.json({ error: stock.reason }, { status: 503 });
+
+    if (stock.remaining < qty)
       return NextResponse.json(
         {
           error:
-            left === 0
+            stock.remaining === 0
               ? `${p.name} sold out of Drop 01 while you were deciding.`
-              : `Only ${left} of ${p.name} left in Drop 01.`,
+              : `Only ${stock.remaining} of ${p.name} left in Drop 01.`,
         },
         { status: 409 },
       );

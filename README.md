@@ -119,6 +119,29 @@ Add to bag ─→ drawer ─→ /checkout ─→ POST /api/checkout ─→ Strip
 
 The bag is cleared on the success page, not before the redirect — backing out of Stripe leaves it intact.
 
+### Stock and customer data
+
+Supabase holds the drop allocation, orders and customers. Schema and the
+`settle_order` function live in [supabase/schema.sql](supabase/schema.sql) — run
+it once in the Supabase SQL editor.
+
+Two properties do the real work, and both live in SQL rather than app code:
+
+- **Atomic.** The decrement guards on `remaining >= qty` *inside the UPDATE*, so
+  two concurrent buyers cannot both pass the check. Read-then-write in
+  JavaScript cannot give you this no matter how it is written.
+- **Idempotent.** `orders.stripe_session_id` is unique, and Stripe retries the
+  webhook until it gets a 2xx. A redelivered event returns
+  `{applied:false}` and changes nothing.
+
+Failure modes are deliberate: if Supabase is unreachable the checkout route
+returns `503` rather than selling stock it cannot verify, and an unknown sku
+raises inside the transaction instead of decrementing nothing and looking like
+success.
+
+Every table has RLS enabled **with no policies**. Only the service-role key
+reaches them, and the browser never talks to Supabase at all.
+
 ### Environment
 
 Copy `.env.example` to `.env.local`:
@@ -128,6 +151,8 @@ Copy `.env.example` to `.env.local`:
 | `STRIPE_SECRET_KEY` | Dashboard → Developers → API keys (`sk_test_…`) |
 | `STRIPE_WEBHOOK_SECRET` | `stripe listen` locally, or the endpoint's signing secret in production |
 | `NEXT_PUBLIC_SITE_URL` | Optional; inferred from request headers when unset |
+| `SUPABASE_URL` | Supabase → Project Settings → API |
+| `SUPABASE_SERVICE_ROLE_KEY` | Same page — the **service role** key, server-only |
 
 Locally, forward events so fulfilment fires:
 
