@@ -49,8 +49,9 @@ export const CATALOG: Record<string, Product> = {
     name: "Chillcore three-pack",
     tagline: "Three slim ice packs — one in, one freezing, one spare",
     price: 1999,
-    image: null,
-    gallery: [],
+    image: "/ice-packs-crop.png",
+    // the annotated shot carries the dimensions, so it earns a place in the gallery
+    gallery: ["/ice-packs-crop.png", "/ice-packs.png"],
     blurb:
       "One pack ships inside every can, which is enough until you want it cold again the same day. With three you stop waiting on the freezer: one in the base, one setting up, one spare in the door.",
     points: [
@@ -61,8 +62,9 @@ export const CATALOG: Record<string, Product> = {
     ],
     specs: [
       { k: "In the pack", v: "3 discs" },
-      { k: "Each", v: "18 g" },
+      { k: "Each", v: "6.7 × 1.3 cm" },
       { k: "Freeze", v: "90 min" },
+      { k: "Weight", v: "18 g each" },
       { k: "Fill", v: "Food-safe gel" },
     ],
     remaining: null,

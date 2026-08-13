@@ -55,7 +55,7 @@ export function Carriers() {
     rail.current?.scrollBy({ left: dir * 360, behavior: "smooth" });
 
   return (
-    <section id="carriers" className="py-24 sm:py-32">
+    <section id="carriers" className="py-20 sm:py-24">
       <div className="mx-auto flex max-w-7xl items-end justify-between gap-6 px-4 sm:px-6">
         <div className="max-w-3xl">
           <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
@@ -91,7 +91,7 @@ export function Carriers() {
              while the rail itself still bleeds to the viewport */
           paddingInlineStart: "max(1rem, calc((100vw - 80rem) / 2 + 1.5rem))",
         }}
-        className="mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {CARRIERS.map((c, i) => (
           <motion.figure

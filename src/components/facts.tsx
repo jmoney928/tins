@@ -20,7 +20,7 @@ const FACTS = [
 
 export function Facts() {
   return (
-    <section id="facts" className="relative overflow-hidden py-24 sm:py-32">
+    <section id="facts" className="relative overflow-hidden py-20 sm:py-28">
       <Splatter
         scope="facts-splat"
         rotate={-64}
@@ -29,7 +29,7 @@ export function Facts() {
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="max-w-2xl lg:pl-[8vw]">
+        <div className="max-w-2xl">
           <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
             Cold facts
           </p>
@@ -39,7 +39,7 @@ export function Facts() {
           </h2>
         </div>
 
-        <div className="mt-16 border-t border-frost/8">
+        <div className="mt-12 border-t border-frost/8">
           {FACTS.map((f) => (
             <div
               key={f.k}

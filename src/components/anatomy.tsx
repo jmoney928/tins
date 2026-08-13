@@ -27,13 +27,13 @@ const LAYERS = [
 
 export function Anatomy() {
   return (
-    <section id="anatomy" className="relative overflow-hidden py-24 sm:py-32">
+    <section id="anatomy" className="relative overflow-hidden py-20 sm:py-28">
       <Flecks
         scope="anat-flecks"
         className="pointer-events-none absolute top-14 right-8 h-52 w-52 rotate-45 opacity-60 mix-blend-multiply"
       />
 
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
         {/* sectioned drawing — sticky on desktop */}
         <div className="lg:sticky lg:top-28 lg:h-fit">
           <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">

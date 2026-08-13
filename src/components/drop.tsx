@@ -47,7 +47,7 @@ export function Drop() {
   const invalid = status.s === "error";
 
   return (
-    <section id="drop" className="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32">
+    <section id="drop" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28">
       <div className="glass-edge relative overflow-hidden rounded-[2.5rem] bg-abyss/80 px-6 py-14 backdrop-blur-md sm:px-14 sm:py-20">
         <div className="pointer-events-none absolute -top-24 -right-16 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(46,157,200,0.28),transparent_65%)] blur-2xl" />
 

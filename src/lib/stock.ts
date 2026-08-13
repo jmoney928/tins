@@ -24,8 +24,12 @@ export type StockRead =
 export async function remaining(sku: string): Promise<StockRead> {
   const cfg = dbConfig();
 
-  if (cfg.state === "partial") {
-    console.error(`[stock] ${cfg.missing} is missing — refusing to guess at stock.`);
+  if (cfg.state === "partial" || cfg.state === "malformed") {
+    console.error(
+      "[stock]",
+      cfg.state === "partial" ? `${cfg.missing} is missing` : cfg.problem,
+      "— refusing to guess at stock.",
+    );
     return { ok: false, reason: "Could not check availability right now." };
   }
 
@@ -84,9 +88,13 @@ export type SettleInput = {
 export async function settleOrder(input: SettleInput): Promise<boolean> {
   const cfg = dbConfig();
 
-  if (cfg.state === "partial")
+  if (cfg.state === "partial" || cfg.state === "malformed")
     // throw so the webhook 500s and Stripe retries once this is fixed
-    throw new Error(`${cfg.missing} is missing — cannot record the order.`);
+    throw new Error(
+      cfg.state === "partial"
+        ? `${cfg.missing} is missing — cannot record the order.`
+        : cfg.problem,
+    );
 
   if (cfg.state === "absent") {
     for (const l of input.lines) {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   XIcon,
@@ -49,6 +50,13 @@ export function QuickView({
     }
   }, [open]);
 
+  // Portal to <body>. The trigger sits inside a card with backdrop-blur, and
+  // an element with backdrop-filter becomes the containing block for fixed
+  // descendants — so without this the overlay anchors to the card, not the
+  // viewport, and the dialog hangs off the bottom of the screen.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const addAndOpenBag = () => {
     cart.add(product.id, qty);
     setAdded(true);
@@ -68,9 +76,11 @@ export function QuickView({
         {label}
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <>
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {open && (
+              <>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -80,6 +90,10 @@ export function QuickView({
               className="fixed inset-0 z-[70] bg-ink/30 backdrop-blur-sm"
             />
 
+            {/* Centring lives on this wrapper, not the panel: Framer writes the
+                panel's transform for the entry animation and would overwrite a
+                -translate-y-1/2 utility, leaving the dialog hanging low. */}
+            <div className="pointer-events-none fixed inset-0 z-[71] flex items-center justify-center p-4 sm:p-6">
             <motion.div
               role="dialog"
               aria-label={product.name}
@@ -87,7 +101,7 @@ export function QuickView({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 16, scale: 0.99 }}
               transition={{ type: "spring", stiffness: 160, damping: 24 }}
-              className="fixed inset-x-4 top-1/2 z-[71] mx-auto max-h-[88dvh] w-auto max-w-4xl -translate-y-1/2 overflow-y-auto rounded-[2rem] border border-frost/10 bg-paper shadow-2xl sm:inset-x-6"
+              className="pointer-events-auto relative max-h-[88dvh] w-full max-w-4xl overflow-y-auto rounded-[2rem] border border-frost/10 bg-paper shadow-2xl"
             >
               <button
                 onClick={() => setOpen(false)}
@@ -207,9 +221,12 @@ export function QuickView({
                 </div>
               </div>
             </motion.div>
-          </>
+                </div>
+              </>
+            )}
+          </AnimatePresence>,
+          document.body,
         )}
-      </AnimatePresence>
     </>
   );
 }

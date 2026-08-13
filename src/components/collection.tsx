@@ -3,8 +3,6 @@ import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { CATALOG, CURRENCY_LABEL, money } from "@/lib/catalog";
 import { AddButton } from "./add-button";
 import { QuickView } from "./quick-view";
-import { IceCore } from "./ice-core";
-import { Splatter } from "./splatter";
 
 export function Collection() {
   // one source of truth: the same records Stripe is charged from
@@ -12,32 +10,25 @@ export function Collection() {
   const core = CATALOG["chillcore-3"];
 
   return (
-    <section id="collection" className="relative overflow-hidden py-24 sm:py-32">
-      <Splatter
-        scope="shop-bg"
-        rotate={36}
-        className="pointer-events-none absolute -bottom-40 -left-52 h-[38rem] w-[38rem] opacity-[0.3] mix-blend-multiply"
-      />
-
+    <section id="collection" className="relative overflow-hidden py-20 sm:py-28">
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-xl">
-            <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
-              The tin
-            </p>
-            <h2 className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
-              One can.
-              <span className="text-fog"> Made properly.</span>
-            </h2>
-          </div>
-          <p className="max-w-[38ch] text-sm leading-relaxed text-fog md:text-right">
+        {/* centred, to break the left-head / right-body pattern used elsewhere */}
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
+            The tin
+          </p>
+          <h2 className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
+            One can.
+            <span className="text-fog"> Made properly.</span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-[46ch] text-sm leading-relaxed text-fog">
             We make one tin and the packs that go in it. No colourways to pick
             between and nothing bolted on — just the thing, machined once and
             machined right.
           </p>
         </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-5 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="mt-12 grid grid-cols-1 gap-5 lg:grid-cols-[1.05fr_0.95fr]">
           {/* the lid, shot dark — the one place the page goes to black */}
           <div className="relative overflow-hidden rounded-[2rem] bg-ink">
             <Image
@@ -92,10 +83,15 @@ export function Collection() {
 
         {/* the refill, kept deliberately short — it is an add-on, not a rival */}
         <div className="glass-edge mt-5 flex flex-col gap-6 rounded-[2rem] bg-paper/75 p-6 backdrop-blur-sm sm:flex-row sm:items-center sm:gap-8 sm:p-7">
-          <div className="relative flex h-16 w-28 shrink-0 items-center">
-            <IceCore scope="refill-a" className="absolute left-0 w-14 -rotate-6 opacity-80" />
-            <IceCore scope="refill-b" className="absolute left-7 w-14 rotate-3 opacity-90" />
-            <IceCore scope="refill-c" className="absolute left-14 w-14 -rotate-3" />
+          <div className="relative h-20 w-24 shrink-0">
+            <Image
+              src={core.image!}
+              alt={core.name}
+              width={856}
+              height={900}
+              sizes="96px"
+              className="h-full w-full object-contain"
+            />
           </div>
 
           <div className="min-w-0 flex-1">
@@ -123,7 +119,10 @@ export function Collection() {
               {money(core.price)}
               <span className="ml-2 text-xs text-fog">{CURRENCY_LABEL}</span>
             </span>
-            <AddButton productId="chillcore-3" label="Add pack" />
+            <div className="flex items-center gap-3">
+              <QuickView productId="chillcore-3" className="hidden sm:flex" />
+              <AddButton productId="chillcore-3" label="Add pack" />
+            </div>
           </div>
         </div>
       </div>
