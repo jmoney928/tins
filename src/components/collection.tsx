@@ -81,47 +81,53 @@ export function Collection() {
           </div>
         </div>
 
-        {/* the refill, kept deliberately short — it is an add-on, not a rival */}
-        <div className="glass-edge mt-5 flex flex-col gap-6 rounded-[2rem] bg-paper/75 p-6 backdrop-blur-sm sm:flex-row sm:items-center sm:gap-8 sm:p-7">
-          <div className="relative h-20 w-24 shrink-0">
+        {/* The refill borrows the tin's framing — same gutter, same radius, a
+            full-bleed photo panel beside a glass card — but at roughly half the
+            height, so it reads as the same family without rivalling the tin. */}
+        <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-[13rem_1fr] lg:grid-cols-[16rem_1fr]">
+          <div className="relative overflow-hidden rounded-[2rem] bg-ink">
             <Image
               src={core.image!}
-              alt={core.name}
-              width={856}
-              height={900}
-              sizes="96px"
-              className="h-full w-full object-contain"
+              alt="Three Chillcore ice packs stacked, matte black with the engraved emblem"
+              width={1000}
+              height={1000}
+              sizes="(max-width: 640px) 92vw, 16rem"
+              className="h-full w-full object-cover"
             />
           </div>
 
-          <div className="min-w-0 flex-1">
+          <div className="glass-edge flex flex-col rounded-[2rem] bg-paper/75 p-6 backdrop-blur-sm sm:p-7">
             <h3 className="text-lg leading-tight tracking-tight text-white-ice">
               {core.name}
             </h3>
-            <p className="mt-1.5 max-w-[46ch] text-sm leading-relaxed text-fog">
+            <p className="mt-1.5 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase">
               {core.tagline}
             </p>
-          </div>
 
-          <dl className="hidden items-center gap-6 xl:flex">
-            {core.specs.slice(0, 3).map((s) => (
-              <div key={s.k}>
-                <dt className="font-mono text-[10px] tracking-[0.16em] text-fog uppercase">
-                  {s.k}
-                </dt>
-                <dd className="mt-1 font-mono text-sm text-frost">{s.v}</dd>
+            {/* two columns, so four short points fill the row the photo sets
+                rather than leaving the card half empty */}
+            <ul className="mt-5 grid gap-x-8 gap-y-2.5 border-t border-frost/8 pt-5 sm:grid-cols-2">
+              {core.points.map((p) => (
+                <li key={p} className="flex items-start gap-3 text-sm text-frost">
+                  <CheckIcon
+                    size={14}
+                    weight="bold"
+                    className="mt-1 shrink-0 text-ice-500"
+                  />
+                  {p}
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-auto flex items-center justify-between gap-5 border-t border-frost/8 pt-5">
+              <span className="font-mono text-lg tracking-tight text-white-ice">
+                {money(core.price)}
+                <span className="ml-2 text-xs text-fog">{CURRENCY_LABEL}</span>
+              </span>
+              <div className="flex items-center gap-3">
+                <QuickView productId="chillcore-3" className="hidden sm:flex" />
+                <AddButton productId="chillcore-3" label="Add pack" />
               </div>
-            ))}
-          </dl>
-
-          <div className="flex shrink-0 items-center justify-between gap-5 border-t border-frost/8 pt-5 sm:border-t-0 sm:pt-0">
-            <span className="font-mono text-lg tracking-tight text-white-ice">
-              {money(core.price)}
-              <span className="ml-2 text-xs text-fog">{CURRENCY_LABEL}</span>
-            </span>
-            <div className="flex items-center gap-3">
-              <QuickView productId="chillcore-3" className="hidden sm:flex" />
-              <AddButton productId="chillcore-3" label="Add pack" />
             </div>
           </div>
         </div>

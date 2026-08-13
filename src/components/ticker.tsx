@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 const WORDS = [
   "One tin, one refill pack",
   "Cold for 6 hours",
-  "Machined in Sweden",
+  "Machined in Vancouver, BC",
   "Freezer to ready in 90 min",
   "One ice pack in every can",
   "New drop the first of every month",

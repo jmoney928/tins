@@ -24,12 +24,12 @@ export function SiteFooter() {
             <BrandMark size={52} tagline />
             <p className="mt-4 max-w-[38ch] text-sm leading-relaxed text-fog">
               A three-floor snus can with a slim ice pack in the base. Made in
-              Sweden, shipped worldwide.
+              Vancouver, BC, shipped worldwide.
             </p>
             <p className="mt-6 font-mono text-[11px] leading-relaxed text-fog/60">
-              Verkstadsgatan 14, 118 62 Stockholm
+              418 Alexander Street, Vancouver, BC V6A 1C4
               <br />
-              +46 8 559 27 41
+              +1 (604) 555-0148
             </p>
           </div>
 
