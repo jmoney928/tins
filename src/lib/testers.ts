@@ -21,7 +21,7 @@ export const CARRIERS = [
     city: "Gothenburg",
     tint: "from-[#7f9bab] to-[#2b4055] text-white",
     quote:
-      "Four months in a jeans pocket and it still lands on the same stop every time I close it.",
+      "Lives in a tool bag that gets thrown around all day on site. Four months in, dropped more than once — no dent, no leak, still cold through a full shift.",
   },
   {
     name: "Nadia Bergsson",
