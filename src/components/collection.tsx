@@ -30,14 +30,14 @@ export function Collection() {
         </div>
 
         <div className="mt-12 grid grid-cols-1 gap-5 lg:grid-cols-[1.05fr_0.95fr]">
-          {/* the lid, shot dark — the one place the page goes to black */}
+          {/* shot dark — the one place the page goes to black */}
           <Link
             href="/products/ice-tin"
             className="group relative overflow-hidden rounded-[2rem] bg-ink"
           >
             <Image
-              src="/tin-lid.jpg"
-              alt="The engraved Ice Tins Supply Co. lid, machined matte black aluminium"
+              src="/side-product.jpg"
+              alt="The Ice Tin at an angle, showing the machined lid and the three stacked floors"
               width={1000}
               height={1000}
               sizes="(max-width: 1024px) 92vw, 46vw"

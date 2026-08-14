@@ -25,7 +25,7 @@ export const CATALOG: Record<string, Product> = {
     name: "The Ice Tin",
     tagline: "Cerakote over 6061-T6, bead-blasted matte black",
     price: 5999,
-    image: "/tin-lid.jpg",
+    image: "/side-product.jpg",
     gallery: ["/side-product.jpg", "/dark-product.jpg", "/three-layer-gallery.jpg"],
     galleryAlt: [
       "The Ice Tin at an angle, showing the machined lid and the three stacked floors",
