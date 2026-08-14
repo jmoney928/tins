@@ -24,7 +24,13 @@ export const CATALOG: Record<string, Product> = {
     tagline: "Cerakote over 6061-T6, bead-blasted matte black",
     price: 5999,
     image: "/tin-lid.jpg",
-    gallery: ["/tin-lid.jpg", "/three-layer.png", "/xray-section.png"],
+    gallery: [
+      "/tin-lid.jpg",
+      "/side-product.jpg",
+      "/dark-product.jpg",
+      "/three-layer-gallery.jpg",
+      "/xray-section.png",
+    ],
     blurb:
       "Three floors in the footprint of a standard can: spent pouches up top, twenty-five fresh in the middle, a slim ice pack in the base. Sealed, it holds fridge temperature for six hours.",
     points: [
