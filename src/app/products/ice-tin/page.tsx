@@ -17,17 +17,31 @@ import { CATALOG, CURRENCY_LABEL, money } from "@/lib/catalog";
 import { SPECS, STEPS } from "@/lib/products";
 import { CARRIERS } from "@/lib/testers";
 import { remaining } from "@/lib/stock";
+import { ORG_NAME, SITE_URL, absoluteUrl } from "@/lib/seo";
+
+const PDP_URL = absoluteUrl("/products/ice-tin");
 
 export const metadata: Metadata = {
   title: "The Ice Tin",
   description:
     "A three-floor snus can holding 25 fresh pouches: spent on top, fresh in the middle, a slim ice pack underneath. Machined 6061-T6, stays cold for 6 hours. $59.99 CAD, in stock now.",
+  alternates: { canonical: "/products/ice-tin" },
   openGraph: {
     title: "The Ice Tin — Cold to the last pouch",
     description:
       "25 pouches across three floors, with a slim ice pack in the base. Stays cold for 6 hours. In stock now, ships worldwide.",
-    url: "https://icetins.com/products/ice-tin",
+    url: PDP_URL,
     type: "website",
+    images: [
+      { url: absoluteUrl("/side-product.jpg"), width: 1100, height: 1100, alt: "The Ice Tin" },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Ice Tin — Cold to the last pouch",
+    description:
+      "25 pouches across three floors, with a slim ice pack in the base. Stays cold for 6 hours.",
+    images: [absoluteUrl("/side-product.jpg")],
   },
 };
 
@@ -36,6 +50,43 @@ export const dynamic = "force-dynamic";
 
 const NOTES = CARRIERS.slice(0, 3);
 
+/**
+ * Answers real questions the rest of the page already makes — nothing here
+ * says anything the blurb, specs, or objections section doesn't. The
+ * FAQPage JSON-LD below is generated from this same array, so the
+ * structured data can never drift from what a visitor actually reads.
+ */
+const FAQS = [
+  {
+    q: "What's inside The Ice Tin?",
+    a: "Three floors in the footprint of a standard can: an empty top floor for spent pouches, a middle floor that holds 25 fresh pouches, and a slim Chillcore ice pack in the base.",
+  },
+  {
+    q: "How long does it keep pouches cold?",
+    a: "Six hours at room temperature with the lid sealed on its two O-rings.",
+  },
+  {
+    q: "Does the ice pack come with it?",
+    a: "Yes — one Chillcore pack ships inside every tin. Chillcore three-packs are sold separately if you want a spare already freezing.",
+  },
+  {
+    q: "What is the tin made from?",
+    a: "Cerakote-finished 6061-T6 aluminium, bead-blasted matte black, 68 mm across and 41 mm tall.",
+  },
+  {
+    q: "Where does it ship from, and how fast?",
+    a: "Vancouver, BC, within 1–2 business days. Flat $8 CAD shipping, free over $75.",
+  },
+  {
+    q: "Is there nicotine or tobacco inside?",
+    a: "No. Ice Tins Supply Co. sells empty metal cans and ice packs only — never nicotine or tobacco in any form.",
+  },
+  {
+    q: "What does the warranty cover?",
+    a: "A lifetime warranty on the shell against cracking or a failed thread.",
+  },
+];
+
 export default async function IceTinPage() {
   const tin = CATALOG["ice-tin"];
   const core = CATALOG["chillcore-3"];
@@ -43,8 +94,63 @@ export default async function IceTinPage() {
   const left =
     stock.ok && Number.isFinite(stock.remaining) ? stock.remaining : (tin.remaining ?? null);
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: tin.name,
+    description: tin.blurb,
+    sku: tin.id,
+    image: tin.gallery.map((g) => absoluteUrl(g)),
+    brand: { "@type": "Brand", name: ORG_NAME },
+    offers: {
+      "@type": "Offer",
+      url: PDP_URL,
+      priceCurrency: "CAD",
+      price: (tin.price / 100).toFixed(2),
+      availability:
+        left === null || left > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      itemCondition: "https://schema.org/NewCondition",
+      seller: { "@type": "Organization", name: ORG_NAME },
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: tin.name, item: PDP_URL },
+    ],
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQS.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
   return (
     <>
+      {/* plain <script>, not next/script — see layout.tsx for why */}
+      <script
+        id="product-json-ld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <script
+        id="breadcrumb-json-ld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        id="faq-json-ld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <FrostField />
       <ProductNav />
 
@@ -231,6 +337,25 @@ export default async function IceTinPage() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* faq — same seven questions as the FAQPage JSON-LD above, verbatim */}
+        <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
+          <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
+            Questions
+          </p>
+          <h2 className="mt-4 max-w-[22ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
+            Everything else people ask.
+          </h2>
+
+          <dl className="mt-10 divide-y divide-frost/8 border-t border-frost/8">
+            {FAQS.map((f) => (
+              <div key={f.q} className="grid grid-cols-1 gap-2 py-6 sm:grid-cols-[minmax(0,22rem)_1fr] sm:gap-10">
+                <dt className="text-base font-medium text-white-ice">{f.q}</dt>
+                <dd className="max-w-[58ch] text-sm leading-relaxed text-fog">{f.a}</dd>
+              </div>
+            ))}
+          </dl>
         </section>
 
         {/* final push */}

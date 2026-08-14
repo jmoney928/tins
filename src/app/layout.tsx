@@ -4,8 +4,33 @@ import Script from "next/script";
 import "./globals.css";
 import { CartProvider } from "@/components/cart/cart-context";
 import { CartDrawer } from "@/components/cart/cart-drawer";
+import { ORG_NAME, SITE_URL } from "@/lib/seo";
 
 const META_PIXEL_ID = "4563845340565065";
+
+/**
+ * Site-wide identity graph. Every page inherits this via the root layout,
+ * so an answer engine or a rich-results crawler can resolve "who sells
+ * this" without depending on any one page having its own copy.
+ */
+const ORG_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${SITE_URL}/#organization`,
+  name: ORG_NAME,
+  url: SITE_URL,
+  logo: `${SITE_URL}/logo-emblem-512.png`,
+  description:
+    "Machined aluminium snus tin cases with a built-in ice pack tray, made in Vancouver, BC.",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "418 Alexander Street",
+    addressLocality: "Vancouver",
+    addressRegion: "BC",
+    postalCode: "V6A 1C4",
+    addressCountry: "CA",
+  },
+};
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,7 +43,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://icetins.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Ice Tins Supply Co. — Machined snus tin cases",
     template: "%s — Ice Tins",
@@ -32,11 +57,12 @@ export const metadata: Metadata = {
     "three compartment snus can",
     "pouch case",
   ],
+  alternates: { canonical: "/" },
   openGraph: {
     title: "Ice Tins Supply Co. — Cold to the last pouch",
     description:
       "25 pouches across three floors, in the footprint of a standard can, with a slim ice pack in the base. Stays cold for 6 hours. $59.99 CAD.",
-    url: "https://icetins.com",
+    url: SITE_URL,
     siteName: "Ice Tins Supply Co.",
     type: "website",
   },
@@ -60,6 +86,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
       <body className="min-h-dvh">
+        {/* plain <script>, not next/script — Script defaults to afterInteractive,
+            which injects client-side after hydration and is invisible to any
+            crawler that reads the server response rather than executing JS */}
+        <script
+          id="org-json-ld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSON_LD) }}
+        />
         <Script id="meta-pixel" strategy="afterInteractive">
           {`!function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){n.callMethod?

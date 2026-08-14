@@ -6,11 +6,14 @@ import type { Product } from "@/lib/catalog";
 export function ProductArt({
   product,
   src,
+  alt,
   className = "",
   sizes,
 }: {
   product: Product;
   src?: string;
+  /** defaults to the matching galleryAlt entry when src is a gallery photo */
+  alt?: string;
   className?: string;
   sizes?: string;
 }) {
@@ -24,10 +27,13 @@ export function ProductArt({
     );
   }
 
+  const resolvedAlt =
+    alt ?? product.galleryAlt[product.gallery.indexOf(file)] ?? product.name;
+
   return (
     <Image
       src={file}
-      alt={product.name}
+      alt={resolvedAlt}
       width={1000}
       height={1000}
       sizes={sizes}

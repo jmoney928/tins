@@ -10,6 +10,8 @@ export type Product = {
   /** null when the product is drawn rather than photographed */
   image: string | null;
   gallery: string[];
+  /** parallel to gallery — one descriptive alt per photo, not a repeated product name */
+  galleryAlt: string[];
   blurb: string;
   points: string[];
   specs: { k: string; v: string }[];
@@ -25,6 +27,11 @@ export const CATALOG: Record<string, Product> = {
     price: 5999,
     image: "/tin-lid.jpg",
     gallery: ["/side-product.jpg", "/dark-product.jpg", "/three-layer-gallery.jpg"],
+    galleryAlt: [
+      "The Ice Tin at an angle, showing the machined lid and the three stacked floors",
+      "The Ice Tin on a dark stone surface, matte black Cerakote finish",
+      "The Ice Tin exploded into its three floors: lid, perforated pouch tray, and ice pack base",
+    ],
     blurb:
       "Three floors in the footprint of a standard can: spent pouches up top, twenty-five fresh in the middle, a slim ice pack in the base. Sealed, it holds fridge temperature for six hours.",
     points: [
@@ -52,6 +59,10 @@ export const CATALOG: Record<string, Product> = {
     image: "/ice-packs.jpg",
     // the annotated shot carries the dimensions, so it earns a place in the gallery
     gallery: ["/ice-packs.jpg", "/ice-packs-dims.jpg"],
+    galleryAlt: [
+      "Three Chillcore ice packs stacked, matte black with the engraved emblem",
+      "Three Chillcore ice packs with dimensions labelled: 6.7 cm across, 1.3 cm thick each",
+    ],
     blurb:
       "One pack ships inside every can, which is enough until you want it cold again the same day. With three you stop waiting on the freezer: one in the base, one setting up, one spare in the door.",
     points: [
