@@ -39,7 +39,7 @@ export function SiteFooter() {
               Vancouver, BC, shipped worldwide.
             </p>
             <p className="mt-6 font-mono text-[11px] leading-relaxed text-fog/60">
-              418 Alexander Street, Vancouver, BC V6A 1C4
+              8105 North Fraser Way, Burnaby, BC V5J 5M8
             </p>
           </div>
 

@@ -24,10 +24,10 @@ const ORG_JSON_LD = {
     "Machined aluminium snus tin cases with a built-in ice pack tray, made in Vancouver, BC.",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "418 Alexander Street",
-    addressLocality: "Vancouver",
+    streetAddress: "8105 North Fraser Way",
+    addressLocality: "Burnaby",
     addressRegion: "BC",
-    postalCode: "V6A 1C4",
+    postalCode: "V5J 5M8",
     addressCountry: "CA",
   },
 };
