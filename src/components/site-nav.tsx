@@ -67,10 +67,10 @@ export function SiteNav() {
 
             <Magnetic className="hidden sm:block">
               <a
-                href="#drop"
+                href="/products/ice-tin"
                 className="block rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-paper transition-colors duration-300 hover:bg-ice-700 active:scale-[0.98]"
               >
-                Get the drop
+                Shop now
               </a>
             </Magnetic>
 
@@ -111,7 +111,7 @@ export function SiteNav() {
               variants={{ show: { transition: { staggerChildren: 0.07, delayChildren: 0.08 } } }}
               className="mt-6 flex flex-col gap-2 px-6"
             >
-              {[...LINKS, { label: "Get the drop", href: "#drop" }].map((l) => (
+              {[...LINKS, { label: "Shop now", href: "/products/ice-tin" }].map((l) => (
                 <motion.li
                   key={l.href}
                   variants={{

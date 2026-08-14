@@ -98,7 +98,7 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
           {remaining !== null && (
             <p className="flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-ice-700 uppercase">
               <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
-              {remaining} left in Drop 01 of 340
+              {remaining > 0 ? `${remaining} in stock` : "Out of stock"}
             </p>
           )}
 

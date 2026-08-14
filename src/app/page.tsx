@@ -2,7 +2,6 @@ import { Anatomy } from "@/components/anatomy";
 import { Carriers } from "@/components/carriers";
 import { ColdSystem } from "@/components/cold-system";
 import { Collection } from "@/components/collection";
-import { Drop } from "@/components/drop";
 import { Facts } from "@/components/facts";
 import { FrostField } from "@/components/frost-field";
 import { Hero } from "@/components/hero";
@@ -24,7 +23,6 @@ export default function Home() {
         <Anatomy />
         <Facts />
         <Carriers />
-        <Drop />
       </main>
 
       <SiteFooter />

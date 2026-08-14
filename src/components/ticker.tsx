@@ -9,7 +9,7 @@ const WORDS = [
   "Machined in Vancouver, BC",
   "Freezer to ready in 90 min",
   "One ice pack in every can",
-  "New drop the first of every month",
+  "Free shipping over $75",
 ];
 
 /** Seamless single-direction band. Duplicated once, translated exactly -50%. */

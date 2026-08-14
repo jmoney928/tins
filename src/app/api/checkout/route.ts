@@ -72,8 +72,8 @@ export async function POST(request: Request) {
         {
           error:
             stock.remaining === 0
-              ? `${p.name} sold out of Drop 01 while you were deciding.`
-              : `Only ${stock.remaining} of ${p.name} left in Drop 01.`,
+              ? `${p.name} sold out while you were deciding.`
+              : `Only ${stock.remaining} of ${p.name} left in stock.`,
         },
         { status: 409 },
       );
@@ -126,9 +126,9 @@ export async function POST(request: Request) {
       success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/checkout?cancelled=1`,
       metadata: {
-        // the webhook reads this back to decrement the Drop 01 allocation
+        // an audit trail in the Stripe dashboard — the webhook itself reads
+        // stock back from the expanded line items, not from here
         bag: JSON.stringify(priced.map((l) => ({ id: l.product.id, qty: l.qty }))),
-        drop: "01",
       },
     });
 

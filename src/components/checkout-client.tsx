@@ -65,8 +65,7 @@ export function CheckoutClient() {
           Your bag is empty.
         </h1>
         <p className="max-w-[36ch] text-sm leading-relaxed text-fog">
-          Nothing to check out yet. Drop 01 is 340 tins and the next one is not
-          until the first of the month.
+          Nothing to check out yet. Add a tin to get started.
         </p>
         <Link
           href="/#collection"

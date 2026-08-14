@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRightIcon,
-  CalendarBlankIcon,
   PackageIcon,
   ShieldCheckIcon,
   TruckIcon,
@@ -22,11 +21,11 @@ import { remaining } from "@/lib/stock";
 export const metadata: Metadata = {
   title: "The Ice Tin",
   description:
-    "A three-floor snus can holding 25 fresh pouches: spent on top, fresh in the middle, a slim ice pack underneath. Machined 6061-T6, stays cold for 6 hours. $59.99 CAD, Drop 01 — 340 made.",
+    "A three-floor snus can holding 25 fresh pouches: spent on top, fresh in the middle, a slim ice pack underneath. Machined 6061-T6, stays cold for 6 hours. $59.99 CAD, in stock now.",
   openGraph: {
     title: "The Ice Tin — Cold to the last pouch",
     description:
-      "25 pouches across three floors, with a slim ice pack in the base. Stays cold for 6 hours. Drop 01: 340 made, never restocked.",
+      "25 pouches across three floors, with a slim ice pack in the base. Stays cold for 6 hours. In stock now, ships worldwide.",
     url: "https://icetins.com/products/ice-tin",
     type: "website",
   },
@@ -55,21 +54,20 @@ export default async function IceTinPage() {
           <TinBuyBox remaining={left} />
         </section>
 
-        {/* honest scarcity — real numbers, no fake countdowns */}
+        {/* stock and shipping reassurance */}
         <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
           <div className="glass-edge relative overflow-hidden rounded-[2rem] bg-abyss/80 p-7 backdrop-blur-md sm:p-10">
             <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(46,157,200,0.24),transparent_65%)] blur-2xl" />
             <div className="relative grid grid-cols-1 gap-8 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-10">
-              <CalendarBlankIcon size={32} weight="thin" className="text-ice-500" />
+              <PackageIcon size={32} weight="thin" className="text-ice-500" />
               <div>
                 <h2 className="text-2xl leading-tight tracking-tight text-white-ice sm:text-3xl">
-                  Drop 01 is 340 tins. {left !== null ? `${left} of them are left.` : ""}
+                  In stock and ready to ship.
                 </h2>
                 <p className="mt-3 max-w-[62ch] text-sm leading-relaxed text-fog">
-                  We machine one batch, sell it, and stop — there is no restock
-                  queue for Drop 01 once it is gone. The next batch lands 1
-                  October as Drop 02, and it will not be this one. If you want
-                  this specific run, this is the only window.
+                  Every order ships from Vancouver, BC within 1–2 business
+                  days. Machined in small batches so quality stays
+                  consistent — we simply make more when we run low.
                 </p>
               </div>
             </div>
@@ -241,10 +239,10 @@ export default async function IceTinPage() {
             <div className="pointer-events-none absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(46,157,200,0.22),transparent_65%)] blur-3xl" />
             <div className="relative">
               <h2 className="mx-auto max-w-[20ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
-                {left !== null ? `${left} left in Drop 01.` : "Drop 01 is live."} No restock after.
+                Ready when you are.
               </h2>
               <p className="mx-auto mt-4 max-w-[46ch] text-sm leading-relaxed text-fog">
-                $59.99 CAD, one tin, one ice pack in the box.
+                $59.99 CAD, one tin, one ice pack in the box. In stock now.
               </p>
               <Link
                 href="#top"

@@ -13,7 +13,7 @@ export type Product = {
   blurb: string;
   points: string[];
   specs: { k: string; v: string }[];
-  /** null when unlimited; otherwise the Drop 01 allocation */
+  /** null when unlimited; otherwise the current stock count */
   remaining: number | null;
 };
 

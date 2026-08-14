@@ -79,8 +79,8 @@ export function CartDrawer() {
                   Nothing in the bag yet.
                 </p>
                 <p className="max-w-[30ch] text-sm leading-relaxed text-fog">
-                  Drop 01 is 340 tins. When they are gone the next chance is the
-                  first of the month.
+                  Add a tin to get started — ships worldwide from Vancouver,
+                  BC.
                 </p>
                 <button
                   onClick={closeDrawer}

@@ -7,7 +7,6 @@ const COLUMNS = [
       { label: "The Ice Tin", href: "/products/ice-tin" },
       { label: "Chillcore three-pack", href: "/#collection" },
       { label: "Gift card", href: "#" },
-      { label: "Stock alerts", href: "/#drop" },
     ],
   },
   {

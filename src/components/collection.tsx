@@ -44,7 +44,7 @@ export function Collection() {
               className="h-full w-full object-cover transition-transform duration-700 ease-[var(--ease-glide)] group-hover:scale-[1.03]"
             />
             <span className="absolute top-6 left-6 rounded-full border border-white/15 bg-ink/70 px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] text-ice-300 uppercase backdrop-blur-md">
-              {tin.remaining} left in Drop 01
+              In stock
             </span>
           </Link>
 

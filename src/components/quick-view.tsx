@@ -150,7 +150,7 @@ export function QuickView({
                 <div className="flex flex-col p-6 sm:p-8 md:pl-2">
                   {product.remaining !== null && (
                     <p className="font-mono text-[10px] tracking-[0.2em] text-ice-700 uppercase">
-                      {product.remaining} left in Drop 01
+                      {product.remaining} in stock
                     </p>
                   )}
                   <h2 className="mt-3 text-3xl leading-none tracking-tighter text-white-ice">

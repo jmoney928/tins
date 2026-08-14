@@ -2,7 +2,7 @@ import { CATALOG } from "./catalog";
 import { db, dbConfig } from "./db";
 
 /**
- * Drop allocation.
+ * Stock levels.
  *
  * Backed by Supabase when it is configured. Without it we fall back to an
  * in-memory map so the site still runs locally — but that map resets on every
@@ -35,7 +35,7 @@ export async function remaining(sku: string): Promise<StockRead> {
 
   if (cfg.state === "absent") {
     console.warn(
-      "[stock] Supabase is not configured — using the in-memory fallback. Do not ship a drop on this.",
+      "[stock] Supabase is not configured — using the in-memory fallback. Do not launch on this.",
     );
     return { ok: true, remaining: fallback.get(sku) ?? 0 };
   }

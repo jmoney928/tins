@@ -32,7 +32,7 @@ export function Hero() {
       >
         <div className="flex items-center gap-3 font-mono text-[11px] tracking-[0.28em] text-fog uppercase">
           <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
-          Drop 01 — Sub-Zero
+          In stock, ships worldwide
         </div>
 
         <h1 className="mt-6 text-[3.25rem] leading-[0.88] font-medium tracking-tighter text-white-ice sm:text-7xl lg:text-[5.2rem]">
