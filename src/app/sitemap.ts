@@ -1,6 +1,16 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo";
 
+const INFO_PAGES = [
+  "shipping-returns",
+  "warranty",
+  "ice-pack-care",
+  "workshop",
+  "stockists",
+  "press",
+  "careers",
+];
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
   return [
@@ -11,5 +21,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "daily", // stock count changes on every order
       priority: 0.9,
     },
+    ...INFO_PAGES.map((slug) => ({
+      url: `${SITE_URL}/${slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.3,
+    })),
   ];
 }

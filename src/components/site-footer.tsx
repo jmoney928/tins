@@ -6,25 +6,23 @@ const COLUMNS = [
     links: [
       { label: "The Ice Tin", href: "/products/ice-tin" },
       { label: "Chillcore three-pack", href: "/#collection" },
-      { label: "Gift card", href: "#" },
     ],
   },
   {
     title: "Support",
     links: [
-      { label: "Shipping & returns", href: "#" },
-      { label: "Warranty claim", href: "#" },
-      { label: "Ice pack care", href: "#" },
-      { label: "Track order", href: "#" },
+      { label: "Shipping & returns", href: "/shipping-returns" },
+      { label: "Warranty claim", href: "/warranty" },
+      { label: "Ice pack care", href: "/ice-pack-care" },
     ],
   },
   {
     title: "Company",
     links: [
-      { label: "The workshop", href: "#" },
-      { label: "Stockists", href: "#" },
-      { label: "Press kit", href: "#" },
-      { label: "Careers", href: "#" },
+      { label: "The workshop", href: "/workshop" },
+      { label: "Stockists", href: "/stockists" },
+      { label: "Press kit", href: "/press" },
+      { label: "Careers", href: "/careers" },
     ],
   },
 ];
