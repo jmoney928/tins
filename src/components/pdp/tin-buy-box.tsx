@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   CheckIcon,
@@ -30,9 +31,11 @@ type State = "idle" | "adding" | "added";
 export function TinBuyBox({ remaining }: { remaining: number | null }) {
   const product = CATALOG["ice-tin"];
   const cart = useCart();
+  const router = useRouter();
   const [shot, setShot] = useState(0);
   const [qty, setQty] = useState(1);
   const [state, setState] = useState<State>("idle");
+  const [buying, setBuying] = useState(false);
   const [ctaVisible, setCtaVisible] = useState(true);
   const ctaRef = useRef<HTMLDivElement>(null);
   const timers = useRef<number[]>([]);
@@ -60,6 +63,13 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
       }, 420),
       window.setTimeout(() => setState("idle"), 2200),
     );
+  };
+
+  const buyNow = () => {
+    if (buying) return;
+    setBuying(true);
+    cart.add(product.id, qty);
+    router.push("/checkout");
   };
 
   const clearsFreeShipping = product.price * qty >= FREE_SHIPPING_OVER;
@@ -169,6 +179,17 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
                 )}
               </button>
             </div>
+
+            <button
+              onClick={buyNow}
+              disabled={buying}
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-frost/15 px-6 py-3.5 text-sm font-medium text-frost transition-all duration-300 ease-[var(--ease-glide)] hover:border-ice-500/50 hover:bg-slate-deep/40 active:scale-[0.98] disabled:opacity-70"
+            >
+              {buying ? (
+                <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-frost/35 border-t-frost" />
+              ) : null}
+              {buying ? "Taking you to checkout" : "Checkout now"}
+            </button>
 
             <p className="mt-3 flex items-center gap-1.5 text-xs text-fog">
               <TruckIcon size={13} weight="light" />
