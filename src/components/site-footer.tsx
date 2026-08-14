@@ -42,8 +42,6 @@ export function SiteFooter() {
             </p>
             <p className="mt-6 font-mono text-[11px] leading-relaxed text-fog/60">
               418 Alexander Street, Vancouver, BC V6A 1C4
-              <br />
-              +1 (604) 555-0148
             </p>
           </div>
 
