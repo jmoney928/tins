@@ -12,30 +12,27 @@ export default function WorkshopPage() {
     <InfoPage
       eyebrow="Company"
       title="The workshop"
-      intro="Ice Tins Supply Co. makes one thing: a machined can with an ice pack built in. Everything here is in service of that one object."
+      intro="Ice Tins Supply Co. designs and sells a machined aluminium tin with a built-in ice pack tray, based in Vancouver, BC."
     >
       <section>
-        <h2 className="text-lg font-medium text-white-ice">One product, on purpose</h2>
+        <h2 className="text-lg font-medium text-white-ice">What we make</h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          We don't run colourways or seasonal drops. There's one tin,
-          machined to one spec, and a refill pack for the part that wears
-          out. Narrowing to one SKU means every hour goes into making that
-          one thing better instead of managing a catalogue.
+          One tin, machined to one spec, plus a refill ice pack sold
+          separately. Keeping the range simple lets us focus on getting that
+          one product right rather than spreading across a wider catalogue.
         </p>
       </section>
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">Small batches</h2>
+        <h2 className="text-lg font-medium text-white-ice">How it's made</h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          Machined out of Vancouver, BC, in runs sized to what we can
-          inspect properly rather than what a factory minimum demands. When
-          a batch sells out, we machine more — there's no artificial scarcity
-          and no waitlist theatre, just a queue for the next run.
+          Each tin is machined in small batches and checked before it ships.
+          When a batch sells out, we make more.
         </p>
       </section>
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">What "machined right" means here</h2>
+        <h2 className="text-lg font-medium text-white-ice">The specs</h2>
         <dl className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-frost/8 sm:grid-cols-3">
           {SPECS.slice(0, 6).map((s) => (
             <div key={s.k} className="bg-paper p-5">
