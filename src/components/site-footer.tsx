@@ -3,15 +3,30 @@ import { BrandMark } from "./brand-mark";
 const COLUMNS = [
   {
     title: "Shop",
-    links: ["The Ice Tin", "Chillcore three-pack", "Gift card", "Stock alerts"],
+    links: [
+      { label: "The Ice Tin", href: "/products/ice-tin" },
+      { label: "Chillcore three-pack", href: "/#collection" },
+      { label: "Gift card", href: "#" },
+      { label: "Stock alerts", href: "/#drop" },
+    ],
   },
   {
     title: "Support",
-    links: ["Shipping & returns", "Warranty claim", "Ice pack care", "Track order"],
+    links: [
+      { label: "Shipping & returns", href: "#" },
+      { label: "Warranty claim", href: "#" },
+      { label: "Ice pack care", href: "#" },
+      { label: "Track order", href: "#" },
+    ],
   },
   {
     title: "Company",
-    links: ["The workshop", "Stockists", "Press kit", "Careers"],
+    links: [
+      { label: "The workshop", href: "#" },
+      { label: "Stockists", href: "#" },
+      { label: "Press kit", href: "#" },
+      { label: "Careers", href: "#" },
+    ],
   },
 ];
 
@@ -40,12 +55,12 @@ export function SiteFooter() {
               </h3>
               <ul className="mt-5 flex flex-col gap-3">
                 {col.links.map((l) => (
-                  <li key={l}>
+                  <li key={l.label}>
                     <a
-                      href="#"
+                      href={l.href}
                       className="text-sm text-frost/80 transition-colors duration-300 hover:text-ice-300"
                     >
-                      {l}
+                      {l.label}
                     </a>
                   </li>
                 ))}

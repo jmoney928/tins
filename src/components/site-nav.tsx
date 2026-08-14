@@ -8,7 +8,7 @@ import { useCart } from "./cart/cart-context";
 import { BrandMark } from "./brand-mark";
 
 const LINKS = [
-  { label: "Shop", href: "#collection" },
+  { label: "Shop", href: "/products/ice-tin" },
   { label: "Cold system", href: "#cold" },
   { label: "Build", href: "#anatomy" },
   { label: "Cold facts", href: "#facts" },

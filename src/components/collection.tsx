@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
+import { ArrowRightIcon, CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { CATALOG, CURRENCY_LABEL, money } from "@/lib/catalog";
 import { AddButton } from "./add-button";
 import { QuickView } from "./quick-view";
@@ -30,19 +31,22 @@ export function Collection() {
 
         <div className="mt-12 grid grid-cols-1 gap-5 lg:grid-cols-[1.05fr_0.95fr]">
           {/* the lid, shot dark — the one place the page goes to black */}
-          <div className="relative overflow-hidden rounded-[2rem] bg-ink">
+          <Link
+            href="/products/ice-tin"
+            className="group relative overflow-hidden rounded-[2rem] bg-ink"
+          >
             <Image
               src="/tin-lid.jpg"
               alt="The engraved Ice Tins Supply Co. lid, machined matte black aluminium"
               width={1000}
               height={1000}
               sizes="(max-width: 1024px) 92vw, 46vw"
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover transition-transform duration-700 ease-[var(--ease-glide)] group-hover:scale-[1.03]"
             />
             <span className="absolute top-6 left-6 rounded-full border border-white/15 bg-ink/70 px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] text-ice-300 uppercase backdrop-blur-md">
               {tin.remaining} left in Drop 01
             </span>
-          </div>
+          </Link>
 
           <div className="glass-edge flex flex-col rounded-[2rem] bg-paper/75 p-8 backdrop-blur-sm sm:p-10">
             <h3 className="text-2xl leading-tight tracking-tight text-white-ice">
@@ -73,10 +77,17 @@ export function Collection() {
                 {money(tin.price)}
                 <span className="ml-2 text-xs text-fog">{CURRENCY_LABEL}</span>
               </span>
-              <div className="flex items-center gap-3">
-                <QuickView productId="ice-tin" />
-                <AddButton productId="ice-tin" label="Add to bag" />
-              </div>
+              <Link
+                href="/products/ice-tin"
+                className="group flex items-center gap-2.5 rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-colors duration-300 ease-[var(--ease-glide)] hover:bg-ice-700 active:scale-[0.98]"
+              >
+                View the tin
+                <ArrowRightIcon
+                  size={14}
+                  weight="bold"
+                  className="transition-transform duration-300 ease-[var(--ease-glide)] group-hover:translate-x-1"
+                />
+              </Link>
             </div>
           </div>
         </div>

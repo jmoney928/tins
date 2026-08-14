@@ -104,7 +104,7 @@ export default async function SuccessPage({
             A confirmation is on its way to{" "}
             <span className="text-frost">{email}</span>. Drop 01 ships 1
             September, and you will get a tracking number the morning it leaves
-            Stockholm.
+            Vancouver.
           </>
         ) : (
           <>

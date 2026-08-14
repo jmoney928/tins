@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowDownRightIcon, ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { ProductStage } from "./product-stage";
 import { Magnetic } from "./magnetic";
@@ -60,8 +61,8 @@ export function Hero() {
 
         <div className="mt-9 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
           <Magnetic strength={0.4}>
-            <a
-              href="#collection"
+            <Link
+              href="/products/ice-tin"
               className="group flex items-center justify-center gap-3 rounded-full bg-ink px-7 py-4 text-sm font-medium text-paper transition-colors duration-300 ease-[var(--ease-glide)] hover:bg-ice-700 active:scale-[0.98]"
             >
               Shop the tin
@@ -71,7 +72,7 @@ export function Hero() {
                 weight="bold"
                 className="transition-transform duration-300 ease-[var(--ease-glide)] group-hover:translate-x-1"
               />
-            </a>
+            </Link>
           </Magnetic>
 
           <a
