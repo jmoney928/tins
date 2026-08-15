@@ -63,6 +63,10 @@ export default function PressPage() {
           <a href="mailto:hello@icetins.com" className="text-ice-700 underline underline-offset-2">
             hello@icetins.com
           </a>
+          . For order and product questions:{" "}
+          <a href="mailto:shop@icetins.com" className="text-ice-700 underline underline-offset-2">
+            shop@icetins.com
+          </a>
           .
         </p>
       </section>
