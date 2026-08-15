@@ -12,7 +12,8 @@ import {
 import { useCart } from "./cart/cart-context";
 import { ProductArt } from "./product-art";
 import { BrandMark } from "./brand-mark";
-import { money } from "@/lib/catalog";
+import { CURRENCY_LABEL, money } from "@/lib/catalog";
+import { trackPixel } from "@/lib/pixel";
 
 export function CheckoutClient() {
   const cart = useCart();
@@ -47,6 +48,14 @@ export function CheckoutClient() {
         setBusy(false);
         return;
       }
+
+      trackPixel("InitiateCheckout", {
+        content_ids: cart.lines.map((l) => l.id),
+        content_type: "product",
+        currency: CURRENCY_LABEL,
+        value: cart.total / 100,
+        num_items: cart.count,
+      });
 
       // hand off to Stripe; the bag is cleared on the success page, not here,
       // so backing out of Stripe leaves the shopper's bag intact

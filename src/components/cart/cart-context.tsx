@@ -13,8 +13,10 @@ import {
   CATALOG,
   FREE_SHIPPING_OVER,
   SHIPPING_FLAT,
+  CURRENCY_LABEL,
   type Product,
 } from "@/lib/catalog";
+import { trackPixel } from "@/lib/pixel";
 
 const KEY = "icetins:cart";
 
@@ -75,11 +77,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [lines, ready]);
 
   const add = useCallback((id: string, qty = 1) => {
-    if (!CATALOG[id]) return;
+    const product = CATALOG[id];
+    if (!product) return;
     setLines((prev) => {
       const hit = prev.find((l) => l.id === id);
       if (!hit) return [...prev, { id, qty }];
       return prev.map((l) => (l.id === id ? { ...l, qty: l.qty + qty } : l));
+    });
+    trackPixel("AddToCart", {
+      content_ids: [id],
+      content_type: "product",
+      content_name: product.name,
+      currency: CURRENCY_LABEL,
+      value: (product.price * qty) / 100,
     });
   }, []);
 

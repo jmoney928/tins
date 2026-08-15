@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeftIcon, SnowflakeIcon, WarningCircleIcon } from "@phosphor-icons/react/dist/ssr";
 import { FrostField } from "@/components/frost-field";
 import { ClearCart } from "@/components/clear-cart";
+import { TrackPurchase } from "@/components/track-purchase";
 import { stripe, stripeConfigured } from "@/lib/stripe";
 import { money } from "@/lib/catalog";
 
@@ -90,6 +91,13 @@ export default async function SuccessPage({
   return (
     <Shell>
       {paid && <ClearCart />}
+      {paid && (
+        <TrackPurchase
+          value={(session.amount_total ?? 0) / 100}
+          currency={(session.currency ?? "cad").toUpperCase()}
+          orderId={session.id}
+        />
+      )}
 
       <SnowflakeIcon size={28} weight="thin" className="text-ice-500" />
       <p className="mt-6 font-mono text-[11px] tracking-[0.28em] text-fog uppercase">
