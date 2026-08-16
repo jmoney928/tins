@@ -110,9 +110,9 @@ export default async function SuccessPage({
         {paid ? (
           <>
             A confirmation is on its way to{" "}
-            <span className="text-frost">{email}</span>. Your order ships
-            within 1–2 business days, and you will get a tracking number the
-            morning it leaves Vancouver.
+            <span className="text-frost">{email}</span>. Current lead time is
+            6 weeks — you will get a tracking number the morning it leaves
+            Vancouver.
           </>
         ) : (
           <>
