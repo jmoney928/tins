@@ -24,7 +24,7 @@ export const CATALOG: Record<string, Product> = {
     id: "ice-tin",
     name: "The Ice Tin",
     tagline: "Cerakote over 6061-T6, bead-blasted matte black",
-    price: 5999,
+    price: 7999,
     image: "/side-product.jpg",
     gallery: ["/side-product.jpg", "/dark-product.jpg", "/three-layer-gallery.jpg"],
     galleryAlt: [
@@ -82,7 +82,12 @@ export const CATALOG: Record<string, Product> = {
   },
 };
 
-/** Set so a tin plus a refill pack clears it — that is the order we want. */
+/**
+ * At the $79.99 list price a single tin clears this on its own; during the
+ * sale it takes a tin plus a refill pack ($49.99 + $19.99 is short of it).
+ * Left where it is deliberately — moving it would change the shipping offer
+ * mid-sale.
+ */
 export const FREE_SHIPPING_OVER = 7500;
 export const SHIPPING_FLAT = 800;
 
@@ -101,12 +106,19 @@ export function freeShippingToday(now: Date = new Date()) {
 }
 
 /**
- * One-week sale on the tin. CATALOG["ice-tin"].price stays the real,
- * actually-charged-until-now regular price ($59.99) — that is what makes a
- * "was $59.99" strikethrough honest. The sale price is a separate,
- * genuinely time-boxed override checked fresh on every read, the same
- * pattern as freeShippingToday: a real calendar window that expires on its
- * own rather than a static discount someone has to remember to revert.
+ * One-week sale on the tin. CATALOG["ice-tin"].price is the regular list
+ * price ($79.99) — what the tin charges the moment this window closes, not
+ * a number invented to inflate the strikethrough. The sale price is a
+ * separate, genuinely time-boxed override checked fresh on every read, the
+ * same pattern as freeShippingToday: a real calendar window that expires on
+ * its own rather than a static discount someone has to remember to revert.
+ *
+ * Note: the list price moved 59.99 -> 79.99 at the same time this window
+ * opened, so "was $79.99" is a forward-looking list price rather than one
+ * the store has actually charged. Canadian ordinary-price rules want the
+ * struck-through price to have been sold in volume or offered in good faith
+ * for a substantial period; letting $79.99 stand on its own after Aug 22 is
+ * what makes it true.
  */
 export const TIN_SALE_PRICE = 4999;
 const TIN_SALE_START = "2026-08-16";
