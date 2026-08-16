@@ -18,6 +18,8 @@ import {
   FREE_SHIPPING_OVER,
   SHIPPING_FLAT,
   freeShippingToday,
+  tinOnSale,
+  currentPrice,
   money,
 } from "@/lib/catalog";
 
@@ -74,7 +76,9 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
   };
 
   const promoToday = freeShippingToday();
-  const clearsFreeShipping = product.price * qty >= FREE_SHIPPING_OVER;
+  const onSale = tinOnSale();
+  const unitPrice = currentPrice(product.id);
+  const clearsFreeShipping = unitPrice * qty >= FREE_SHIPPING_OVER;
 
   return (
     <>
@@ -133,9 +137,19 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
           </ul>
 
           <div ref={ctaRef} className="mt-8 border-t border-frost/8 pt-7">
+            {onSale && (
+              <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-ice-500 px-3 py-1 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
+                This week only
+              </span>
+            )}
             <div className="flex items-baseline gap-2.5">
+              {onSale && (
+                <span className="font-mono text-lg text-fog line-through decoration-fog/50">
+                  {money(product.price * qty)}
+                </span>
+              )}
               <span className="font-mono text-3xl tracking-tight text-white-ice">
-                {money(product.price * qty)}
+                {money(unitPrice * qty)}
               </span>
               <span className="text-xs text-fog">{CURRENCY_LABEL}</span>
             </div>
@@ -222,8 +236,13 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
           >
             <div className="min-w-0 flex-1">
               <p className="truncate text-xs text-fog">{product.name}</p>
-              <p className="font-mono text-base tracking-tight text-white-ice">
-                {money(product.price * qty)}
+              <p className="flex items-baseline gap-2 font-mono text-base tracking-tight text-white-ice">
+                {onSale && (
+                  <span className="text-xs text-fog line-through decoration-fog/50">
+                    {money(product.price * qty)}
+                  </span>
+                )}
+                {money(unitPrice * qty)}
               </p>
             </div>
             <button

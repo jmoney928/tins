@@ -15,6 +15,7 @@ import {
   SHIPPING_FLAT,
   CURRENCY_LABEL,
   freeShippingToday,
+  currentPrice,
   type Product,
 } from "@/lib/catalog";
 import { trackPixel } from "@/lib/pixel";
@@ -92,7 +93,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       content_type: "product",
       content_name: product.name,
       currency: CURRENCY_LABEL,
-      value: (product.price * qty) / 100,
+      value: (currentPrice(id) * qty) / 100,
     });
   }, []);
 
@@ -115,7 +116,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const full: FullLine[] = lines.map((l) => ({
       ...l,
       product: CATALOG[l.id],
-      total: CATALOG[l.id].price * l.qty,
+      total: currentPrice(l.id) * l.qty,
     }));
     const subtotal = full.reduce((n, l) => n + l.total, 0);
     const promo = freeShippingToday();

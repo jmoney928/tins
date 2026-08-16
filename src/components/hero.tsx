@@ -3,6 +3,7 @@ import { ArrowDownRightIcon, ArrowRightIcon } from "@phosphor-icons/react/dist/s
 import { ProductStage } from "./product-stage";
 import { Magnetic } from "./magnetic";
 import { Splatter } from "./splatter";
+import { currentPrice, money } from "@/lib/catalog";
 
 const PROOF = [
   ["3 floors", "spent, fresh, ice"],
@@ -66,7 +67,7 @@ export function Hero() {
               className="group flex items-center justify-center gap-3 rounded-full bg-ink px-7 py-4 text-sm font-medium text-paper transition-colors duration-300 ease-[var(--ease-glide)] hover:bg-ice-700 active:scale-[0.98]"
             >
               Shop the tin
-              <span className="font-mono text-xs opacity-65">$59.99</span>
+              <span className="font-mono text-xs opacity-65">{money(currentPrice("ice-tin"))}</span>
               <ArrowRightIcon
                 size={15}
                 weight="bold"

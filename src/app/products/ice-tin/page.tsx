@@ -13,7 +13,14 @@ import { AddButton } from "@/components/add-button";
 import { QuickView } from "@/components/quick-view";
 import { ProductArt } from "@/components/product-art";
 import { SiteFooter } from "@/components/site-footer";
-import { CATALOG, CURRENCY_LABEL, freeShippingToday, money } from "@/lib/catalog";
+import {
+  CATALOG,
+  CURRENCY_LABEL,
+  freeShippingToday,
+  tinOnSale,
+  currentPrice,
+  money,
+} from "@/lib/catalog";
 import { SPECS, STEPS } from "@/lib/products";
 import { CARRIERS } from "@/lib/testers";
 import { remaining } from "@/lib/stock";
@@ -21,29 +28,37 @@ import { ORG_NAME, SITE_URL, absoluteUrl } from "@/lib/seo";
 
 const PDP_URL = absoluteUrl("/products/ice-tin");
 
-export const metadata: Metadata = {
-  title: "The Ice Tin",
-  description:
-    "A three-floor snus can holding 25 fresh pouches: spent on top, fresh in the middle, a slim ice pack underneath. Machined 6061-T6, stays cold for 6 hours. $59.99 CAD, in stock now.",
-  alternates: { canonical: "/products/ice-tin" },
-  openGraph: {
-    title: "The Ice Tin — Cold to the last pouch",
-    description:
-      "25 pouches across three floors, with a slim ice pack in the base. Stays cold for 6 hours. In stock now, ships worldwide.",
-    url: PDP_URL,
-    type: "website",
-    images: [
-      { url: absoluteUrl("/side-product.jpg"), width: 1100, height: 1100, alt: "The Ice Tin" },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "The Ice Tin — Cold to the last pouch",
-    description:
-      "25 pouches across three floors, with a slim ice pack in the base. Stays cold for 6 hours.",
-    images: [absoluteUrl("/side-product.jpg")],
-  },
-};
+// the description below quotes the live price, so metadata is generated
+// per request rather than frozen at build time — this page is already
+// force-dynamic for the same reason (live stock)
+export async function generateMetadata(): Promise<Metadata> {
+  const priceLine = tinOnSale()
+    ? `${money(currentPrice("ice-tin"))} CAD this week (regular ${money(CATALOG["ice-tin"].price)}), in stock now.`
+    : `${money(currentPrice("ice-tin"))} CAD, in stock now.`;
+
+  return {
+    title: "The Ice Tin",
+    description: `A three-floor snus can holding 25 fresh pouches: spent on top, fresh in the middle, a slim ice pack underneath. Machined 6061-T6, stays cold for 6 hours. ${priceLine}`,
+    alternates: { canonical: "/products/ice-tin" },
+    openGraph: {
+      title: "The Ice Tin — Cold to the last pouch",
+      description:
+        "25 pouches across three floors, with a slim ice pack in the base. Stays cold for 6 hours. In stock now, ships worldwide.",
+      url: PDP_URL,
+      type: "website",
+      images: [
+        { url: absoluteUrl("/side-product.jpg"), width: 1100, height: 1100, alt: "The Ice Tin" },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "The Ice Tin — Cold to the last pouch",
+      description:
+        "25 pouches across three floors, with a slim ice pack in the base. Stays cold for 6 hours.",
+      images: [absoluteUrl("/side-product.jpg")],
+    },
+  };
+}
 
 // live stock, checked on every request — a scarcity claim that goes stale is a lie
 export const dynamic = "force-dynamic";
@@ -101,6 +116,8 @@ export default async function IceTinPage() {
   const left =
     stock.ok && Number.isFinite(stock.remaining) ? stock.remaining : (tin.remaining ?? null);
   const promoToday = freeShippingToday();
+  const onSale = tinOnSale();
+  const unitPrice = currentPrice("ice-tin");
   const FAQS = buildFaqs(promoToday);
 
   const productJsonLd = {
@@ -115,7 +132,7 @@ export default async function IceTinPage() {
       "@type": "Offer",
       url: PDP_URL,
       priceCurrency: "CAD",
-      price: (tin.price / 100).toFixed(2),
+      price: (unitPrice / 100).toFixed(2),
       availability:
         left === null || left > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
@@ -378,7 +395,17 @@ export default async function IceTinPage() {
                 Ready when you are.
               </h2>
               <p className="mx-auto mt-4 max-w-[46ch] text-sm leading-relaxed text-fog">
-                $59.99 CAD, one tin, one ice pack in the box. In stock now.
+                {onSale ? (
+                  <>
+                    <span className="text-fog line-through decoration-fog/50">
+                      {money(tin.price)}
+                    </span>{" "}
+                    <span className="text-frost">{money(unitPrice)} CAD this week</span> — one
+                    tin, one ice pack in the box. In stock now.
+                  </>
+                ) : (
+                  `${money(unitPrice)} CAD, one tin, one ice pack in the box. In stock now.`
+                )}
               </p>
               <Link
                 href="#top"

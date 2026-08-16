@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon, CheckIcon } from "@phosphor-icons/react/dist/ssr";
-import { CATALOG, CURRENCY_LABEL, money } from "@/lib/catalog";
+import { CATALOG, CURRENCY_LABEL, currentPrice, tinOnSale, money } from "@/lib/catalog";
 import { AddButton } from "./add-button";
 import { QuickView } from "./quick-view";
 
@@ -9,6 +9,8 @@ export function Collection() {
   // one source of truth: the same records Stripe is charged from
   const tin = CATALOG["ice-tin"];
   const core = CATALOG["chillcore-3"];
+  const onSale = tinOnSale();
+  const tinPrice = currentPrice("ice-tin");
 
   return (
     <section id="collection" className="relative overflow-hidden py-20 sm:py-28">
@@ -46,6 +48,11 @@ export function Collection() {
             <span className="absolute top-6 left-6 rounded-full border border-white/15 bg-ink/70 px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] text-ice-300 uppercase backdrop-blur-md">
               In stock
             </span>
+            {onSale && (
+              <span className="absolute top-6 right-6 rounded-full bg-ice-500 px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
+                This week only
+              </span>
+            )}
           </Link>
 
           <div className="glass-edge flex flex-col rounded-[2rem] bg-paper/75 p-8 backdrop-blur-sm sm:p-10">
@@ -73,9 +80,16 @@ export function Collection() {
             </ul>
 
             <div className="mt-auto flex items-center justify-between gap-4 border-t border-frost/8 pt-8">
-              <span className="font-mono text-2xl tracking-tight text-white-ice">
-                {money(tin.price)}
-                <span className="ml-2 text-xs text-fog">{CURRENCY_LABEL}</span>
+              <span className="flex items-baseline gap-2.5">
+                {onSale && (
+                  <span className="font-mono text-base text-fog line-through decoration-fog/50">
+                    {money(tin.price)}
+                  </span>
+                )}
+                <span className="font-mono text-2xl tracking-tight text-white-ice">
+                  {money(tinPrice)}
+                </span>
+                <span className="text-xs text-fog">{CURRENCY_LABEL}</span>
               </span>
               <Link
                 href="/products/ice-tin"

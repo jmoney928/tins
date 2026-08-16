@@ -100,6 +100,29 @@ export function freeShippingToday(now: Date = new Date()) {
   return now.toISOString().slice(0, 10) === FREE_SHIPPING_PROMO_DATE;
 }
 
+/**
+ * One-week sale on the tin. CATALOG["ice-tin"].price stays the real,
+ * actually-charged-until-now regular price ($59.99) — that is what makes a
+ * "was $59.99" strikethrough honest. The sale price is a separate,
+ * genuinely time-boxed override checked fresh on every read, the same
+ * pattern as freeShippingToday: a real calendar window that expires on its
+ * own rather than a static discount someone has to remember to revert.
+ */
+export const TIN_SALE_PRICE = 4999;
+const TIN_SALE_START = "2026-08-16";
+const TIN_SALE_END = "2026-08-22"; // inclusive — a real 7-day window
+
+export function tinOnSale(now: Date = new Date()) {
+  const d = now.toISOString().slice(0, 10);
+  return d >= TIN_SALE_START && d <= TIN_SALE_END;
+}
+
+/** The price to actually charge/display right now for any product. */
+export function currentPrice(id: string, now?: Date): number {
+  if (id === "ice-tin" && tinOnSale(now)) return TIN_SALE_PRICE;
+  return CATALOG[id].price;
+}
+
 export const money = (cents: number) =>
   `$${(cents / 100).toFixed(2).replace(/\.00$/, "")}`;
 

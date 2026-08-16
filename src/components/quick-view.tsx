@@ -12,7 +12,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { useCart } from "./cart/cart-context";
 import { ProductArt } from "./product-art";
-import { CATALOG, money } from "@/lib/catalog";
+import { CATALOG, currentPrice, money } from "@/lib/catalog";
 
 /** Trigger + modal. Owns its own open state so it can sit anywhere. */
 export function QuickView({
@@ -176,7 +176,7 @@ export function QuickView({
 
                   <div className="mt-auto flex flex-wrap items-center gap-4 border-t border-frost/8 pt-6">
                     <span className="font-mono text-2xl tracking-tight text-white-ice">
-                      {money(product.price * qty)}
+                      {money(currentPrice(product.id) * qty)}
                     </span>
 
                     <div className="flex items-center rounded-full border border-frost/12">

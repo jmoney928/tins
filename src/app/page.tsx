@@ -9,6 +9,10 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
 import { Ticker } from "@/components/ticker";
 
+// the hero and shop card show live sale/shipping-promo pricing, which
+// depends on today's date — must not be frozen at build time
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <>

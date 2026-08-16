@@ -5,6 +5,7 @@ import {
   FREE_SHIPPING_OVER,
   SHIPPING_FLAT,
   freeShippingToday,
+  currentPrice,
 } from "@/lib/catalog";
 import { stripe, inspectKey, keyDiagnosis, siteOrigin } from "@/lib/stripe";
 import { remaining } from "@/lib/stock";
@@ -87,7 +88,7 @@ export async function POST(request: Request) {
     priced.push({ product: p, qty });
   }
 
-  const subtotal = priced.reduce((n, l) => n + l.product.price * l.qty, 0);
+  const subtotal = priced.reduce((n, l) => n + currentPrice(l.product.id) * l.qty, 0);
   const shipping =
     freeShippingToday() || subtotal >= FREE_SHIPPING_OVER ? 0 : SHIPPING_FLAT;
   const origin = siteOrigin(request);
@@ -99,7 +100,7 @@ export async function POST(request: Request) {
         quantity: l.qty,
         price_data: {
           currency: CURRENCY,
-          unit_amount: l.product.price,
+          unit_amount: currentPrice(l.product.id),
           product_data: {
             name: l.product.name,
             description: l.product.tagline,
