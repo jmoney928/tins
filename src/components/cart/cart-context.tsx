@@ -14,6 +14,7 @@ import {
   FREE_SHIPPING_OVER,
   SHIPPING_FLAT,
   CURRENCY_LABEL,
+  freeShippingToday,
   type Product,
 } from "@/lib/catalog";
 import { trackPixel } from "@/lib/pixel";
@@ -28,6 +29,8 @@ type CartValue = {
   count: number;
   subtotal: number;
   shipping: number;
+  /** the one-day free-shipping offer shown when the cart drawer opens */
+  freeShippingPromo: boolean;
   total: number;
   /** false until localStorage has been read, so SSR and first paint agree */
   ready: boolean;
@@ -115,14 +118,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
       total: CATALOG[l.id].price * l.qty,
     }));
     const subtotal = full.reduce((n, l) => n + l.total, 0);
+    const promo = freeShippingToday();
     const shipping =
-      subtotal === 0 || subtotal >= FREE_SHIPPING_OVER ? 0 : SHIPPING_FLAT;
+      subtotal === 0 || promo || subtotal >= FREE_SHIPPING_OVER ? 0 : SHIPPING_FLAT;
 
     return {
       lines: full,
       count: full.reduce((n, l) => n + l.qty, 0),
       subtotal,
       shipping,
+      freeShippingPromo: promo,
       total: subtotal + shipping,
       ready,
       drawerOpen,

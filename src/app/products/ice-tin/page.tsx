@@ -13,7 +13,7 @@ import { AddButton } from "@/components/add-button";
 import { QuickView } from "@/components/quick-view";
 import { ProductArt } from "@/components/product-art";
 import { SiteFooter } from "@/components/site-footer";
-import { CATALOG, CURRENCY_LABEL, money } from "@/lib/catalog";
+import { CATALOG, CURRENCY_LABEL, freeShippingToday, money } from "@/lib/catalog";
 import { SPECS, STEPS } from "@/lib/products";
 import { CARRIERS } from "@/lib/testers";
 import { remaining } from "@/lib/stock";
@@ -54,38 +54,45 @@ const NOTES = CARRIERS.slice(0, 3);
  * Answers real questions the rest of the page already makes — nothing here
  * says anything the blurb, specs, or objections section doesn't. The
  * FAQPage JSON-LD below is generated from this same array, so the
- * structured data can never drift from what a visitor actually reads.
+ * structured data can never drift from what a visitor actually reads. It's
+ * a function of the shipping promo (not a module-level constant) so the
+ * shipping answer stays accurate on the date the promo expires — this page
+ * is force-dynamic, so it re-evaluates on every request.
  */
-const FAQS = [
-  {
-    q: "What's inside The Ice Tin?",
-    a: "Three floors in the footprint of a standard can: an empty top floor for spent pouches, a middle floor that holds 25 fresh pouches, and a slim Chillcore ice pack in the base.",
-  },
-  {
-    q: "How long does it keep pouches cold?",
-    a: "Six hours at room temperature with the lid sealed on its two O-rings.",
-  },
-  {
-    q: "Does the ice pack come with it?",
-    a: "Yes — one Chillcore pack ships inside every tin. Chillcore three-packs are sold separately if you want a spare already freezing.",
-  },
-  {
-    q: "What is the tin made from?",
-    a: "Cerakote-finished 6061-T6 aluminium, bead-blasted matte black, 68 mm across and 41 mm tall.",
-  },
-  {
-    q: "Where does it ship from, and how fast?",
-    a: "Vancouver, BC, within 1–2 business days. Flat $8 CAD shipping, free over $75.",
-  },
-  {
-    q: "Is there nicotine or tobacco inside?",
-    a: "No. Ice Tins Supply Co. sells empty metal cans and ice packs only — never nicotine or tobacco in any form.",
-  },
-  {
-    q: "What does the warranty cover?",
-    a: "A lifetime warranty on the shell against cracking or a failed thread.",
-  },
-];
+function buildFaqs(promoToday: boolean) {
+  return [
+    {
+      q: "What's inside The Ice Tin?",
+      a: "Three floors in the footprint of a standard can: an empty top floor for spent pouches, a middle floor that holds 25 fresh pouches, and a slim Chillcore ice pack in the base.",
+    },
+    {
+      q: "How long does it keep pouches cold?",
+      a: "Six hours at room temperature with the lid sealed on its two O-rings.",
+    },
+    {
+      q: "Does the ice pack come with it?",
+      a: "Yes — one Chillcore pack ships inside every tin. Chillcore three-packs are sold separately if you want a spare already freezing.",
+    },
+    {
+      q: "What is the tin made from?",
+      a: "Cerakote-finished 6061-T6 aluminium, bead-blasted matte black, 68 mm across and 41 mm tall.",
+    },
+    {
+      q: "Where does it ship from, and how fast?",
+      a: promoToday
+        ? "Vancouver, BC, within 1–2 business days. Shipping is free today on every order."
+        : "Vancouver, BC, within 1–2 business days. Flat $8 CAD shipping, free over $75.",
+    },
+    {
+      q: "Is there nicotine or tobacco inside?",
+      a: "No. Ice Tins Supply Co. sells empty metal cans and ice packs only — never nicotine or tobacco in any form.",
+    },
+    {
+      q: "What does the warranty cover?",
+      a: "A lifetime warranty on the shell against cracking or a failed thread.",
+    },
+  ];
+}
 
 export default async function IceTinPage() {
   const tin = CATALOG["ice-tin"];
@@ -93,6 +100,8 @@ export default async function IceTinPage() {
   const stock = await remaining("ice-tin");
   const left =
     stock.ok && Number.isFinite(stock.remaining) ? stock.remaining : (tin.remaining ?? null);
+  const promoToday = freeShippingToday();
+  const FAQS = buildFaqs(promoToday);
 
   const productJsonLd = {
     "@context": "https://schema.org",
@@ -286,7 +295,9 @@ export default async function IceTinPage() {
               <div>
                 <h3 className="text-sm font-medium text-white-ice">Shipping</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-fog">
-                  Ships worldwide from Vancouver, BC. Flat $8, free at $75+.
+                  {promoToday
+                    ? "Ships worldwide from Vancouver, BC. Free today on every order."
+                    : "Ships worldwide from Vancouver, BC. Flat $8, free at $75+."}
                 </p>
               </div>
             </div>

@@ -86,6 +86,20 @@ export const CATALOG: Record<string, Product> = {
 export const FREE_SHIPPING_OVER = 7500;
 export const SHIPPING_FLAT = 800;
 
+/**
+ * One-day free-shipping promo, triggered by adding to cart. Anchored to a
+ * real calendar date rather than "today" as a tautology — it genuinely
+ * expires, rather than being an evergreen banner that always claims
+ * urgency. Checked against server time in the checkout API, which never
+ * trusts a client-supplied shipping amount; the client copy here is
+ * display-only.
+ */
+const FREE_SHIPPING_PROMO_DATE = "2026-08-16";
+
+export function freeShippingToday(now: Date = new Date()) {
+  return now.toISOString().slice(0, 10) === FREE_SHIPPING_PROMO_DATE;
+}
+
 export const money = (cents: number) =>
   `$${(cents / 100).toFixed(2).replace(/\.00$/, "")}`;
 

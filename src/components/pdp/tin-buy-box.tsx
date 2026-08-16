@@ -17,6 +17,7 @@ import {
   CURRENCY_LABEL,
   FREE_SHIPPING_OVER,
   SHIPPING_FLAT,
+  freeShippingToday,
   money,
 } from "@/lib/catalog";
 
@@ -72,6 +73,7 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
     router.push("/checkout");
   };
 
+  const promoToday = freeShippingToday();
   const clearsFreeShipping = product.price * qty >= FREE_SHIPPING_OVER;
 
   return (
@@ -193,9 +195,11 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
 
             <p className="mt-3 flex items-center gap-1.5 text-xs text-fog">
               <TruckIcon size={13} weight="light" />
-              {clearsFreeShipping
-                ? "Free shipping — this order qualifies."
-                : `${money(SHIPPING_FLAT)} flat shipping, free over ${money(FREE_SHIPPING_OVER)}.`}
+              {promoToday
+                ? "Free shipping today — already applied."
+                : clearsFreeShipping
+                  ? "Free shipping — this order qualifies."
+                  : `${money(SHIPPING_FLAT)} flat shipping, free over ${money(FREE_SHIPPING_OVER)}.`}
             </p>
             <p className="mt-1.5 flex items-center gap-1.5 text-xs text-fog">
               <ShieldCheckIcon size={13} weight="light" />

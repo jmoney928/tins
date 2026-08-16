@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
-import { CATALOG, CURRENCY, FREE_SHIPPING_OVER, SHIPPING_FLAT } from "@/lib/catalog";
+import {
+  CATALOG,
+  CURRENCY,
+  FREE_SHIPPING_OVER,
+  SHIPPING_FLAT,
+  freeShippingToday,
+} from "@/lib/catalog";
 import { stripe, inspectKey, keyDiagnosis, siteOrigin } from "@/lib/stripe";
 import { remaining } from "@/lib/stock";
 
@@ -82,7 +88,8 @@ export async function POST(request: Request) {
   }
 
   const subtotal = priced.reduce((n, l) => n + l.product.price * l.qty, 0);
-  const shipping = subtotal >= FREE_SHIPPING_OVER ? 0 : SHIPPING_FLAT;
+  const shipping =
+    freeShippingToday() || subtotal >= FREE_SHIPPING_OVER ? 0 : SHIPPING_FLAT;
   const origin = siteOrigin(request);
 
   try {

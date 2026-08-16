@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
 import { InfoPage } from "@/components/info-page";
-import { FREE_SHIPPING_OVER, SHIPPING_FLAT, money } from "@/lib/catalog";
+import { FREE_SHIPPING_OVER, SHIPPING_FLAT, freeShippingToday, money } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Shipping & returns",
   alternates: { canonical: "/shipping-returns" },
 };
 
+// the rate below depends on freeShippingToday(), which must be checked
+// against the current date rather than baked in at build time
+export const dynamic = "force-dynamic";
+
 export default function ShippingReturnsPage() {
+  const promoToday = freeShippingToday();
+
   return (
     <InfoPage
       eyebrow="Support"
@@ -28,7 +34,9 @@ export default function ShippingReturnsPage() {
               Rate
             </dt>
             <dd className="mt-1.5 text-sm text-frost">
-              {money(SHIPPING_FLAT)} flat, free over {money(FREE_SHIPPING_OVER)}
+              {promoToday
+                ? "Free today, every order"
+                : `${money(SHIPPING_FLAT)} flat, free over ${money(FREE_SHIPPING_OVER)}`}
             </dd>
           </div>
           <div className="bg-paper p-5">

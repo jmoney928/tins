@@ -91,6 +91,16 @@ export function CartDrawer() {
               </div>
             ) : (
               <>
+                {cart.freeShippingPromo && (
+                  <div className="mx-6 mt-5 flex items-center gap-2.5 rounded-2xl border border-ice-500/25 bg-ice-100 px-4 py-3">
+                    <SnowflakeIcon size={16} weight="fill" className="shrink-0 text-ice-700" />
+                    <p className="text-sm text-ice-700">
+                      <span className="font-medium">Free shipping, today only</span> — already
+                      applied at checkout.
+                    </p>
+                  </div>
+                )}
+
                 <ul className="flex-1 divide-y divide-frost/8 overflow-y-auto px-6">
                   {cart.lines.map((line) => (
                     <li key={line.id} className="flex gap-4 py-6">
@@ -150,15 +160,13 @@ export function CartDrawer() {
                 </ul>
 
                 <footer className="border-t border-frost/8 px-6 py-6">
-                  {toFree > 0 ? (
-                    <p className="mb-4 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase">
-                      {money(toFree)} more for free shipping
-                    </p>
-                  ) : (
-                    <p className="mb-4 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase">
-                      Free shipping unlocked
-                    </p>
-                  )}
+                  <p className="mb-4 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase">
+                    {cart.freeShippingPromo
+                      ? "Free shipping unlocked — today only"
+                      : toFree > 0
+                        ? `${money(toFree)} more for free shipping`
+                        : "Free shipping unlocked"}
+                  </p>
 
                   <dl className="flex flex-col gap-2 text-sm">
                     <div className="flex justify-between text-fog">
