@@ -8,6 +8,7 @@ import {
   MinusIcon,
   PlusIcon,
   ShieldCheckIcon,
+  SnowflakeIcon,
   TruckIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { useCart } from "../cart/cart-context";
@@ -19,6 +20,7 @@ import {
   SHIPPING_FLAT,
   freeShippingToday,
   tinOnSale,
+  tinSaleEndsLabel,
   currentPrice,
   money,
 } from "@/lib/catalog";
@@ -111,6 +113,13 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
 
         {/* buy box */}
         <div>
+          {onSale && (
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-ice-500 px-4 py-2 font-mono text-[11px] tracking-[0.16em] text-paper uppercase">
+              <SnowflakeIcon size={13} weight="fill" />
+              Sale — {money(unitPrice)} this week, ends {tinSaleEndsLabel()}
+            </div>
+          )}
+
           {remaining !== null && (
             <p className="flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-ice-700 uppercase">
               <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
@@ -139,7 +148,7 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
           <div ref={ctaRef} className="mt-8 border-t border-frost/8 pt-7">
             {onSale && (
               <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-ice-500 px-3 py-1 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
-                This week only
+                This week only — ends {tinSaleEndsLabel()}
               </span>
             )}
             <div className="flex items-baseline gap-2.5">

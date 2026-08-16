@@ -1,7 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon, CheckIcon } from "@phosphor-icons/react/dist/ssr";
-import { CATALOG, CURRENCY_LABEL, currentPrice, tinOnSale, money } from "@/lib/catalog";
+import {
+  CATALOG,
+  CURRENCY_LABEL,
+  currentPrice,
+  tinOnSale,
+  tinSaleEndsLabel,
+  money,
+} from "@/lib/catalog";
 import { AddButton } from "./add-button";
 import { QuickView } from "./quick-view";
 
@@ -17,6 +24,11 @@ export function Collection() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         {/* centred, to break the left-head / right-body pattern used elsewhere */}
         <div className="mx-auto max-w-2xl text-center">
+          {onSale && (
+            <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-ice-500 px-3.5 py-1.5 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
+              {money(tinPrice)} this week — ends {tinSaleEndsLabel()}
+            </span>
+          )}
           <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
             The tin
           </p>
@@ -50,7 +62,7 @@ export function Collection() {
             </span>
             {onSale && (
               <span className="absolute top-6 right-6 rounded-full bg-ice-500 px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
-                This week only
+                Ends {tinSaleEndsLabel()}
               </span>
             )}
           </Link>

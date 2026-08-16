@@ -2,8 +2,9 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
+import { tinOnSale, tinSaleEndsLabel, currentPrice, money } from "@/lib/catalog";
 
-const WORDS = [
+const BASE_WORDS = [
   "One tin, one refill pack",
   "Cold for 6 hours",
   "Machined in Vancouver, BC",
@@ -14,7 +15,11 @@ const WORDS = [
 
 /** Seamless single-direction band. Duplicated once, translated exactly -50%. */
 export const Ticker = memo(function Ticker() {
-  const row = [...WORDS, ...WORDS];
+  const onSale = tinOnSale();
+  const words = onSale
+    ? [`${money(currentPrice("ice-tin"))} this week, ends ${tinSaleEndsLabel()}`, ...BASE_WORDS]
+    : BASE_WORDS;
+  const row = [...words, ...words];
 
   return (
     <div className="relative overflow-hidden border-y py-5 hairline bg-abyss/30">

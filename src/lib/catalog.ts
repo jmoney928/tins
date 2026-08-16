@@ -117,6 +117,16 @@ export function tinOnSale(now: Date = new Date()) {
   return d >= TIN_SALE_START && d <= TIN_SALE_END;
 }
 
+/** "Aug 22" — the real end date, for urgency copy that stays true. */
+export function tinSaleEndsLabel() {
+  const [y, m, d] = TIN_SALE_END.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
 /** The price to actually charge/display right now for any product. */
 export function currentPrice(id: string, now?: Date): number {
   if (id === "ice-tin" && tinOnSale(now)) return TIN_SALE_PRICE;

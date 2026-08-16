@@ -3,7 +3,7 @@ import { ArrowDownRightIcon, ArrowRightIcon } from "@phosphor-icons/react/dist/s
 import { ProductStage } from "./product-stage";
 import { Magnetic } from "./magnetic";
 import { Splatter } from "./splatter";
-import { currentPrice, money } from "@/lib/catalog";
+import { currentPrice, money, tinOnSale, tinSaleEndsLabel } from "@/lib/catalog";
 
 const PROOF = [
   ["3 floors", "spent, fresh, ice"],
@@ -16,6 +16,8 @@ const PROOF = [
  * lands between the headline and the body copy instead of below the fold.
  */
 export function Hero() {
+  const onSale = tinOnSale();
+
   return (
     <section
       id="top"
@@ -31,9 +33,16 @@ export function Hero() {
         className="cascade relative lg:col-start-2 lg:row-start-1 lg:self-end lg:pl-12"
         style={{ "--index": 0 } as React.CSSProperties}
       >
-        <div className="flex items-center gap-3 font-mono text-[11px] tracking-[0.28em] text-fog uppercase">
-          <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
-          In stock, ships worldwide
+        <div className="flex flex-wrap items-center gap-3">
+          {onSale && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-ice-500 px-3 py-1 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
+              {money(currentPrice("ice-tin"))} this week — ends {tinSaleEndsLabel()}
+            </span>
+          )}
+          <span className="flex items-center gap-3 font-mono text-[11px] tracking-[0.28em] text-fog uppercase">
+            <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
+            In stock, ships worldwide
+          </span>
         </div>
 
         <h1 className="mt-6 text-[3.25rem] leading-[0.88] font-medium tracking-tighter text-white-ice sm:text-7xl lg:text-[5.2rem]">
