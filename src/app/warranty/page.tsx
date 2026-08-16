@@ -44,8 +44,8 @@ export default function WarrantyPage() {
         <h2 className="text-lg font-medium text-white-ice">How to file one</h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
           Email{" "}
-          <a href="mailto:hello@icetins.com" className="text-ice-700 underline underline-offset-2">
-            hello@icetins.com
+          <a href="mailto:shop@icetins.com" className="text-ice-700 underline underline-offset-2">
+            shop@icetins.com
           </a>{" "}
           with your order number, a couple of photos of the issue, and a line
           on what happened. Most claims get a straight yes or no within a

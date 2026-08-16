@@ -30,8 +30,8 @@ export default function StockistsPage() {
         <h2 className="text-lg font-medium text-white-ice">Want to carry it?</h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
           If you run a shop and want to stock the tin, email{" "}
-          <a href="mailto:hello@icetins.com" className="text-ice-700 underline underline-offset-2">
-            hello@icetins.com
+          <a href="mailto:shop@icetins.com" className="text-ice-700 underline underline-offset-2">
+            shop@icetins.com
           </a>{" "}
           with a bit about the store. We're not set up for wholesale yet, but
           we're keeping a list.

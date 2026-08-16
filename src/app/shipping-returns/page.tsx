@@ -65,8 +65,8 @@ export default function ShippingReturnsPage() {
           The Ice Tin can be returned unused, in its original packaging,
           within 30 days of delivery for a full refund of the item price.
           Email{" "}
-          <a href="mailto:hello@icetins.com" className="text-ice-700 underline underline-offset-2">
-            hello@icetins.com
+          <a href="mailto:shop@icetins.com" className="text-ice-700 underline underline-offset-2">
+            shop@icetins.com
           </a>{" "}
           with your order number and we'll send a return label.
         </p>

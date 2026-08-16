@@ -60,10 +60,6 @@ export default function PressPage() {
         <h2 className="text-lg font-medium text-white-ice">Contact</h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
           For interviews, samples, or anything else:{" "}
-          <a href="mailto:hello@icetins.com" className="text-ice-700 underline underline-offset-2">
-            hello@icetins.com
-          </a>
-          . For order and product questions:{" "}
           <a href="mailto:shop@icetins.com" className="text-ice-700 underline underline-offset-2">
             shop@icetins.com
           </a>

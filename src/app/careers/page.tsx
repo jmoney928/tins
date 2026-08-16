@@ -19,8 +19,8 @@ export default function CareersPage() {
           If that changes, it'll be for hands-on work — machining,
           fulfilment, or customer support — before anything else. If that's
           you and you'd rather not wait for a posting, send a short note to{" "}
-          <a href="mailto:hello@icetins.com" className="text-ice-700 underline underline-offset-2">
-            hello@icetins.com
+          <a href="mailto:shop@icetins.com" className="text-ice-700 underline underline-offset-2">
+            shop@icetins.com
           </a>
           . We keep good ones on file.
         </p>
