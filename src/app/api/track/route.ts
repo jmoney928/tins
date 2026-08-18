@@ -70,7 +70,11 @@ export async function POST(request: NextRequest) {
   }));
   const value = lines.reduce((n, l) => n + (currentPrice(l.id) * l.qty) / 100, 0);
 
-  await sendMetaEvent({
+  // Meta's own verdict is surfaced rather than swallowed: "the token is set"
+  // and "Meta accepted the event" are different claims, and only the second
+  // one means anything. Reveals nothing a page visitor could not already tell
+  // from whether conversions appear.
+  const delivered = await sendMetaEvent({
     eventName: event as Allowed,
     eventId,
     eventSourceUrl: typeof body.url === "string" ? body.url.slice(0, 500) : null,
@@ -86,5 +90,5 @@ export async function POST(request: NextRequest) {
     ...(contents.length ? { contents, value, currency: "CAD" } : {}),
   });
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, delivered });
 }
