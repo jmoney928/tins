@@ -104,8 +104,8 @@ export async function attachRecoveryUrl(sessionId: string, url: string | null, e
  * week would mail everyone who abandoned during that week as though they had
  * just left.
  */
-export async function dueForReminder(now = new Date()): Promise<AbandonedRow[]> {
-  if (!ready()) return [];
+export async function dueForReminder(now = new Date()): Promise<AbandonedRow[] | null> {
+  if (!ready()) return null;
 
   const hoursAgo = (h: number) => new Date(now.getTime() - h * 3600_000).toISOString();
 
@@ -123,7 +123,10 @@ export async function dueForReminder(now = new Date()): Promise<AbandonedRow[]> 
 
   if (error) {
     console.error("[abandoned] could not read due rows:", error.message);
-    return [];
+    // null, not an empty list — "nothing to send" and "I could not look" are
+    // different answers, and a run that cannot tell them apart reports
+    // success while quietly sending nothing
+    return null;
   }
   return (data ?? []) as AbandonedRow[];
 }

@@ -49,6 +49,16 @@ export async function GET() {
       p_address: null,
       p_lines: [{ sku: "__nope__", name: "x", qty: 1, unit_amount: 0, total_amount: 0 }],
     });
+    // the recovery table is newer than the rest of the schema, and a missing
+    // one fails silently: checkout still succeeds, the row is simply never
+    // written and nobody is ever reminded. Worth a probe of its own.
+    const recovery = await db().from("abandoned_checkouts").select("id").limit(1);
+    supabase.abandoned_checkouts = recovery.error
+      ? /does not exist|schema cache/i.test(recovery.error.message)
+        ? "missing — re-run supabase/schema.sql"
+        : `unreadable: ${recovery.error.message}`
+      : "present";
+
     const msg = rpc.error?.message ?? "";
     supabase.settle_order = /could not find the function|does not exist/i.test(msg)
       ? "missing — run supabase/schema.sql"
@@ -62,6 +72,14 @@ export async function GET() {
   return NextResponse.json({
     stripe: key.ok ? "ready" : `not ready (${key.reason})`,
     webhookSecret: process.env.STRIPE_WEBHOOK_SECRET ? "set" : "missing",
+    // configuration only — whether Meta and Resend actually accept what we
+    // send them is not something a health check can answer, and pretending
+    // otherwise would be worse than saying nothing
+    metaCapi: process.env.META_PIXEL_ID && process.env.META_CAPI_ACCESS_TOKEN
+      ? "configured"
+      : "missing META_PIXEL_ID or META_CAPI_ACCESS_TOKEN",
+    email: process.env.RESEND_API_KEY ? "configured" : "missing RESEND_API_KEY",
+    cronSecret: process.env.CRON_SECRET ? "set" : "missing",
     supabase,
   });
 }

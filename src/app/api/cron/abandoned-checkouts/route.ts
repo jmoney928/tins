@@ -36,6 +36,8 @@ function linkFor(row: AbandonedRow) {
 
 async function run() {
   const rows = await dueForReminder();
+  if (rows === null) return null;
+
   let sent = 0;
   let skipped = 0;
 
@@ -79,7 +81,14 @@ export async function GET(request: NextRequest) {
   }
 
   const result = await run();
-  console.log("[cron abandoned]", JSON.stringify(result));
+  if (result === null) {
+    console.error("[cron abandoned] could not read the recovery table");
+    return NextResponse.json(
+      { error: "Could not read abandoned_checkouts. Is supabase/schema.sql applied?" },
+      { status: 503 },
+    );
+  }
 
+  console.log("[cron abandoned]", JSON.stringify(result));
   return NextResponse.json({ ok: true, ...result });
 }
