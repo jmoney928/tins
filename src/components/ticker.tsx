@@ -2,11 +2,12 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { tinOnSale, tinSaleEndsLabel, currentPrice, money } from "@/lib/catalog";
+import { CATALOG, tinOnSale, tinSaleEndsLabel, currentPrice, money } from "@/lib/catalog";
 
 const BASE_WORDS = [
   "One tin, one refill pack",
   "Cold for 6 hours",
+  "A sealed floor for the spent ones",
   "Machined in Vancouver, BC",
   "Freezer to ready in 90 min",
   "One ice pack in every can",
@@ -17,7 +18,10 @@ const BASE_WORDS = [
 export const Ticker = memo(function Ticker() {
   const onSale = tinOnSale();
   const words = onSale
-    ? [`${money(currentPrice("ice-tin"))} this week, ends ${tinSaleEndsLabel()}`, ...BASE_WORDS]
+    ? [
+        `${money(currentPrice("ice-tin"))} until ${tinSaleEndsLabel()}, then ${money(CATALOG["ice-tin"].price)}`,
+        ...BASE_WORDS,
+      ]
     : BASE_WORDS;
   const row = [...words, ...words];
 

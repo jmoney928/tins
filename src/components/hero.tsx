@@ -3,7 +3,7 @@ import { ArrowDownRightIcon, ArrowRightIcon } from "@phosphor-icons/react/dist/s
 import { ProductStage } from "./product-stage";
 import { Magnetic } from "./magnetic";
 import { Splatter } from "./splatter";
-import { currentPrice, money, tinOnSale, tinSaleEndsLabel } from "@/lib/catalog";
+import { CATALOG, currentPrice, money, tinOnSale, tinSaleEndsLabel } from "@/lib/catalog";
 
 const PROOF = [
   ["3 floors", "spent, fresh, ice"],
@@ -36,7 +36,8 @@ export function Hero() {
         <div className="flex flex-wrap items-center gap-3">
           {onSale && (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-ice-500 px-3 py-1 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
-              {money(currentPrice("ice-tin"))} this week — ends {tinSaleEndsLabel()}
+              {money(currentPrice("ice-tin"))} until {tinSaleEndsLabel()} — then{" "}
+              {money(CATALOG["ice-tin"].price)}
             </span>
           )}
           <span className="flex items-center gap-3 font-mono text-[11px] tracking-[0.28em] text-fog uppercase">
@@ -64,9 +65,10 @@ export function Hero() {
         style={{ "--index": 2 } as React.CSSProperties}
       >
         <p className="max-w-[50ch] text-base leading-relaxed text-fog">
-          A machined aluminium can with three floors: spent pouches up top,
-          twenty-five fresh in the middle, a slim ice pack underneath. Standard
-          diameter, one extra floor deep, and it stays cold for six hours.
+          Warm pouches by two o&rsquo;clock, and the spent one still in your
+          pocket. This can fixes both: twenty-five fresh over a frozen slim
+          pack, a sealed floor on top for the dead ones. Same width as the tin
+          you carry now, one floor deeper.
         </p>
 
         <div className="mt-9 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
@@ -75,7 +77,7 @@ export function Hero() {
               href="/products/ice-tin"
               className="group flex items-center justify-center gap-3 rounded-full bg-ink px-7 py-4 text-sm font-medium text-paper transition-colors duration-300 ease-[var(--ease-glide)] hover:bg-ice-700 active:scale-[0.98]"
             >
-              Shop the tin
+              See the tin
               <span className="font-mono text-xs opacity-65">{money(currentPrice("ice-tin"))}</span>
               <ArrowRightIcon
                 size={15}

@@ -6,6 +6,7 @@ import { ClearCart } from "@/components/clear-cart";
 import { TrackPurchase } from "@/components/track-purchase";
 import { stripe, stripeConfigured } from "@/lib/stripe";
 import { money } from "@/lib/catalog";
+import { dispatchSentence } from "@/lib/fulfilment";
 
 export const metadata: Metadata = {
   title: "Order confirmed",
@@ -110,9 +111,8 @@ export default async function SuccessPage({
         {paid ? (
           <>
             A confirmation is on its way to{" "}
-            <span className="text-frost">{email}</span>. Current lead time is
-            6 weeks — you will get a tracking number the morning it leaves
-            Vancouver.
+            <span className="text-frost">{email}</span>. {dispatchSentence()}{" "}
+            You will get a tracking number the morning it leaves Vancouver.
           </>
         ) : (
           <>

@@ -70,7 +70,7 @@ export function SiteNav() {
                 href="/products/ice-tin"
                 className="block rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-paper transition-colors duration-300 hover:bg-ice-700 active:scale-[0.98]"
               >
-                Shop now
+                See the tin
               </a>
             </Magnetic>
 
@@ -111,7 +111,7 @@ export function SiteNav() {
               variants={{ show: { transition: { staggerChildren: 0.07, delayChildren: 0.08 } } }}
               className="mt-6 flex flex-col gap-2 px-6"
             >
-              {[...LINKS, { label: "Shop now", href: "/products/ice-tin" }].map((l) => (
+              {[...LINKS, { label: "See the tin", href: "/products/ice-tin" }].map((l) => (
                 <motion.li
                   key={l.href}
                   variants={{

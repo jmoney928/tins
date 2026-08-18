@@ -3,6 +3,78 @@ import type Stripe from "stripe";
 import { stripe, stripeConfigured } from "@/lib/stripe";
 import { settleOrder, type SettleLine } from "@/lib/stock";
 import { CATALOG } from "@/lib/catalog";
+import { purchaseEventId } from "@/lib/attribution";
+import { sendMetaEvent } from "@/lib/meta";
+import { sendOrderEmail } from "@/lib/email";
+import { markRecovered, attachRecoveryUrl } from "@/lib/abandoned";
+
+/**
+ * Purchase, reported from the server.
+ *
+ * The browser copy fires on the success page, which a shopper can close, block
+ * or reload — so the only certain observation of a sale is this one. Both
+ * copies carry an event id derived from the Stripe session, so Meta collapses
+ * them into a single conversion rather than counting the order twice.
+ *
+ * The click identity was captured on landing and carried out to Stripe as
+ * session metadata, which is how an order made minutes later on a different
+ * origin can still be traced back to the ad that produced it. The buyer
+ * details are Stripe's verified values, hashed in `sendMetaEvent`.
+ */
+async function reportPurchase(session: Stripe.Checkout.Session, lines: SettleLine[]) {
+  const d = session.customer_details;
+  const m = session.metadata ?? {};
+  const [firstName, ...rest] = (d?.name ?? "").trim().split(/\s+/);
+
+  await sendMetaEvent({
+    eventName: "Purchase",
+    eventId: purchaseEventId(session.id),
+    eventTime: session.created,
+    actionSource: "website",
+    user: {
+      email: d?.email,
+      phone: d?.phone,
+      firstName: firstName || null,
+      lastName: rest.length ? rest.join(" ") : null,
+      city: d?.address?.city,
+      region: d?.address?.state,
+      postalCode: d?.address?.postal_code,
+      country: d?.address?.country,
+      externalId: m.external_id ?? null,
+      fbp: m.fbp ?? null,
+      fbc: m.fbc ?? null,
+      ip: m.client_ip ?? null,
+      userAgent: m.client_ua ?? null,
+    },
+    value: (session.amount_total ?? 0) / 100,
+    currency: session.currency ?? "cad",
+    contents: lines.map((l) => ({
+      id: l.sku,
+      quantity: l.qty,
+      item_price: l.unit_amount / 100,
+    })),
+  });
+}
+
+/** The confirmation the success page has been promising all along. */
+async function sendOrderConfirmation(session: Stripe.Checkout.Session, lines: SettleLine[]) {
+  const to = session.customer_details?.email;
+  if (!to) {
+    console.warn("[stripe webhook] no email on", session.id, "— no confirmation sent");
+    return;
+  }
+
+  await sendOrderEmail({
+    to,
+    // the same reference the success page shows, so a support email matches
+    reference: `IT-${session.id.slice(-8).toUpperCase()}`,
+    lines: lines.map((l) => ({ name: l.name, qty: l.qty, total_amount: l.total_amount })),
+    total: session.amount_total ?? 0,
+    currency: session.currency ?? "cad",
+    shippingName:
+      session.collected_information?.shipping_details?.name ?? session.customer_details?.name,
+  });
+}
 
 /**
  * The only place an order becomes real.
@@ -32,6 +104,20 @@ export async function POST(request: Request) {
     const message = err instanceof Error ? err.message : "bad signature";
     console.error("[stripe webhook] rejected:", message);
     return NextResponse.json({ error: "Invalid signature." }, { status: 400 });
+  }
+
+  // The session lapsed without payment. Stripe mints a fresh link to the same
+  // bag on expiry, which is what the second reminder sends people to — and it
+  // also reports the email they typed on Stripe's page, so a shopper who
+  // abandoned before our own field can still be reached.
+  if (event.type === "checkout.session.expired") {
+    const expired = event.data.object as Stripe.Checkout.Session;
+    await attachRecoveryUrl(
+      expired.id,
+      expired.after_expiration?.recovery?.url ?? null,
+      expired.customer_details?.email ?? expired.customer_email ?? null,
+    );
+    return NextResponse.json({ received: true });
   }
 
   if (
@@ -115,7 +201,19 @@ export async function POST(request: Request) {
         : `[stripe webhook] ${session.id} already settled, ignoring replay`,
     );
 
-    // TODO: send the confirmation email here, guarded on `applied`.
+    // Everything below is guarded on `applied`, so a Stripe retry of an
+    // already-settled session cannot double-report a conversion or send the
+    // buyer a second confirmation.
+    if (applied) {
+      await reportPurchase(session, lines);
+      await sendOrderConfirmation(session, lines);
+    }
+
+    // outside the `applied` guard on purpose: a replayed webhook should still
+    // close out a recovery row that an earlier delivery failed to mark, and
+    // marking twice is a no-op
+    await markRecovered(session.id);
+
     return NextResponse.json({ received: true, applied });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);

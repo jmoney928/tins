@@ -19,8 +19,7 @@ export function Carriers() {
             Field testers
           </p>
           <h2 className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
-            Tested
-            <span className="text-fog"> before you get one.</span>
+            Tested before you get one.
           </h2>
         </div>
         <div className="hidden gap-2 sm:flex">

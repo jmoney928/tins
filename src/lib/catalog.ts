@@ -139,6 +139,32 @@ export function tinSaleEndsLabel() {
   });
 }
 
+/**
+ * Tin plus a refill pack, taken off the order once.
+ *
+ * Modelled as a saving rather than a fixed bundle price on purpose: a fixed
+ * "$89.99 bundle" would be *more* than the two items cost during the sale,
+ * so it would quietly stop being an offer for exactly the week it matters
+ * most. As a deduction it stacks on whatever the live price is —
+ * $59.99 during the sale, $89.99 after it — and needs no maintenance when
+ * the window closes.
+ *
+ * $9.99 rather than a round $10 so both totals land on a real price point.
+ */
+export const BUNDLE_SAVING = 999;
+const BUNDLE_PARTS = ["ice-tin", "chillcore-3"] as const;
+
+/** The saving for a bag, in cents. Applies once, not once per pair. */
+export function bundleSaving(lines: { id: string; qty: number }[], now?: Date): number {
+  const has = (id: string) => lines.some((l) => l.id === id && l.qty > 0);
+  if (!BUNDLE_PARTS.every(has)) return 0;
+
+  // never let the deduction exceed the bag — a saving bigger than the order
+  // would hand Stripe a negative total
+  const gross = lines.reduce((n, l) => n + currentPrice(l.id, now) * l.qty, 0);
+  return Math.min(BUNDLE_SAVING, gross);
+}
+
 /** The price to actually charge/display right now for any product. */
 export function currentPrice(id: string, now?: Date): number {
   if (id === "ice-tin" && tinOnSale(now)) return TIN_SALE_PRICE;

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon, CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import {
+  BUNDLE_SAVING,
   CATALOG,
   CURRENCY_LABEL,
   currentPrice,
@@ -26,20 +27,20 @@ export function Collection() {
         <div className="mx-auto max-w-2xl text-center">
           {onSale && (
             <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-ice-500 px-3.5 py-1.5 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
-              {money(tinPrice)} this week — ends {tinSaleEndsLabel()}
+              {money(tinPrice)} until {tinSaleEndsLabel()} — then {money(tin.price)}
             </span>
           )}
           <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
             The tin
           </p>
+          {/* flat declarative on purpose — the two-tone headline runs in four
+              other sections, and dropping it once is what keeps it working */}
           <h2 className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
-            One can.
-            <span className="text-fog"> Made properly.</span>
+            We make one can, and the packs that go in it.
           </h2>
           <p className="mx-auto mt-5 max-w-[46ch] text-sm leading-relaxed text-fog">
-            We make one tin and the packs that go in it. No colourways to pick
-            between and nothing bolted on — just the thing, machined once and
-            machined right.
+            No colourways to pick between and nothing bolted on — just the
+            thing, machined once and machined right.
           </p>
         </div>
 
@@ -107,7 +108,7 @@ export function Collection() {
                 href="/products/ice-tin"
                 className="group flex items-center gap-2.5 rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-colors duration-300 ease-[var(--ease-glide)] hover:bg-ice-700 active:scale-[0.98]"
               >
-                View the tin
+                See the tin
                 <ArrowRightIcon
                   size={14}
                   weight="bold"
@@ -139,6 +140,10 @@ export function Collection() {
             </h3>
             <p className="mt-1.5 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase">
               {core.tagline}
+            </p>
+            <p className="mt-2.5 text-sm leading-relaxed text-frost">
+              Take one with the tin and {money(BUNDLE_SAVING)} comes off the
+              order.
             </p>
 
             {/* two columns, so four short points fill the row the photo sets

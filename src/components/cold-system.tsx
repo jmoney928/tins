@@ -44,7 +44,8 @@ export function ColdSystem() {
         </h2>
         <p className="mt-6 max-w-[58ch] text-base leading-relaxed text-ice-100/75">
           We split a can into three floors — 8 mm of spent, 20 mm of fresh,
-          13 mm of ice — and kept the diameter standard. Nothing else close.
+          13 mm of ice — and kept the diameter standard. 68 mm across, 41 mm
+          tall: it goes in the pocket the old can came out of.
         </p>
 
         <ol className="mt-12 border-t border-white/12">

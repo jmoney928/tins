@@ -16,6 +16,7 @@ import {
   CURRENCY_LABEL,
   freeShippingToday,
   currentPrice,
+  bundleSaving,
   type Product,
 } from "@/lib/catalog";
 import { trackPixel } from "@/lib/pixel";
@@ -29,6 +30,8 @@ type CartValue = {
   lines: FullLine[];
   count: number;
   subtotal: number;
+  /** tin + refill pack, deducted once — 0 when the bag does not qualify */
+  saving: number;
   shipping: number;
   /** the one-day free-shipping offer shown when the cart drawer opens */
   freeShippingPromo: boolean;
@@ -89,9 +92,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return prev.map((l) => (l.id === id ? { ...l, qty: l.qty + qty } : l));
     });
     trackPixel("AddToCart", {
-      content_ids: [id],
-      content_type: "product",
-      content_name: product.name,
+      lines: [{ id, qty }],
       currency: CURRENCY_LABEL,
       value: (currentPrice(id) * qty) / 100,
     });
@@ -119,17 +120,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
       total: currentPrice(l.id) * l.qty,
     }));
     const subtotal = full.reduce((n, l) => n + l.total, 0);
+    const saving = bundleSaving(lines);
     const promo = freeShippingToday();
+    // the free-shipping threshold is tested against what the customer
+    // actually pays for goods, so the bundle saving cannot push an order
+    // over $75 that no longer spends $75
+    const goods = subtotal - saving;
     const shipping =
-      subtotal === 0 || promo || subtotal >= FREE_SHIPPING_OVER ? 0 : SHIPPING_FLAT;
+      goods === 0 || promo || goods >= FREE_SHIPPING_OVER ? 0 : SHIPPING_FLAT;
 
     return {
       lines: full,
       count: full.reduce((n, l) => n + l.qty, 0),
       subtotal,
+      saving,
       shipping,
       freeShippingPromo: promo,
-      total: subtotal + shipping,
+      total: goods + shipping,
       ready,
       drawerOpen,
       add,

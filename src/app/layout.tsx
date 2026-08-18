@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { Attribution } from "@/components/attribution";
 import { CartProvider } from "@/components/cart/cart-context";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { ORG_NAME, SITE_URL } from "@/lib/seo";
@@ -115,6 +116,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             alt=""
           />
         </noscript>
+
+        <Attribution />
 
         <CartProvider>
           {children}

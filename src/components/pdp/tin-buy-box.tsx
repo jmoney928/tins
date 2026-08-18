@@ -116,7 +116,7 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
           {onSale && (
             <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-ice-500 px-4 py-2 font-mono text-[11px] tracking-[0.16em] text-paper uppercase">
               <SnowflakeIcon size={13} weight="fill" />
-              Sale — {money(unitPrice)} this week, ends {tinSaleEndsLabel()}
+              {money(unitPrice)} until {tinSaleEndsLabel()} — then {money(product.price)}
             </div>
           )}
 
@@ -145,12 +145,9 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
             ))}
           </ul>
 
+          {/* the deadline is stated once, at the top of this column — repeating
+              it over the price only made the offer look like it was pleading */}
           <div ref={ctaRef} className="mt-8 border-t border-frost/8 pt-7">
-            {onSale && (
-              <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-ice-500 px-3 py-1 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
-                This week only — ends {tinSaleEndsLabel()}
-              </span>
-            )}
             <div className="flex items-baseline gap-2.5">
               {onSale && (
                 <span className="font-mono text-lg text-fog line-through decoration-fog/50">

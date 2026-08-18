@@ -13,14 +13,18 @@ import { AddButton } from "@/components/add-button";
 import { QuickView } from "@/components/quick-view";
 import { ProductArt } from "@/components/product-art";
 import { SiteFooter } from "@/components/site-footer";
+import { ViewContent } from "@/components/view-content";
 import {
+  BUNDLE_SAVING,
   CATALOG,
   CURRENCY_LABEL,
   freeShippingToday,
   tinOnSale,
+  tinSaleEndsLabel,
   currentPrice,
   money,
 } from "@/lib/catalog";
+import { availabilityHeadline, dispatchSentence } from "@/lib/fulfilment";
 import { SPECS, STEPS } from "@/lib/products";
 import { CARRIERS } from "@/lib/testers";
 import { remaining } from "@/lib/stock";
@@ -95,8 +99,8 @@ function buildFaqs(promoToday: boolean) {
     {
       q: "Where does it ship from, and how fast?",
       a: promoToday
-        ? "Vancouver, BC, within 1–2 business days. Shipping is free today on every order."
-        : "Vancouver, BC, within 1–2 business days. Flat $8 CAD shipping, free over $75.",
+        ? `${dispatchSentence()} Shipping is free today on every order.`
+        : `${dispatchSentence()} Flat $8 CAD shipping, free over $75.`,
     },
     {
       q: "Is there nicotine or tobacco inside?",
@@ -105,6 +109,13 @@ function buildFaqs(promoToday: boolean) {
     {
       q: "What does the warranty cover?",
       a: "A lifetime warranty on the shell against cracking or a failed thread.",
+    },
+    {
+      // the price is the objection at this end of the market, so it is
+      // answered here too — this array feeds the FAQPage JSON-LD, which is
+      // where answer engines read it
+      q: `Why is it ${money(CATALOG["ice-tin"].price)}?`,
+      a: "Because it is machined from solid 6061-T6 in small batches rather than pressed from sheet, because the threads and O-rings have to keep sealing for six hours after a year of daily use, and because we replace the shell for life. Cheaper tins are a lid on a box. This one has a working cold system in the floor.",
     },
   ];
 }
@@ -177,6 +188,7 @@ export default async function IceTinPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+      <ViewContent productId={tin.id} />
       <FrostField />
       <ProductNav />
 
@@ -184,6 +196,23 @@ export default async function IceTinPage() {
         {/* buy box */}
         <section id="top" className="mx-auto max-w-7xl px-4 sm:px-6 scroll-mt-24">
           <TinBuyBox remaining={left} />
+        </section>
+
+        {/* the price justification, kept close to the button — at this price
+            the objection is what it costs, not what it does */}
+        <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
+          <div className="grid grid-cols-1 gap-5 border-t border-frost/8 pt-10 sm:grid-cols-[minmax(0,20rem)_1fr] sm:gap-10">
+            <h2 className="text-2xl leading-tight tracking-tight text-white-ice sm:text-3xl">
+              Why it costs what it costs.
+            </h2>
+            <p className="max-w-[62ch] text-sm leading-relaxed text-fog">
+              Billet 6061-T6, cut in small batches in Vancouver. Two silicone
+              O-rings and a double-start thread that still has to seal after a
+              few thousand turns. Thirty-one prototypes before this one, and a
+              lifetime warranty on the shell. It was never going to be a
+              twelve-dollar pocket tin.
+            </p>
+          </div>
         </section>
 
         {/* stock and shipping reassurance */}
@@ -194,12 +223,11 @@ export default async function IceTinPage() {
               <PackageIcon size={32} weight="thin" className="text-ice-500" />
               <div>
                 <h2 className="text-2xl leading-tight tracking-tight text-white-ice sm:text-3xl">
-                  In stock and ready to ship.
+                  {availabilityHeadline()}
                 </h2>
                 <p className="mt-3 max-w-[62ch] text-sm leading-relaxed text-fog">
-                  Every order ships from Vancouver, BC within 1–2 business
-                  days. Machined in small batches so quality stays
-                  consistent — we simply make more when we run low.
+                  {dispatchSentence()} Machined in small batches so quality
+                  stays consistent.
                 </p>
               </div>
             </div>
@@ -351,7 +379,10 @@ export default async function IceTinPage() {
               <h3 className="text-lg leading-tight tracking-tight text-white-ice">{core.name}</h3>
               <p className="mt-1.5 max-w-[46ch] text-sm leading-relaxed text-fog">
                 One pack ships in every tin. Add this if you want a spare
-                already freezing on day one.
+                already freezing on day one —{" "}
+                <span className="text-frost">
+                  {money(BUNDLE_SAVING)} comes off when both are in the bag.
+                </span>
               </p>
             </div>
             <div className="flex shrink-0 items-center justify-between gap-5 border-t border-frost/8 pt-5 sm:border-t-0 sm:pt-0">
@@ -391,8 +422,8 @@ export default async function IceTinPage() {
           <div className="glass-edge relative overflow-hidden rounded-[2.5rem] bg-abyss/80 px-6 py-14 text-center backdrop-blur-md sm:px-14 sm:py-16">
             <div className="pointer-events-none absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(46,157,200,0.22),transparent_65%)] blur-3xl" />
             <div className="relative">
-              <h2 className="mx-auto max-w-[20ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
-                Ready when you are.
+              <h2 className="mx-auto max-w-[24ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
+                Open it at four o&rsquo;clock. That is the whole test.
               </h2>
               <p className="mx-auto mt-4 max-w-[46ch] text-sm leading-relaxed text-fog">
                 {onSale ? (
@@ -400,8 +431,10 @@ export default async function IceTinPage() {
                     <span className="text-fog line-through decoration-fog/50">
                       {money(tin.price)}
                     </span>{" "}
-                    <span className="text-frost">{money(unitPrice)} CAD this week</span> — one
-                    tin, one ice pack in the box. In stock now.
+                    <span className="text-frost">
+                      {money(unitPrice)} CAD until {tinSaleEndsLabel()}
+                    </span>{" "}
+                    — one tin, one ice pack in the box. In stock now.
                   </>
                 ) : (
                   `${money(unitPrice)} CAD, one tin, one ice pack in the box. In stock now.`

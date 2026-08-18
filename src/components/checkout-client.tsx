@@ -20,6 +20,7 @@ export function CheckoutClient() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [cancelled, setCancelled] = useState(false);
+  const [email, setEmail] = useState("");
 
   // read once on mount rather than useSearchParams, which would force a
   // Suspense boundary around an otherwise static page
@@ -29,6 +30,14 @@ export function CheckoutClient() {
 
   const pay = async () => {
     if (busy) return;
+
+    // checked here as well as on the server, so a typo costs a glance rather
+    // than a round trip out to Stripe and back
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
+      setError("Enter the email your receipt should go to.");
+      return;
+    }
+
     setBusy(true);
     setError("");
     setCancelled(false);
@@ -39,6 +48,7 @@ export function CheckoutClient() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           lines: cart.lines.map((l) => ({ id: l.id, qty: l.qty })),
+          email: email.trim(),
         }),
       });
       const data = await res.json();
@@ -50,11 +60,9 @@ export function CheckoutClient() {
       }
 
       trackPixel("InitiateCheckout", {
-        content_ids: cart.lines.map((l) => l.id),
-        content_type: "product",
+        lines: cart.lines.map((l) => ({ id: l.id, qty: l.qty })),
         currency: CURRENCY_LABEL,
         value: cart.total / 100,
-        num_items: cart.count,
       });
 
       // hand off to Stripe; the bag is cleared on the success page, not here,
@@ -154,6 +162,12 @@ export function CheckoutClient() {
             <dt>Subtotal</dt>
             <dd className="font-mono">{money(cart.subtotal)}</dd>
           </div>
+          {cart.saving > 0 && (
+            <div className="flex justify-between text-ice-700">
+              <dt>Tin + pack bundle</dt>
+              <dd className="font-mono">−{money(cart.saving)}</dd>
+            </div>
+          )}
           <div className="flex justify-between text-fog">
             <dt>Shipping</dt>
             <dd className="font-mono">
@@ -166,10 +180,40 @@ export function CheckoutClient() {
           </div>
         </dl>
 
+        {/* asked here rather than on Stripe's page, and passed through so it
+            arrives prefilled — one field earlier, not one field more */}
+        <div className="mt-7">
+          <label
+            htmlFor="checkout-email"
+            className="font-mono text-[11px] tracking-[0.18em] text-fog uppercase"
+          >
+            Email
+          </label>
+          <input
+            id="checkout-email"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") pay();
+            }}
+            placeholder="you@example.com"
+            aria-describedby="checkout-email-note"
+            className="mt-2 w-full rounded-2xl border border-frost/12 bg-paper/60 px-4 py-3.5 text-sm text-frost outline-none transition-colors duration-300 placeholder:text-fog/60 focus:border-ice-500/60"
+          />
+          <p id="checkout-email-note" className="mt-2 text-xs leading-relaxed text-fog/80">
+            Your receipt and tracking go here. If you do not finish, we will
+            email your bag back to you once — and nothing else.
+          </p>
+        </div>
+
         <button
           onClick={pay}
           disabled={busy}
-          className="group mt-7 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-4 text-sm font-medium text-paper transition-all duration-300 ease-[var(--ease-glide)] hover:bg-ice-700 active:scale-[0.99] disabled:opacity-70"
+          className="group mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-4 text-sm font-medium text-paper transition-all duration-300 ease-[var(--ease-glide)] hover:bg-ice-700 active:scale-[0.99] disabled:opacity-70"
         >
           {busy ? (
             <>

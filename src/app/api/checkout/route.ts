@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import {
   CATALOG,
   CURRENCY,
@@ -6,9 +6,13 @@ import {
   SHIPPING_FLAT,
   freeShippingToday,
   currentPrice,
+  bundleSaving,
 } from "@/lib/catalog";
 import { stripe, inspectKey, keyDiagnosis, siteOrigin } from "@/lib/stripe";
 import { remaining } from "@/lib/stock";
+import { COOKIE } from "@/lib/attribution";
+import { TRANSIT_DAYS } from "@/lib/fulfilment";
+import { recordAbandoned } from "@/lib/abandoned";
 
 /**
  * Creates a Stripe Checkout Session and hands back its URL.
@@ -21,7 +25,71 @@ import { remaining } from "@/lib/stock";
 
 type Line = { id: string; qty: number };
 
-export async function POST(request: Request) {
+/**
+ * The bundle discount as a Stripe coupon.
+ *
+ * Applied as a discount rather than by quietly shaving the pack's unit price,
+ * so the line items stay truthful and the saving shows as its own line on the
+ * receipt. The id is deterministic, so this creates one coupon per amount for
+ * the whole account rather than one per checkout.
+ *
+ * If it cannot be resolved we throw: the shopper has already been shown the
+ * discounted total, and charging more than the cart displayed is the one
+ * failure mode worth refusing the sale over.
+ */
+async function bundleCoupon(amountOff: number) {
+  const id = `ice-tins-bundle-${amountOff}-${CURRENCY}`;
+  try {
+    return (await stripe().coupons.retrieve(id)).id;
+  } catch {
+    try {
+      return (
+        await stripe().coupons.create({
+          id,
+          amount_off: amountOff,
+          currency: CURRENCY,
+          duration: "once",
+          name: "Tin + pack bundle",
+        })
+      ).id;
+    } catch (err) {
+      // a concurrent checkout may have created it between our two calls
+      if ((err as { code?: string }).code === "resource_already_exists") return id;
+      throw err;
+    }
+  }
+}
+
+/**
+ * The attribution cookies, read server-side rather than accepted from the
+ * body — the browser has no reason to be trusted with them, and by this point
+ * whatever JavaScript ran on the page is no longer in the picture.
+ *
+ * Stripe rejects metadata values over 500 characters and undefined values, so
+ * every entry is trimmed and absent keys are simply left out.
+ */
+function attribution(request: NextRequest) {
+  const meta: Record<string, string> = {};
+  const put = (key: string, value?: string) => {
+    if (value) meta[key] = value.slice(0, 500);
+  };
+
+  put("fbp", request.cookies.get(COOKIE.fbp)?.value);
+  put("fbc", request.cookies.get(COOKIE.fbc)?.value);
+  put("external_id", request.cookies.get(COOKIE.externalId)?.value);
+  put("utm", request.cookies.get(COOKIE.utm)?.value);
+  put(
+    "client_ip",
+    request.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
+      request.headers.get("x-real-ip") ??
+      undefined,
+  );
+  put("client_ua", request.headers.get("user-agent") ?? undefined);
+
+  return meta;
+}
+
+export async function POST(request: NextRequest) {
   const key = inspectKey();
   if (!key.ok) {
     // one clear line in the log instead of an opaque 502 from Stripe later
@@ -36,11 +104,23 @@ export async function POST(request: Request) {
     );
   }
 
-  let body: { lines?: unknown };
+  let body: { lines?: unknown; email?: unknown };
   try {
-    body = (await request.json()) as { lines?: unknown };
+    body = (await request.json()) as { lines?: unknown; email?: unknown };
   } catch {
     return NextResponse.json({ error: "Malformed request." }, { status: 400 });
+  }
+
+  // Collected on our page rather than left to Stripe's, which is the only way
+  // an abandoned checkout is reachable at all — Stripe only tells us an
+  // address once someone has already paid. It is passed straight through as
+  // `customer_email`, so nobody types it twice.
+  const email = typeof body.email === "string" ? body.email.trim() : "";
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 254) {
+    return NextResponse.json(
+      { error: "That email does not look right. Check it and try again." },
+      { status: 400 },
+    );
   }
 
   const lines = Array.isArray(body.lines) ? (body.lines as Line[]) : [];
@@ -89,8 +169,12 @@ export async function POST(request: Request) {
   }
 
   const subtotal = priced.reduce((n, l) => n + currentPrice(l.product.id) * l.qty, 0);
+  // recomputed here rather than trusted from the client, like every other
+  // number in this route
+  const saving = bundleSaving(priced.map((l) => ({ id: l.product.id, qty: l.qty })));
+  const goods = subtotal - saving;
   const shipping =
-    freeShippingToday() || subtotal >= FREE_SHIPPING_OVER ? 0 : SHIPPING_FLAT;
+    freeShippingToday() || goods >= FREE_SHIPPING_OVER ? 0 : SHIPPING_FLAT;
   const origin = siteOrigin(request);
 
   try {
@@ -122,21 +206,36 @@ export async function POST(request: Request) {
             type: "fixed_amount",
             display_name: shipping === 0 ? "Free shipping" : "Standard shipping",
             fixed_amount: { amount: shipping, currency: CURRENCY },
+            // transit only — the lead time before dispatch is stated on the
+            // product page and repeated in the confirmation, from the same
+            // constant, so Stripe's estimate cannot contradict either
             delivery_estimate: {
-              minimum: { unit: "business_day", value: 3 },
-              maximum: { unit: "business_day", value: 8 },
+              minimum: { unit: "business_day", value: TRANSIT_DAYS.min },
+              maximum: { unit: "business_day", value: TRANSIT_DAYS.max },
             },
           },
         },
       ],
+      customer_email: email,
+      // Stripe hands back a fresh link to the same bag once the session
+      // lapses, which is what the second reminder sends people to
+      after_expiration: { recovery: { enabled: true, allow_promotion_codes: false } },
       phone_number_collection: { enabled: false },
-      allow_promotion_codes: true,
+      // Stripe refuses both at once, so a bundle order trades the promo-code
+      // field for the discount it already earned
+      ...(saving > 0
+        ? { discounts: [{ coupon: await bundleCoupon(saving) }] }
+        : { allow_promotion_codes: true }),
       success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/checkout?cancelled=1`,
       metadata: {
         // an audit trail in the Stripe dashboard — the webhook itself reads
         // stock back from the expanded line items, not from here
         bag: JSON.stringify(priced.map((l) => ({ id: l.product.id, qty: l.qty }))),
+        // the click identity, carried across the redirect. Stripe is the only
+        // thing that survives the round trip to the payment page and back, so
+        // the webhook can attribute a sale to the ad that produced it.
+        ...attribution(request),
       },
     });
 
@@ -145,6 +244,24 @@ export async function POST(request: Request) {
         { error: "Stripe did not return a checkout URL." },
         { status: 502 },
       );
+
+    // recorded after the session exists so the row always has a session id to
+    // be marked recovered against; awaited, but it never throws, so a broken
+    // recovery table cannot cost the sale that is already paid for
+    await recordAbandoned({
+      sessionId: session.id,
+      email,
+      lines: priced.map((l) => ({
+        sku: l.product.id,
+        name: l.product.name,
+        qty: l.qty,
+        total_amount: currentPrice(l.product.id) * l.qty,
+      })),
+      subtotalCents: goods,
+      currency: CURRENCY,
+      checkoutUrl: session.url,
+      attribution: attribution(request),
+    });
 
     return NextResponse.json({ url: session.url });
   } catch (err) {

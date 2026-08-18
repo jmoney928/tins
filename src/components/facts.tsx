@@ -14,7 +14,7 @@ const FACTS = [
   {
     n: "31",
     k: "Prototypes before this",
-    body: "Thirty-one machined test units since last spring. Nine of them leaked, four cracked a thread, and one is still in a freezer in Malmö.",
+    body: "Thirty-one machined test units since last spring. Nine leaked, four cracked a thread, one is still in a freezer in Malmö. You are buying the thirty-second.",
   },
 ];
 

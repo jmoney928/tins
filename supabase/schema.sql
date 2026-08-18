@@ -61,15 +61,70 @@ create table if not exists order_lines (
   total_amount integer not null
 );
 
+-- ───────────────────── abandoned checkouts ───────────────────────────
+-- One row per checkout session that got as far as an email address.
+--
+-- `checkout_url` is Stripe's own session URL and stays valid until the
+-- session expires, so the first reminder can drop someone straight back onto
+-- a live payment page with their bag intact. `recovery_url` is what Stripe
+-- hands back on expiry, and is what the later reminder uses instead.
+--
+-- recovered_at is set from the webhook when the order settles, which is also
+-- what stops a reminder being sent to someone who has already paid.
+create table if not exists abandoned_checkouts (
+  id                uuid primary key default gen_random_uuid(),
+  stripe_session_id text not null unique,
+  email             text not null,
+  lines             jsonb not null,
+  subtotal_cents    integer,
+  currency          text not null default 'cad',
+  checkout_url      text,
+  recovery_url      text,
+  attribution       jsonb,
+  created_at        timestamptz not null default now(),
+  recovered_at      timestamptz,
+  reminded_at       timestamptz
+);
+
+-- Reminders started out as a two-stage sequence, an hour out and again the
+-- next day. Vercel's Hobby plan runs a cron once a day, which would have
+-- collapsed the two sends into near-neighbours, so it is one reminder now.
+-- This block keeps the file safe to re-run against a table already created
+-- with the old column names.
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_name = 'abandoned_checkouts' and column_name = 'first_email_at'
+  ) then
+    alter table abandoned_checkouts rename column first_email_at to reminded_at;
+  end if;
+
+  if exists (
+    select 1 from information_schema.columns
+    where table_name = 'abandoned_checkouts' and column_name = 'second_email_at'
+  ) then
+    alter table abandoned_checkouts drop column second_email_at;
+  end if;
+end $$;
+
+-- the sender's query: unrecovered, oldest first
+create index if not exists abandoned_open_idx
+  on abandoned_checkouts (created_at)
+  where recovered_at is null;
+
+create index if not exists abandoned_email_idx on abandoned_checkouts (email);
+
 create index if not exists orders_email_idx      on orders (email);
 create index if not exists orders_created_at_idx on orders (created_at desc);
 create index if not exists order_lines_order_idx on order_lines (order_id);
 
 -- ───────────────────────── lock everything down ──────────────────────
-alter table products    enable row level security;
-alter table customers   enable row level security;
-alter table orders      enable row level security;
-alter table order_lines enable row level security;
+alter table products             enable row level security;
+alter table customers            enable row level security;
+alter table orders               enable row level security;
+alter table order_lines          enable row level security;
+alter table abandoned_checkouts  enable row level security;
 -- deliberately no policies: only the service-role key (which bypasses RLS)
 -- can touch these tables. The browser never talks to Supabase directly.
 

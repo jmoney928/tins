@@ -66,8 +66,9 @@ export function SiteFooter() {
 
         <div className="mt-16 flex flex-col gap-4 border-t border-frost/8 pt-8 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-[62ch] text-xs leading-relaxed text-fog/70">
-            Ice Tins Supply Co. sells empty metal cans and ice packs. We do not sell,
-            ship, or supply nicotine or tobacco in any form.
+            We make containers, not contents. Ice Tins Supply Co. sells empty
+            machined cans and ice packs — never nicotine or tobacco, in any
+            form, anywhere.
           </p>
           <p className="font-mono text-[11px] tracking-widest text-fog/50 uppercase">
             © {new Date().getFullYear()} Ice Tins Supply Co.

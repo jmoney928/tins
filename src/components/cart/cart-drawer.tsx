@@ -173,6 +173,12 @@ export function CartDrawer() {
                       <dt>Subtotal</dt>
                       <dd className="font-mono">{money(cart.subtotal)}</dd>
                     </div>
+                    {cart.saving > 0 && (
+                      <div className="flex justify-between text-ice-700">
+                        <dt>Tin + pack bundle</dt>
+                        <dd className="font-mono">−{money(cart.saving)}</dd>
+                      </div>
+                    )}
                     <div className="flex justify-between text-fog">
                       <dt>Shipping</dt>
                       <dd className="font-mono">

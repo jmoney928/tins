@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { InfoPage } from "@/components/info-page";
 import { FREE_SHIPPING_OVER, SHIPPING_FLAT, freeShippingToday, money } from "@/lib/catalog";
+import { SHIPS_FROM_STOCK, leadTimeLabel, transitLabel } from "@/lib/fulfilment";
 
 export const metadata: Metadata = {
   title: "Shipping & returns",
@@ -25,9 +26,9 @@ export default function ShippingReturnsPage() {
         <dl className="mt-5 grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-frost/8 sm:grid-cols-2">
           <div className="bg-paper p-5">
             <dt className="font-mono text-[10px] tracking-[0.18em] text-fog uppercase">
-              Processing
+              {SHIPS_FROM_STOCK ? "Processing" : "Lead time"}
             </dt>
-            <dd className="mt-1.5 text-sm text-frost">1–2 business days</dd>
+            <dd className="mt-1.5 text-sm text-frost">{leadTimeLabel()}</dd>
           </div>
           <div className="bg-paper p-5">
             <dt className="font-mono text-[10px] tracking-[0.18em] text-fog uppercase">
@@ -47,9 +48,9 @@ export default function ShippingReturnsPage() {
           </div>
           <div className="bg-paper p-5">
             <dt className="font-mono text-[10px] tracking-[0.18em] text-fog uppercase">
-              Coverage
+              Transit
             </dt>
-            <dd className="mt-1.5 text-sm text-frost">Worldwide</dd>
+            <dd className="mt-1.5 text-sm text-frost">{transitLabel()}</dd>
           </div>
         </dl>
         <p className="mt-5 text-sm leading-relaxed text-fog">
