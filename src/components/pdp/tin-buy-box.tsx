@@ -27,6 +27,7 @@ import {
 } from "@/lib/catalog";
 import { dispatchSentence } from "@/lib/fulfilment";
 import { GuaranteeLine } from "../guarantee";
+import { ReviewBadge } from "../review-badge";
 
 type State = "idle" | "adding" | "added";
 
@@ -137,6 +138,7 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
             {product.name}
           </h1>
           <p className="mt-2.5 text-sm text-fog">{product.tagline}</p>
+          <ReviewBadge className="mt-3" />
 
           <p className="mt-5 max-w-[46ch] text-[15px] leading-relaxed text-frost">
             {product.blurb}

@@ -27,6 +27,7 @@ import {
 } from "@/lib/catalog";
 import { availabilityHeadline, dispatchSentence } from "@/lib/fulfilment";
 import { GUARANTEE_BODY, GUARANTEE_EXCEPTION } from "@/lib/guarantee";
+import { aggregateRatingJsonLd } from "@/lib/social-proof";
 import { Guarantee } from "@/components/guarantee";
 import { SPECS, STEPS } from "@/lib/products";
 import { CARRIERS } from "@/lib/testers";
@@ -171,6 +172,10 @@ export default async function IceTinPage() {
       itemCondition: "https://schema.org/NewCondition",
       seller: { "@type": "Organization", name: ORG_NAME },
     },
+    // omitted entirely until there is a real average and somewhere on this
+    // page a reader can check it — rating markup that a visitor cannot see
+    // is what earns a manual penalty, not rich results
+    aggregateRating: aggregateRatingJsonLd(),
   };
 
   const breadcrumbJsonLd = {

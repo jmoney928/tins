@@ -10,6 +10,7 @@ import { Magnetic } from "./magnetic";
 import { Splatter } from "./splatter";
 import { CATALOG, currentPrice, money, tinOnSale } from "@/lib/catalog";
 import { GUARANTEE_SHORT } from "@/lib/guarantee";
+import { ReviewBadge } from "./review-badge";
 
 const PROOF = [
   ["3 floors", "spent, fresh, ice"],
@@ -107,6 +108,9 @@ export function Hero() {
             social proof is the one thing that would make everything else on
             the page less believable. Every claim here is one we can keep. */}
         <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-fog">
+          <li>
+            <ReviewBadge />
+          </li>
           <li className="flex items-center gap-2">
             <ShieldCheckIcon size={14} weight="light" className="text-ice-500" />
             {GUARANTEE_SHORT}
