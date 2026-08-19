@@ -20,8 +20,31 @@ import "server-only";
  */
 const API_VERSION = process.env.SHOPIFY_API_VERSION ?? "2026-01";
 
+/**
+ * Two kinds of Storefront token, and which one you need depends on something
+ * that has nothing to do with code: whether the online store still has its
+ * password page up.
+ *
+ *   public  (X-Shopify-Storefront-Access-Token) — browser-safe, and refused
+ *           while the storefront is password-protected
+ *   private (Shopify-Storefront-Private-Token)  — server-only, and reads a
+ *           password-protected store perfectly well
+ *
+ * icetins.myshopify.com is password-protected today, so the private token is
+ * the one that works. Every call here is server-side regardless, so the
+ * private token is preferred whenever it is present.
+ */
 export function shopifyConfigured() {
-  return Boolean(process.env.SHOPIFY_STORE_DOMAIN && process.env.SHOPIFY_STOREFRONT_TOKEN);
+  return Boolean(
+    process.env.SHOPIFY_STORE_DOMAIN &&
+      (process.env.SHOPIFY_STOREFRONT_PRIVATE_TOKEN || process.env.SHOPIFY_STOREFRONT_TOKEN),
+  );
+}
+
+function authHeaders(): Record<string, string> {
+  const priv = process.env.SHOPIFY_STOREFRONT_PRIVATE_TOKEN;
+  if (priv) return { "Shopify-Storefront-Private-Token": priv };
+  return { "X-Shopify-Storefront-Access-Token": process.env.SHOPIFY_STOREFRONT_TOKEN! };
 }
 
 function endpoint() {
@@ -47,7 +70,7 @@ export async function shopifyFetch<T>(
 ): Promise<T> {
   if (!shopifyConfigured()) {
     throw new Error(
-      "SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_TOKEN must both be set.",
+      "Set SHOPIFY_STORE_DOMAIN plus SHOPIFY_STOREFRONT_PRIVATE_TOKEN (or SHOPIFY_STOREFRONT_TOKEN).",
     );
   }
 
@@ -55,7 +78,7 @@ export async function shopifyFetch<T>(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-Shopify-Storefront-Access-Token": process.env.SHOPIFY_STOREFRONT_TOKEN!,
+      ...authHeaders(),
     },
     body: JSON.stringify({ query, variables }),
     ...(init?.revalidate !== undefined
