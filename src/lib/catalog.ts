@@ -23,7 +23,7 @@ export const CATALOG: Record<string, Product> = {
   "ice-tin": {
     id: "ice-tin",
     name: "The Ice Tin",
-    tagline: "Cerakote over 6061-T6, bead-blasted matte black",
+    tagline: "A sealed floor for the spent ones, twenty-five fresh",
     price: 7999,
     image: "/side-product.jpg",
     /**
@@ -53,9 +53,11 @@ export const CATALOG: Record<string, Product> = {
       "The Ice Tin surrounded by a burst of powdered ice and cold vapour",
     ],
     blurb:
-      "Three floors in the footprint of a standard can: spent pouches up top, twenty-five fresh in the middle, a slim ice pack in the base. Sealed, it holds fridge temperature for six hours.",
+      "Three compartments, one job: your pouches stay right. Twenty-five fresh sit on a perforated tray over a slim ice pack that holds fridge temperature for six hours — a full shift. On top, a sealed floor takes the spent ones, so the used pouch stops riding in your pocket.",
+    // benefit first, engineering second — the order a buyer cares about
     points: [
-      "Three floors: spent, fresh, ice",
+      "Sealed top floor for spent pouches",
+      "Twenty-five fresh, cold for 6 hours",
       "Perforated floor so the cold rises",
       "Two silicone O-rings, IPX6",
       "One Chillcore pack in the box",
@@ -103,12 +105,16 @@ export const CATALOG: Record<string, Product> = {
 };
 
 /**
- * At the $79.99 list price a single tin clears this on its own; during the
- * sale it takes a tin plus a refill pack ($49.99 + $19.99 is short of it).
- * Left where it is deliberately — moving it would change the shipping offer
- * mid-sale.
+ * Set so the tin alone clears it at the launch price.
+ *
+ * It was $75 against a $49.99 tin whose only companion is a $19.99 pack —
+ * a threshold the cart could not reach without buying both, which is the
+ * kind of near-miss that reads as a toll rather than an offer.
+ *
+ * $49.99 rather than a round $50, because $50 would miss the tin by a single
+ * cent and recreate the same problem in miniature.
  */
-export const FREE_SHIPPING_OVER = 7500;
+export const FREE_SHIPPING_OVER = 4999;
 export const SHIPPING_FLAT = 800;
 
 /**
@@ -126,37 +132,30 @@ export function freeShippingToday(now: Date = new Date()) {
 }
 
 /**
- * One-week sale on the tin. CATALOG["ice-tin"].price is the regular list
- * price ($79.99) — what the tin charges the moment this window closes, not
- * a number invented to inflate the strikethrough. The sale price is a
- * separate, genuinely time-boxed override checked fresh on every read, the
- * same pattern as freeShippingToday: a real calendar window that expires on
- * its own rather than a static discount someone has to remember to revert.
+ * Launch pricing, with no countdown.
  *
- * Note: the list price moved 59.99 -> 79.99 at the same time this window
- * opened, so "was $79.99" is a forward-looking list price rather than one
- * the store has actually charged. Canadian ordinary-price rules want the
- * struck-through price to have been sold in volume or offered in good faith
- * for a substantial period; letting $79.99 stand on its own after Aug 22 is
- * what makes it true.
+ * This replaces a seven-day sale that expired on Aug 22. A deadline that
+ * close is worse than no deadline: everyone arriving on the 23rd would have
+ * met the worst version of the offer — full price, no anchor, no reason to
+ * act — and the urgency was doing nothing for the majority of traffic that
+ * never saw it in time.
+ *
+ * ── Read this before leaving it running ──────────────────────────────────
+ * $79.99 is the price this tin sells for when launch pricing ends, and the
+ * shop has never actually charged it. That is defensible for an
+ * introductory period on a new product; it stops being defensible if it runs
+ * indefinitely, because Canadian ordinary-price rules expect a struck-through
+ * price to have been sold in volume or offered in good faith for a
+ * substantial period. Either move to $79.99 in due course, or drop the
+ * comparison and simply sell at $49.99. Set LAUNCH_PRICING to false to do
+ * the former; every surface follows.
  */
+export const LAUNCH_PRICING = true;
 export const TIN_SALE_PRICE = 4999;
-const TIN_SALE_START = "2026-08-16";
-const TIN_SALE_END = "2026-08-22"; // inclusive — a real 7-day window
 
-export function tinOnSale(now: Date = new Date()) {
-  const d = now.toISOString().slice(0, 10);
-  return d >= TIN_SALE_START && d <= TIN_SALE_END;
-}
-
-/** "Aug 22" — the real end date, for urgency copy that stays true. */
-export function tinSaleEndsLabel() {
-  const [y, m, d] = TIN_SALE_END.split("-").map(Number);
-  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    timeZone: "UTC",
-  });
+/** Kept as a function so callers read a live value, not a frozen import. */
+export function tinOnSale(_now: Date = new Date()) {
+  return LAUNCH_PRICING;
 }
 
 /**

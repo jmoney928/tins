@@ -1,5 +1,7 @@
 import { Anatomy } from "@/components/anatomy";
+import { Benefits } from "@/components/benefits";
 import { Carriers } from "@/components/carriers";
+import { Guarantee } from "@/components/guarantee";
 import { ColdSystem } from "@/components/cold-system";
 import { Collection } from "@/components/collection";
 import { Facts } from "@/components/facts";
@@ -22,8 +24,13 @@ export default function Home() {
       <main>
         <Hero />
         <Ticker />
+        {/* the felt benefits come before the engineering: disposal and
+            freshness are what a cold visitor recognises, the cold system is
+            what justifies the price once they are interested */}
+        <Benefits />
         <ColdSystem />
         <Collection />
+        <Guarantee />
         <Anatomy />
         <Facts />
         <Carriers />

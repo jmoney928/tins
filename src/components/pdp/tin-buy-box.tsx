@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   CheckIcon,
+  LockSimpleIcon,
   MinusIcon,
+  PackageIcon,
   PlusIcon,
   ShieldCheckIcon,
   SnowflakeIcon,
@@ -20,10 +22,11 @@ import {
   SHIPPING_FLAT,
   freeShippingToday,
   tinOnSale,
-  tinSaleEndsLabel,
   currentPrice,
   money,
 } from "@/lib/catalog";
+import { dispatchSentence } from "@/lib/fulfilment";
+import { GuaranteeLine } from "../guarantee";
 
 type State = "idle" | "adding" | "added";
 
@@ -119,7 +122,7 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
           {onSale && (
             <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-ice-500 px-4 py-2 font-mono text-[11px] tracking-[0.16em] text-paper uppercase">
               <SnowflakeIcon size={13} weight="fill" />
-              {money(unitPrice)} until {tinSaleEndsLabel()} — then {money(product.price)}
+              Launch price {money(unitPrice)} — reg. {money(product.price)}
             </div>
           )}
 
@@ -224,9 +227,20 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
                   ? "Free shipping — this order qualifies."
                   : `${money(SHIPPING_FLAT)} flat shipping, free over ${money(FREE_SHIPPING_OVER)}.`}
             </p>
+            {/* the guarantee sits with the button, not on a policy page:
+                this is the moment the doubt actually occurs */}
+            <GuaranteeLine className="mt-3" />
             <p className="mt-1.5 flex items-center gap-1.5 text-xs text-fog">
               <ShieldCheckIcon size={13} weight="light" />
-              Lifetime warranty on the shell. Secure checkout via Stripe.
+              Lifetime warranty on the shell.
+            </p>
+            <p className="mt-1.5 flex items-center gap-1.5 text-xs text-fog">
+              <LockSimpleIcon size={13} weight="fill" />
+              Secure checkout via Stripe — card details never touch our servers.
+            </p>
+            <p className="mt-3 flex items-start gap-1.5 text-xs leading-relaxed text-fog">
+              <PackageIcon size={13} weight="light" className="mt-0.5 shrink-0" />
+              {dispatchSentence()}
             </p>
           </div>
         </div>

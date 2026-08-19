@@ -1,9 +1,15 @@
 import Link from "next/link";
-import { ArrowDownRightIcon, ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
+import {
+  ArrowDownRightIcon,
+  ArrowRightIcon,
+  ShieldCheckIcon,
+  WrenchIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import { ProductStage } from "./product-stage";
 import { Magnetic } from "./magnetic";
 import { Splatter } from "./splatter";
-import { CATALOG, currentPrice, money, tinOnSale, tinSaleEndsLabel } from "@/lib/catalog";
+import { CATALOG, currentPrice, money, tinOnSale } from "@/lib/catalog";
+import { GUARANTEE_SHORT } from "@/lib/guarantee";
 
 const PROOF = [
   ["3 floors", "spent, fresh, ice"],
@@ -36,7 +42,7 @@ export function Hero() {
         <div className="flex flex-wrap items-center gap-3">
           {onSale && (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-ice-500 px-3 py-1 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
-              {money(currentPrice("ice-tin"))} until {tinSaleEndsLabel()} — then{" "}
+              Launch price {money(currentPrice("ice-tin"))} — reg.{" "}
               {money(CATALOG["ice-tin"].price)}
             </span>
           )}
@@ -47,9 +53,9 @@ export function Hero() {
         </div>
 
         <h1 className="mt-6 text-[3.25rem] leading-[0.88] font-medium tracking-tighter text-white-ice sm:text-7xl lg:text-[5.2rem]">
-          Cold to the
+          Fresh pouches ready.
           <br />
-          <span className="text-fog">last pouch.</span>
+          <span className="text-fog">Dead ones gone.</span>
         </h1>
       </div>
 
@@ -65,10 +71,10 @@ export function Hero() {
         style={{ "--index": 2 } as React.CSSProperties}
       >
         <p className="max-w-[50ch] text-base leading-relaxed text-fog">
-          Warm pouches by two o&rsquo;clock, and the spent one still in your
-          pocket. This can fixes both: twenty-five fresh over a frozen slim
-          pack, a sealed floor on top for the dead ones. Same width as the tin
-          you carry now, one floor deeper.
+          A machined case that keeps twenty-five pouches cold over a frozen
+          slim pack — and seals the spent ones away where they belong. No more
+          warm pouches, no more used one riding in your pocket. Same width as
+          the tin you carry now, one floor deeper.
         </p>
 
         <div className="mt-9 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
@@ -96,7 +102,22 @@ export function Hero() {
           </a>
         </div>
 
-        <dl className="mt-12 grid grid-cols-3 gap-6 border-t border-frost/8 pt-7">
+        {/* Trust strip. Deliberately carries no star rating or customer
+            count: there is no review system on this site yet, and invented
+            social proof is the one thing that would make everything else on
+            the page less believable. Every claim here is one we can keep. */}
+        <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-fog">
+          <li className="flex items-center gap-2">
+            <ShieldCheckIcon size={14} weight="light" className="text-ice-500" />
+            {GUARANTEE_SHORT}
+          </li>
+          <li className="flex items-center gap-2">
+            <WrenchIcon size={14} weight="light" className="text-ice-500" />
+            Lifetime shell warranty
+          </li>
+        </ul>
+
+        <dl className="mt-10 grid grid-cols-3 gap-6 border-t border-frost/8 pt-7">
           {PROOF.map(([n, label]) => (
             <div key={n}>
               <dt className="font-mono text-lg text-white-ice">{n}</dt>

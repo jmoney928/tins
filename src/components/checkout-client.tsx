@@ -13,6 +13,7 @@ import { useCart } from "./cart/cart-context";
 import { ProductArt } from "./product-art";
 import { BrandMark } from "./brand-mark";
 import { CURRENCY_LABEL, money } from "@/lib/catalog";
+import { GUARANTEE_SHORT } from "@/lib/guarantee";
 import { trackPixel } from "@/lib/pixel";
 
 export function CheckoutClient() {
@@ -235,6 +236,11 @@ export function CheckoutClient() {
         <p className="mt-4 flex items-center justify-center gap-2 text-xs text-fog/80">
           <LockSimpleIcon size={13} weight="fill" />
           Secured by Stripe. Card details never touch our servers.
+        </p>
+        {/* the last thing read before paying should be the way out, not the
+            lock icon */}
+        <p className="mt-2 text-center text-xs leading-relaxed text-fog/80">
+          {GUARANTEE_SHORT}
         </p>
       </div>
     </main>

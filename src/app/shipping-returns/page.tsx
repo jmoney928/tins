@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { InfoPage } from "@/components/info-page";
 import { FREE_SHIPPING_OVER, SHIPPING_FLAT, freeShippingToday, money } from "@/lib/catalog";
 import { SHIPS_FROM_STOCK, leadTimeLabel, transitLabel } from "@/lib/fulfilment";
+import { GUARANTEE_BODY, GUARANTEE_EXCEPTION } from "@/lib/guarantee";
 
 export const metadata: Metadata = {
   title: "Shipping & returns",
@@ -61,25 +62,24 @@ export default function ShippingReturnsPage() {
       </section>
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">Returns</h2>
+        <h2 className="text-lg font-medium text-white-ice">
+          Returns — the cold-or-refund guarantee
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-frost">
+          {GUARANTEE_BODY}
+        </p>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          The Ice Tin can be returned unused, in its original packaging,
-          within 30 days of delivery for a full refund of the item price.
           Email{" "}
           <a href="mailto:shop@icetins.com" className="text-ice-700 underline underline-offset-2">
             shop@icetins.com
           </a>{" "}
-          with your order number and we'll send a return label.
+          with your order number and we&rsquo;ll send a prepaid return label.
+          You do not need the original packaging, and the tin does not need to
+          be unused — carrying it is how you find out whether it works.
         </p>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          Chillcore ice packs are a food-safe consumable — once one has been
-          in a freezer, it can't be resold, so packs aren't returnable unless
-          the seal arrived compromised. That's covered under warranty, not as
-          a return.
-        </p>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          Shipping costs on the original order aren't refunded unless the
-          return is because of our error.
+          {GUARANTEE_EXCEPTION} If a pack&rsquo;s seal arrived compromised,
+          that is a warranty replacement rather than a return.
         </p>
       </section>
     </InfoPage>

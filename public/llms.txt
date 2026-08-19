@@ -23,7 +23,11 @@
 ## Company facts
 
 - Based in Vancouver, BC, Canada. Ships worldwide.
-- Orders ship within 1–2 business days. Flat $8 CAD shipping, free over $75.
+- Each tin is machined to order. Current lead time is 2–3 weeks to dispatch,
+  then 3–8 business days in transit. Shipping is free on any order of $49.99
+  or more, $8 CAD flat below that.
+- 30-day cold-or-refund guarantee: return it used, in any packaging, for a
+  full refund with return shipping paid. Lifetime warranty on the shell.
 - Machined in small batches; restocked as needed rather than sold as
   one-time limited drops.
 - Checkout is handled by Stripe. Card details never touch Ice Tins' servers.

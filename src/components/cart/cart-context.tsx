@@ -124,7 +124,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const promo = freeShippingToday();
     // the free-shipping threshold is tested against what the customer
     // actually pays for goods, so the bundle saving cannot push an order
-    // over $75 that no longer spends $75
+    // over the threshold that no longer spends it
     const goods = subtotal - saving;
     const shipping =
       goods === 0 || promo || goods >= FREE_SHIPPING_OVER ? 0 : SHIPPING_FLAT;

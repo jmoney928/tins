@@ -2,7 +2,8 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { CATALOG, tinOnSale, tinSaleEndsLabel, currentPrice, money } from "@/lib/catalog";
+import { CATALOG, tinOnSale, currentPrice, money } from "@/lib/catalog";
+import { GUARANTEE_DAYS } from "@/lib/guarantee";
 
 const BASE_WORDS = [
   "One tin, one refill pack",
@@ -10,8 +11,8 @@ const BASE_WORDS = [
   "A sealed floor for the spent ones",
   "Machined in Vancouver, BC",
   "Freezer to ready in 90 min",
-  "One ice pack in every can",
-  "Free shipping over $75",
+  `${GUARANTEE_DAYS}-day cold-or-refund guarantee`,
+  "Free shipping on every tin",
 ];
 
 /** Seamless single-direction band. Duplicated once, translated exactly -50%. */
@@ -19,7 +20,7 @@ export const Ticker = memo(function Ticker() {
   const onSale = tinOnSale();
   const words = onSale
     ? [
-        `${money(currentPrice("ice-tin"))} until ${tinSaleEndsLabel()}, then ${money(CATALOG["ice-tin"].price)}`,
+        `Launch price ${money(currentPrice("ice-tin"))}, reg. ${money(CATALOG["ice-tin"].price)}`,
         ...BASE_WORDS,
       ]
     : BASE_WORDS;

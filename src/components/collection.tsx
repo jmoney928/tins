@@ -7,7 +7,6 @@ import {
   CURRENCY_LABEL,
   currentPrice,
   tinOnSale,
-  tinSaleEndsLabel,
   money,
 } from "@/lib/catalog";
 import { AddButton } from "./add-button";
@@ -27,7 +26,7 @@ export function Collection() {
         <div className="mx-auto max-w-2xl text-center">
           {onSale && (
             <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-ice-500 px-3.5 py-1.5 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
-              {money(tinPrice)} until {tinSaleEndsLabel()} — then {money(tin.price)}
+              Launch price {money(tinPrice)} — reg. {money(tin.price)}
             </span>
           )}
           <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
@@ -63,7 +62,7 @@ export function Collection() {
             </span>
             {onSale && (
               <span className="absolute top-6 right-6 rounded-full bg-ice-500 px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
-                Ends {tinSaleEndsLabel()}
+                Launch price
               </span>
             )}
           </Link>

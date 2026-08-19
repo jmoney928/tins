@@ -18,13 +18,16 @@ import {
   BUNDLE_SAVING,
   CATALOG,
   CURRENCY_LABEL,
+  FREE_SHIPPING_OVER,
+  SHIPPING_FLAT,
   freeShippingToday,
   tinOnSale,
-  tinSaleEndsLabel,
   currentPrice,
   money,
 } from "@/lib/catalog";
 import { availabilityHeadline, dispatchSentence } from "@/lib/fulfilment";
+import { GUARANTEE_BODY, GUARANTEE_EXCEPTION } from "@/lib/guarantee";
+import { Guarantee } from "@/components/guarantee";
 import { SPECS, STEPS } from "@/lib/products";
 import { CARRIERS } from "@/lib/testers";
 import { remaining } from "@/lib/stock";
@@ -37,7 +40,7 @@ const PDP_URL = absoluteUrl("/products/ice-tin");
 // force-dynamic for the same reason (live stock)
 export async function generateMetadata(): Promise<Metadata> {
   const priceLine = tinOnSale()
-    ? `${money(currentPrice("ice-tin"))} CAD this week (regular ${money(CATALOG["ice-tin"].price)}), in stock now.`
+    ? `Launch price ${money(currentPrice("ice-tin"))} CAD (regular ${money(CATALOG["ice-tin"].price)}).`
     : `${money(currentPrice("ice-tin"))} CAD, in stock now.`;
 
   return {
@@ -100,7 +103,7 @@ function buildFaqs(promoToday: boolean) {
       q: "Where does it ship from, and how fast?",
       a: promoToday
         ? `${dispatchSentence()} Shipping is free today on every order.`
-        : `${dispatchSentence()} Flat $8 CAD shipping, free over $75.`,
+        : `${dispatchSentence()} Shipping is free on every tin — ${money(SHIPPING_FLAT)} flat on smaller orders.`,
     },
     {
       q: "Is there nicotine or tobacco inside?",
@@ -109,6 +112,25 @@ function buildFaqs(promoToday: boolean) {
     {
       q: "What does the warranty cover?",
       a: "A lifetime warranty on the shell against cracking or a failed thread.",
+    },
+    {
+      // the skeptic's question, answered head-on rather than avoided — the
+      // doubt is the objection, so meeting it is worth more than restating
+      // the benefit
+      q: "Do pouches really go stale otherwise?",
+      a: "Warmth is what dries a pouch out and flattens the mint — the moisture goes, and with it most of the flavour. Held at fridge temperature the pouch you take at hour six is the pouch you took at hour one. Our own test is a frozen pack, a closed lid and a 22°C room, which holds for six hours; the same can with the tray empty holds about one.",
+    },
+    {
+      q: "When will it actually arrive?",
+      a: `${dispatchSentence()} You get a tracking number the morning it leaves Vancouver, and the lead time is stated here rather than sprung on you at checkout.`,
+    },
+    {
+      q: "What if I don't like it?",
+      a: `${GUARANTEE_BODY} ${GUARANTEE_EXCEPTION}`,
+    },
+    {
+      q: "Can I replace the O-rings or the ice pack?",
+      a: "Yes to both. Chillcore packs are sold in three-packs and drop straight into the base. The two silicone O-rings are standard sizes and seat by hand — email shop@icetins.com and we will send replacements at no charge for as long as you own the tin.",
     },
     {
       // the price is the objection at this end of the market, so it is
@@ -342,7 +364,7 @@ export default async function IceTinPage() {
                 <p className="mt-1.5 text-sm leading-relaxed text-fog">
                   {promoToday
                     ? "Ships worldwide from Vancouver, BC. Free today on every order."
-                    : "Ships worldwide from Vancouver, BC. Flat $8, free at $75+."}
+                    : `Ships worldwide from Vancouver, BC. Free on every tin, ${money(SHIPPING_FLAT)} flat below ${money(FREE_SHIPPING_OVER)}.`}
                 </p>
               </div>
             </div>
@@ -398,7 +420,9 @@ export default async function IceTinPage() {
           </div>
         </section>
 
-        {/* faq — same seven questions as the FAQPage JSON-LD above, verbatim */}
+        <Guarantee />
+
+        {/* faq — the same questions as the FAQPage JSON-LD above, verbatim */}
         <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
           <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
             Questions
@@ -432,7 +456,7 @@ export default async function IceTinPage() {
                       {money(tin.price)}
                     </span>{" "}
                     <span className="text-frost">
-                      {money(unitPrice)} CAD until {tinSaleEndsLabel()}
+                      {money(unitPrice)} CAD at launch pricing
                     </span>{" "}
                     — one tin, one ice pack in the box. In stock now.
                   </>
