@@ -123,7 +123,7 @@ export function QuickView({
                   </div>
 
                   {product.gallery.length > 1 && (
-                    <div className="mt-3 flex gap-3">
+                    <div className="mt-3 flex flex-wrap gap-3">
                       {product.gallery.map((g, i) => (
                         <button
                           key={g}

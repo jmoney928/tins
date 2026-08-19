@@ -26,11 +26,31 @@ export const CATALOG: Record<string, Product> = {
     tagline: "Cerakote over 6061-T6, bead-blasted matte black",
     price: 7999,
     image: "/side-product.jpg",
-    gallery: ["/side-product.jpg", "/dark-product.jpg", "/three-layer-gallery.jpg"],
+    /**
+     * Ordered by the question each shot answers, not by how pretty it is:
+     * what is it, how big is it, what is inside, does the cold claim hold up,
+     * and only then the atmosphere. galleryAlt stays index-parallel —
+     * ProductArt looks the alt up by position in this array.
+     */
+    gallery: [
+      "/side-product.jpg",
+      "/in-hand.jpg",
+      "/three-layer-gallery.jpg",
+      "/condensation.jpg",
+      "/three-floors.jpg",
+      "/lid-slate.jpg",
+      "/dark-product.jpg",
+      "/frost-burst.jpg",
+    ],
     galleryAlt: [
       "The Ice Tin at an angle, showing the machined lid and the three stacked floors",
-      "The Ice Tin on a dark stone surface, matte black Cerakote finish",
+      "The Ice Tin held in one hand, roughly the width of a palm, against a charcoal knit sweater",
       "The Ice Tin exploded into its three floors: lid, perforated pouch tray, and ice pack base",
+      "Close-up of condensation beading on the tin and frost crystals along the seam between two floors",
+      "The Ice Tin on a white background, the three stacked floors and their seams clearly visible",
+      "The engraved Ice Tins Supply Co. lid seen from above on dark slate",
+      "The Ice Tin on a dark stone surface, matte black Cerakote finish",
+      "The Ice Tin surrounded by a burst of powdered ice and cold vapour",
     ],
     blurb:
       "Three floors in the footprint of a standard can: spent pouches up top, twenty-five fresh in the middle, a slim ice pack in the base. Sealed, it holds fridge temperature for six hours.",

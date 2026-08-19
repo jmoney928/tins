@@ -95,7 +95,10 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
               className="aspect-square w-full"
             />
           </div>
-          <div className="mt-3 flex gap-2.5">
+          {/* wraps rather than scrolls: eight thumbnails overflow the column
+              on every viewport, and a hidden thumbnail is a photo nobody
+              looks at */}
+          <div className="mt-3 flex flex-wrap gap-2.5">
             {product.gallery.map((g, i) => (
               <button
                 key={g}
