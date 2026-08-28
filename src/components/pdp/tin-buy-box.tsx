@@ -18,7 +18,6 @@ import { ProductArt } from "../product-art";
 import {
   CATALOG,
   CURRENCY_LABEL,
-  FREE_SHIPPING_OVER,
   SHIPPING_FLAT,
   freeShippingToday,
   tinOnSale,
@@ -84,7 +83,9 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
   const promoToday = freeShippingToday();
   const onSale = tinOnSale();
   const unitPrice = currentPrice(product.id);
-  const clearsFreeShipping = unitPrice * qty >= FREE_SHIPPING_OVER;
+  // the buy box only ever holds the tin, so shipping here is the flat rate
+  // with the pair named as the way out of it
+  const packName = CATALOG["chillcore-3"].name;
 
   return (
     <>
@@ -225,9 +226,7 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
               <TruckIcon size={13} weight="light" />
               {promoToday
                 ? "Free shipping today — already applied."
-                : clearsFreeShipping
-                  ? "Free shipping — this order qualifies."
-                  : `${money(SHIPPING_FLAT)} flat shipping, free over ${money(FREE_SHIPPING_OVER)}.`}
+                : `${money(SHIPPING_FLAT)} flat shipping — free when you add a ${packName}.`}
             </p>
             {/* the guarantee sits with the button, not on a policy page:
                 this is the moment the doubt actually occurs */}

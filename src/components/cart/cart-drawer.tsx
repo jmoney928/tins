@@ -13,7 +13,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { useCart } from "./cart-context";
 import { ProductArt } from "../product-art";
-import { FREE_SHIPPING_OVER, money } from "@/lib/catalog";
+import { CATALOG, SHIPPING_FLAT, money } from "@/lib/catalog";
 
 export function CartDrawer() {
   const cart = useCart();
@@ -32,7 +32,9 @@ export function CartDrawer() {
     return () => window.removeEventListener("keydown", onKey);
   }, [closeDrawer]);
 
-  const toFree = FREE_SHIPPING_OVER - cart.subtotal;
+  // free shipping is earned by the pair, so the prompt names the missing
+  // half rather than a number the shopper has to do arithmetic against
+  const needsPack = !cart.freeShipping && cart.lines.some((l) => l.id === "ice-tin");
 
   return (
     <AnimatePresence>
@@ -163,9 +165,11 @@ export function CartDrawer() {
                   <p className="mb-4 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase">
                     {cart.freeShippingPromo
                       ? "Free shipping unlocked — today only"
-                      : toFree > 0
-                        ? `${money(toFree)} more for free shipping`
-                        : "Free shipping unlocked"}
+                      : cart.freeShipping
+                        ? "Free shipping unlocked"
+                        : needsPack
+                          ? `Add a ${CATALOG["chillcore-3"].name} for free shipping`
+                          : `${money(SHIPPING_FLAT)} shipping — free with a tin and a pack`}
                   </p>
 
                   <dl className="flex flex-col gap-2 text-sm">

@@ -12,7 +12,7 @@ const BASE_WORDS = [
   "Machined in Vancouver, BC",
   "Freezer to ready in 90 min",
   `${GUARANTEE_DAYS}-day cold-or-refund guarantee`,
-  "Free shipping on every tin",
+  "Free shipping with a refill pack",
 ];
 
 /** Seamless single-direction band. Duplicated once, translated exactly -50%. */

@@ -2,11 +2,11 @@ import { NextResponse, type NextRequest } from "next/server";
 import {
   CATALOG,
   CURRENCY,
-  FREE_SHIPPING_OVER,
   SHIPPING_FLAT,
   freeShippingToday,
   currentPrice,
   bundleSaving,
+  qualifiesForFreeShipping,
 } from "@/lib/catalog";
 import { stripe, inspectKey, keyDiagnosis, siteOrigin } from "@/lib/stripe";
 import { remaining } from "@/lib/stock";
@@ -171,10 +171,11 @@ export async function POST(request: NextRequest) {
   const subtotal = priced.reduce((n, l) => n + currentPrice(l.product.id) * l.qty, 0);
   // recomputed here rather than trusted from the client, like every other
   // number in this route
-  const saving = bundleSaving(priced.map((l) => ({ id: l.product.id, qty: l.qty })));
+  const bag = priced.map((l) => ({ id: l.product.id, qty: l.qty }));
+  const saving = bundleSaving(bag);
   const goods = subtotal - saving;
   const shipping =
-    freeShippingToday() || goods >= FREE_SHIPPING_OVER ? 0 : SHIPPING_FLAT;
+    freeShippingToday() || qualifiesForFreeShipping(bag) ? 0 : SHIPPING_FLAT;
   const origin = siteOrigin(request);
 
   try {
@@ -231,7 +232,7 @@ export async function POST(request: NextRequest) {
       metadata: {
         // an audit trail in the Stripe dashboard — the webhook itself reads
         // stock back from the expanded line items, not from here
-        bag: JSON.stringify(priced.map((l) => ({ id: l.product.id, qty: l.qty }))),
+        bag: JSON.stringify(bag),
         // the click identity, carried across the redirect. Stripe is the only
         // thing that survives the round trip to the payment page and back, so
         // the webhook can attribute a sale to the ad that produced it.

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { InfoPage } from "@/components/info-page";
-import { FREE_SHIPPING_OVER, SHIPPING_FLAT, freeShippingToday, money } from "@/lib/catalog";
+import { SHIPPING_FLAT, freeShippingToday, money } from "@/lib/catalog";
 import { SHIPS_FROM_STOCK, leadTimeLabel, transitLabel } from "@/lib/fulfilment";
 import { GUARANTEE_BODY, GUARANTEE_EXCEPTION } from "@/lib/guarantee";
 
@@ -38,7 +38,7 @@ export default function ShippingReturnsPage() {
             <dd className="mt-1.5 text-sm text-frost">
               {promoToday
                 ? "Free today, every order"
-                : `${money(SHIPPING_FLAT)} flat, free over ${money(FREE_SHIPPING_OVER)}`}
+                : `${money(SHIPPING_FLAT)} flat — free with a tin and a Chillcore pack`}
             </dd>
           </div>
           <div className="bg-paper p-5">

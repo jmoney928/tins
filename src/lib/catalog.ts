@@ -105,16 +105,14 @@ export const CATALOG: Record<string, Product> = {
 };
 
 /**
- * Set so the tin alone clears it at the launch price.
+ * Shipping is free on one order shape only: a tin with a Chillcore pack.
  *
- * It was $75 against a $49.99 tin whose only companion is a $19.99 pack —
- * a threshold the cart could not reach without buying both, which is the
- * kind of near-miss that reads as a toll rather than an offer.
- *
- * $49.99 rather than a round $50, because $50 would miss the tin by a single
- * cent and recreate the same problem in miniature.
+ * Not a spend threshold. A threshold rewards whatever gets the total over
+ * the line, which on a two-product shop means two tins as readily as the
+ * refill nobody thinks to buy — and the refill is the repeat purchase this
+ * business actually runs on. Tying the perk to the pair points it at the
+ * order worth encouraging rather than at the bigger one.
  */
-export const FREE_SHIPPING_OVER = 4999;
 export const SHIPPING_FLAT = 800;
 
 /**
@@ -173,10 +171,22 @@ export function tinOnSale(_now: Date = new Date()) {
 export const BUNDLE_SAVING = 999;
 const BUNDLE_PARTS = ["ice-tin", "chillcore-3"] as const;
 
+/**
+ * The bundle condition, stated once. The $9.99 discount and free shipping
+ * both hang off it, so they can never disagree about what qualifies.
+ */
+export function hasBundle(lines: { id: string; qty: number }[]): boolean {
+  return BUNDLE_PARTS.every((id) => lines.some((l) => l.id === id && l.qty > 0));
+}
+
+/** Free shipping is earned by the pair, not by the size of the order. */
+export function qualifiesForFreeShipping(lines: { id: string; qty: number }[]): boolean {
+  return hasBundle(lines);
+}
+
 /** The saving for a bag, in cents. Applies once, not once per pair. */
 export function bundleSaving(lines: { id: string; qty: number }[], now?: Date): number {
-  const has = (id: string) => lines.some((l) => l.id === id && l.qty > 0);
-  if (!BUNDLE_PARTS.every(has)) return 0;
+  if (!hasBundle(lines)) return 0;
 
   // never let the deduction exceed the bag — a saving bigger than the order
   // would hand Stripe a negative total

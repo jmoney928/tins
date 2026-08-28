@@ -18,7 +18,6 @@ import {
   BUNDLE_SAVING,
   CATALOG,
   CURRENCY_LABEL,
-  FREE_SHIPPING_OVER,
   SHIPPING_FLAT,
   freeShippingToday,
   tinOnSale,
@@ -35,6 +34,9 @@ import { remaining } from "@/lib/stock";
 import { ORG_NAME, SITE_URL, absoluteUrl } from "@/lib/seo";
 
 const PDP_URL = absoluteUrl("/products/ice-tin");
+
+/** Named once so the shipping rule reads the same wherever it appears. */
+const PACK_LABEL = "Chillcore pack";
 
 // the description below quotes the live price, so metadata is generated
 // per request rather than frozen at build time — this page is already
@@ -104,7 +106,7 @@ function buildFaqs(promoToday: boolean) {
       q: "Where does it ship from, and how fast?",
       a: promoToday
         ? `${dispatchSentence()} Shipping is free today on every order.`
-        : `${dispatchSentence()} Shipping is free on every tin — ${money(SHIPPING_FLAT)} flat on smaller orders.`,
+        : `${dispatchSentence()} Shipping is ${money(SHIPPING_FLAT)} flat, and free on any order with a tin and a ${PACK_LABEL} in it.`,
     },
     {
       q: "Is there nicotine or tobacco inside?",
@@ -369,7 +371,7 @@ export default async function IceTinPage() {
                 <p className="mt-1.5 text-sm leading-relaxed text-fog">
                   {promoToday
                     ? "Ships worldwide from Vancouver, BC. Free today on every order."
-                    : `Ships worldwide from Vancouver, BC. Free on every tin, ${money(SHIPPING_FLAT)} flat below ${money(FREE_SHIPPING_OVER)}.`}
+                    : `Ships worldwide from Vancouver, BC. ${money(SHIPPING_FLAT)} flat, free when you add a ${PACK_LABEL}.`}
                 </p>
               </div>
             </div>
