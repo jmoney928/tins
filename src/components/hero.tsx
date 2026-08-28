@@ -54,9 +54,9 @@ export function Hero() {
         </div>
 
         <h1 className="mt-6 text-[3.25rem] leading-[0.88] font-medium tracking-tighter text-white-ice sm:text-7xl lg:text-[5.2rem]">
-          Fresh pouches, cold.
+          Twenty-five pouches,
           <br />
-          <span className="text-fog">Spent ones sealed away.</span>
+          <span className="text-fog">fridge-cold for six hours.</span>
         </h1>
       </div>
 
@@ -72,9 +72,9 @@ export function Hero() {
         style={{ "--index": 2 } as React.CSSProperties}
       >
         <p className="max-w-[50ch] text-base leading-relaxed text-fog">
-          A machined aluminium case that holds twenty-five pouches at fridge
-          temperature over a frozen slim pack, with a sealed upper floor for
-          spent ones. Standard 68 mm diameter, one floor deeper than a
+          A slim frozen pack sits in the base, under a perforated tray that
+          lets the cold rise straight through. Above it, a sealed floor takes
+          the spent pouches. Standard 68 mm diameter, one floor deeper than a
           conventional can.
         </p>
 
