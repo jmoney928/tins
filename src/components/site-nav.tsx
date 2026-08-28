@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { ListIcon, XIcon, HandbagIcon } from "@phosphor-icons/react/dist/ssr";
 import { Magnetic } from "./magnetic";
 import { useCart } from "./cart/cart-context";
 import { BrandMark } from "./brand-mark";
+import { ShopMenu } from "./shop-menu";
 
 const LINKS = [
   { label: "Shop", href: "/products/ice-tin" },
@@ -18,14 +19,45 @@ const LINKS = [
 export function SiteNav() {
   const [condensed, setCondensed] = useState(false);
   const [open, setOpen] = useState(false);
+  const [shopOpen, setShopOpen] = useState(false);
   const { scrollY } = useScroll();
   const cart = useCart();
 
   useMotionValueEvent(scrollY, "change", (v) => setCondensed(v > 40));
 
+  /**
+   * Closing is delayed by a beat so the cursor can cross the gap between the
+   * "Shop" link and the panel below it without the menu vanishing mid-travel
+   * — the usual reason hover menus feel broken.
+   */
+  const closeTimer = useRef<number | undefined>(undefined);
+  const openShop = () => {
+    window.clearTimeout(closeTimer.current);
+    setShopOpen(true);
+  };
+  const closeShop = () => {
+    window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => setShopOpen(false), 140);
+  };
+
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
+
+  // hover is not available to everyone, so the panel also answers to Escape
+  useEffect(() => {
+    if (!shopOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setShopOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [shopOpen]);
+
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-40 px-4 pt-4 sm:px-6 sm:pt-5">
+      <header
+        className="fixed inset-x-0 top-0 z-40 px-4 pt-4 sm:px-6 sm:pt-5"
+        onMouseLeave={closeShop}
+      >
         <nav
           className={`mx-auto flex max-w-7xl items-center gap-6 rounded-full px-5 py-3 transition-all duration-500 ease-[var(--ease-glide)] sm:px-6 ${
             condensed
@@ -38,17 +70,31 @@ export function SiteNav() {
           </a>
 
           <ul className="ml-auto hidden items-center gap-8 md:flex">
-            {LINKS.map((l) => (
-              <li key={l.href}>
-                <a
-                  href={l.href}
-                  className="group relative text-sm text-fog transition-colors duration-300 hover:text-frost"
+            {LINKS.map((l) => {
+              const isShop = l.href === "/products/ice-tin";
+              return (
+                <li
+                  key={l.href}
+                  onMouseEnter={isShop ? openShop : closeShop}
+                  onFocus={isShop ? openShop : closeShop}
                 >
-                  {l.label}
-                  <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-ice-500 transition-all duration-400 ease-[var(--ease-glide)] group-hover:w-full" />
-                </a>
-              </li>
-            ))}
+                  <a
+                    href={l.href}
+                    {...(isShop
+                      ? { "aria-haspopup": true, "aria-expanded": shopOpen }
+                      : {})}
+                    className="group relative text-sm text-fog transition-colors duration-300 hover:text-frost"
+                  >
+                    {l.label}
+                    <span
+                      className={`absolute -bottom-1.5 left-0 h-px bg-ice-500 transition-all duration-400 ease-[var(--ease-glide)] group-hover:w-full ${
+                        isShop && shopOpen ? "w-full" : "w-0"
+                      }`}
+                    />
+                  </a>
+                </li>
+              );
+            })}
           </ul>
 
           <div className="ml-auto flex items-center gap-3 md:ml-0">
@@ -83,6 +129,8 @@ export function SiteNav() {
             </button>
           </div>
         </nav>
+
+        <ShopMenu open={shopOpen} onClose={() => setShopOpen(false)} />
       </header>
 
       <AnimatePresence>
