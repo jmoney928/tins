@@ -19,23 +19,23 @@ import { Flecks } from "./splatter";
 const BLOCKS = [
   {
     Icon: ArchiveIcon,
-    title: "The spent-pouch problem, solved",
-    body: "A sealed top floor swallows used pouches — no wrappers, no cup holders, no putting it back in your cheek. Empty it when you empty your pockets.",
+    title: "A dedicated floor for spent pouches",
+    body: "The sealed upper floor holds up to fifteen used pouches, kept apart from the fresh ones and from everything else in a pocket or a bag. Empty it whenever convenient.",
   },
   {
     Icon: SnowflakeIcon,
-    title: "Twenty-five, always fresh",
-    body: "A perforated tray sits over a slim frozen pack. Fridge temperature for six hours, so the last pouch tastes like the first — mint stays sharp, nothing dries out.",
+    title: "Twenty-five pouches held cold",
+    body: "A perforated tray sits directly over the frozen pack, holding fridge temperature for six hours. Flavour and moisture are preserved from the first pouch to the last.",
   },
   {
     Icon: WrenchIcon,
-    title: "Machined to outlast the habit",
-    body: "6061-T6 aluminium, Cerakote matte black, sealed to IPX6 on two O-rings. Lifetime warranty on the shell. Buy it once.",
+    title: "Machined for daily use",
+    body: "6061-T6 aluminium with a Cerakote matte black finish, sealed to IPX6 on two silicone O-rings. The shell carries a lifetime warranty.",
   },
   {
     Icon: TimerIcon,
-    title: "Freezer to ready in 90 minutes",
-    body: "Drop the pack in the freezer tonight, pocket it tomorrow. Ships worldwide from our Vancouver workshop.",
+    title: "Ready in ninety minutes",
+    body: "The Chillcore pack freezes in ninety minutes in a standard freezer. Machined and dispatched from Vancouver, British Columbia, with worldwide shipping.",
   },
 ];
 

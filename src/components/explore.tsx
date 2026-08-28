@@ -16,20 +16,20 @@ const TOPICS = [
   {
     href: "/cold-system",
     eyebrow: "The cold system",
-    title: "How the cold actually works",
-    body: "A perforated tray of twenty-five over a slim frozen pack, sealed on two O-rings. Six hours at room temperature, and the testing that got us there.",
+    title: "How the cold system works",
+    body: "A perforated tray of twenty-five pouches over a slim frozen pack, sealed on two O-rings, holding fridge temperature for six hours at room ambient — and the testing behind that figure.",
   },
   {
     href: "/build",
     eyebrow: "The build",
-    title: "What it is machined from",
-    body: "Cerakote over 6061-T6, bead-blasted matte black. 68 mm across, 41 mm tall, three floors at 8, 20 and 13 mm.",
+    title: "Materials and construction",
+    body: "Cerakote over bead-blasted 6061-T6 aluminium. 68 mm in diameter, 41 mm tall, with three floors of 8, 20 and 13 mm.",
   },
   {
     href: "/field-notes",
     eyebrow: "Field notes",
-    title: "Who carried one first",
-    body: "Five people carried one through a season of real shifts — a lift mechanic, a bar manager, a joiner, a dock hand, a sound engineer.",
+    title: "Field testing",
+    body: "Reports from five testers who carried the tin through a full season of working shifts, across five cities and four trades.",
   },
 ];
 

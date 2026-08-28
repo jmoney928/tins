@@ -4,17 +4,17 @@ const FACTS = [
   {
     n: "6 hours",
     k: "Cold hold, sealed",
-    body: "Frozen core, closed lid, 22°C room. That is a full shift, a flight to Lisbon, or a very long night out.",
+    body: "Measured with a frozen pack, the lid closed, in a 22°C room — the length of a full working shift.",
   },
   {
     n: "1 hour",
     k: "Cold hold, no core",
-    body: "The same can with the tray empty. The metal alone buys you an hour. The ice pack is the other five.",
+    body: "The same can measured with the tray empty. The aluminium alone accounts for one hour; the ice pack provides the remaining five.",
   },
   {
     n: "31",
     k: "Prototypes before this",
-    body: "Thirty-one machined test units since last spring. Nine leaked, four cracked a thread, one is still in a freezer in Malmö. You are buying the thirty-second.",
+    body: "Thirty-one machined test units were produced from spring onwards. Nine leaked, four cracked a thread, and one remains on long-term cold test. The unit sold today is the thirty-second revision.",
   },
 ];
 
@@ -34,8 +34,8 @@ export function Facts() {
             Cold facts
           </p>
           <h2 className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
-            We froze a lot of them
-            <span className="text-fog"> first.</span>
+            Tested
+            <span className="text-fog"> before release.</span>
           </h2>
         </div>
 

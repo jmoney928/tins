@@ -96,7 +96,7 @@ function buildFaqs(promoToday: boolean) {
     },
     {
       q: "Does the ice pack come with it?",
-      a: "Yes — one Chillcore pack ships inside every tin. Chillcore three-packs are sold separately if you want a spare already freezing.",
+      a: "Yes. One Chillcore pack ships inside every tin. Three-packs are sold separately for customers who want a frozen spare available at all times.",
     },
     {
       q: "What is the tin made from?",
@@ -110,7 +110,7 @@ function buildFaqs(promoToday: boolean) {
     },
     {
       q: "Is there nicotine or tobacco inside?",
-      a: "No. Ice Tins Supply Co. sells empty metal cans and ice packs only — never nicotine or tobacco in any form.",
+      a: "No. Ice Tins Supply Co. sells empty machined cans and ice packs only, and does not sell, ship or supply nicotine or tobacco in any form.",
     },
     {
       q: "What does the warranty cover?",
@@ -121,7 +121,7 @@ function buildFaqs(promoToday: boolean) {
       // doubt is the objection, so meeting it is worth more than restating
       // the benefit
       q: "Do pouches really go stale otherwise?",
-      a: "Warmth is what dries a pouch out and flattens the mint — the moisture goes, and with it most of the flavour. Held at fridge temperature the pouch you take at hour six is the pouch you took at hour one. Our own test is a frozen pack, a closed lid and a 22°C room, which holds for six hours; the same can with the tray empty holds about one.",
+      a: "Warmth dries a pouch out and flattens its flavour as the moisture is lost. Held at fridge temperature, a pouch taken at hour six is materially the same as one taken at hour one. Our test conditions are a frozen pack, a closed lid and a 22°C room, which holds for six hours; the same can with an empty tray holds approximately one.",
     },
     {
       q: "When will it actually arrive?",
@@ -133,14 +133,14 @@ function buildFaqs(promoToday: boolean) {
     },
     {
       q: "Can I replace the O-rings or the ice pack?",
-      a: "Yes to both. Chillcore packs are sold in three-packs and drop straight into the base. The two silicone O-rings are standard sizes and seat by hand — email shop@icetins.com and we will send replacements at no charge for as long as you own the tin.",
+      a: "Yes. Chillcore packs are sold in three-packs and seat directly into the base. The two silicone O-rings are standard sizes and fit by hand; contact shop@icetins.com and replacements will be sent at no charge for as long as you own the tin.",
     },
     {
       // the price is the objection at this end of the market, so it is
       // answered here too — this array feeds the FAQPage JSON-LD, which is
       // where answer engines read it
       q: `Why is it ${money(CATALOG["ice-tin"].price)}?`,
-      a: "Because it is machined from solid 6061-T6 in small batches rather than pressed from sheet, because the threads and O-rings have to keep sealing for six hours after a year of daily use, and because we replace the shell for life. Cheaper tins are a lid on a box. This one has a working cold system in the floor.",
+      a: "The tin is machined from solid 6061-T6 in small batches rather than pressed from sheet, the threads and O-rings are specified to keep sealing for six hours after a year of daily use, and the shell is covered for life. The price reflects a working cold system rather than a lid on a container.",
     },
   ];
 }
@@ -232,14 +232,14 @@ export default async function IceTinPage() {
         <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
           <div className="grid grid-cols-1 gap-5 border-t border-frost/8 pt-10 sm:grid-cols-[minmax(0,20rem)_1fr] sm:gap-10">
             <h2 className="text-2xl leading-tight tracking-tight text-white-ice sm:text-3xl">
-              Why it costs what it costs.
+              What the price reflects.
             </h2>
             <p className="max-w-[62ch] text-sm leading-relaxed text-fog">
-              Billet 6061-T6, cut in small batches in Vancouver. Two silicone
-              O-rings and a double-start thread that still has to seal after a
-              few thousand turns. Thirty-one prototypes before this one, and a
-              lifetime warranty on the shell. It was never going to be a
-              twelve-dollar pocket tin.
+              Billet 6061-T6, machined in small batches in Vancouver. Two
+              silicone O-rings and a double-start thread specified to keep
+              sealing after several thousand cycles. Thirty-one prototypes
+              preceded this revision, and the shell carries a lifetime
+              warranty.
             </p>
           </div>
         </section>
@@ -269,7 +269,7 @@ export default async function IceTinPage() {
             How it works
           </p>
           <h2 className="mt-4 max-w-[20ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
-            Three steps, then you stop thinking about it.
+            Three steps to set up.
           </h2>
 
           <ol className="mt-10 border-t border-frost/8">
@@ -301,11 +301,11 @@ export default async function IceTinPage() {
             The details
           </p>
           <h2 className="mt-4 max-w-[22ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
-            Exactly what you are buying.
+            What the order includes.
           </h2>
           <p className="mt-4 max-w-[56ch] text-sm leading-relaxed text-fog">
-            One machined can, one Chillcore pack in the box. That is the
-            order — no bundles to parse, no tiers.
+            One machined can and one Chillcore pack, supplied together. A
+            single configuration, with no tiers or optional extras.
           </p>
 
           <dl className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-frost/8 sm:grid-cols-3">
@@ -435,7 +435,7 @@ export default async function IceTinPage() {
             Questions
           </p>
           <h2 className="mt-4 max-w-[22ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
-            Everything else people ask.
+            Frequently asked questions.
           </h2>
 
           <dl className="mt-10 divide-y divide-frost/8 border-t border-frost/8">
@@ -454,7 +454,7 @@ export default async function IceTinPage() {
             <div className="pointer-events-none absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(46,157,200,0.22),transparent_65%)] blur-3xl" />
             <div className="relative">
               <h2 className="mx-auto max-w-[24ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
-                Open it at four o&rsquo;clock. That is the whole test.
+                Order the Ice Tin.
               </h2>
               <p className="mx-auto mt-4 max-w-[46ch] text-sm leading-relaxed text-fog">
                 {onSale ? (

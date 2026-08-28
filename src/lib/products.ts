@@ -14,19 +14,19 @@ export const STEPS = [
   {
     n: "01",
     title: "Freeze the slim pack",
-    body: "Ninety minutes in any freezer drawer. One pack ships inside the can. Keep a three-pack in the door and there is always one ready to go in.",
+    body: "Ninety minutes in a standard freezer drawer. One pack ships inside every can; a three-pack keeps a frozen spare available at all times.",
     stat: "90 min",
   },
   {
     n: "02",
     title: "Load the three floors",
-    body: "Ice pack in the bottom tray, twenty-five fresh pouches in the middle, and the top floor left empty for the ones you are done with.",
+    body: "Ice pack in the base tray, twenty-five fresh pouches on the perforated floor above it, and the upper floor left clear for spent pouches.",
     stat: "Three floors",
   },
   {
     n: "03",
-    title: "Twist and forget",
-    body: "Sealed on two O-rings, the can holds fridge temperature for six hours at room ambient. Your last pouch tastes like your first.",
+    title: "Seal and carry",
+    body: "Closed on two silicone O-rings, the can holds fridge temperature for six hours at room ambient — flavour and moisture preserved throughout.",
     stat: "6 hours",
   },
 ];

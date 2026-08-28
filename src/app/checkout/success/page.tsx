@@ -105,20 +105,20 @@ export default async function SuccessPage({
         Order {reference}
       </p>
       <h1 className="mt-3 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice">
-        {paid ? "That is yours." : "Payment still settling."}
+        {paid ? "Order confirmed." : "Payment pending."}
       </h1>
       <p className="mt-5 max-w-[48ch] text-sm leading-relaxed text-fog">
         {paid ? (
           <>
-            A confirmation is on its way to{" "}
+            A confirmation has been sent to{" "}
             <span className="text-frost">{email}</span>. {dispatchSentence()}{" "}
-            You will get a tracking number the morning it leaves Vancouver.
+            A tracking number will follow on the morning of dispatch.
           </>
         ) : (
           <>
-            Your bank has not confirmed the payment yet. This can take a few
-            minutes — we will email{" "}
-            <span className="text-frost">{email}</span> the moment it clears.
+            Your bank has not yet confirmed the payment. This can take a few
+            minutes. A confirmation will be sent to{" "}
+            <span className="text-frost">{email}</span> once it clears.
           </>
         )}
       </p>

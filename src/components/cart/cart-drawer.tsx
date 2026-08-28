@@ -78,17 +78,17 @@ export function CartDrawer() {
               <div className="flex flex-1 flex-col items-center justify-center gap-4 px-10 text-center">
                 <SnowflakeIcon size={30} weight="thin" className="text-ice-500" />
                 <p className="text-lg tracking-tight text-white-ice">
-                  Nothing in the bag yet.
+                  Your bag is empty.
                 </p>
                 <p className="max-w-[30ch] text-sm leading-relaxed text-fog">
-                  Add a tin to get started — ships worldwide from Vancouver,
-                  BC.
+                  Add a tin to begin. Shipped worldwide from Vancouver,
+                  British Columbia.
                 </p>
                 <button
                   onClick={closeDrawer}
                   className="mt-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-colors duration-300 hover:bg-ice-700"
                 >
-                  Look at the tin
+                  View the tin
                 </button>
               </div>
             ) : (

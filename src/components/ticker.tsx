@@ -8,11 +8,11 @@ import { GUARANTEE_DAYS } from "@/lib/guarantee";
 const BASE_WORDS = [
   "One tin, one refill pack",
   "Cold for 6 hours",
-  "A sealed floor for the spent ones",
+  "Sealed floor for spent pouches",
   "Machined in Vancouver, BC",
   "Freezer to ready in 90 min",
   `${GUARANTEE_DAYS}-day cold-or-refund guarantee`,
-  "Free shipping with a refill pack",
+  "Free shipping with a Chillcore pack",
 ];
 
 /** Seamless single-direction band. Duplicated once, translated exactly -50%. */

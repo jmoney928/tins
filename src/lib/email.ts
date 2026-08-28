@@ -54,7 +54,7 @@ export async function sendOrderEmail(order: OrderEmail): Promise<boolean> {
         from: FROM,
         to: [order.to],
         reply_to: REPLY_TO,
-        subject: `Order ${order.reference} — we have it`,
+        subject: `Order ${order.reference} confirmed`,
         text: plain(order),
         html: html(order),
       }),
@@ -85,8 +85,8 @@ export async function sendOrderEmail(order: OrderEmail): Promise<boolean> {
  */
 const timing = () =>
   SHIPS_FROM_STOCK
-    ? `It leaves Vancouver within ${leadTimeLabel()}, then ${transitLabel()} in transit. You will get a tracking number the morning it ships.`
-    : `Yours is machined to order. Current lead time is ${leadTimeLabel()} to dispatch, then ${transitLabel()} in transit — you will get a tracking number the morning it leaves Vancouver.`;
+    ? `The order leaves Vancouver within ${leadTimeLabel()}, followed by ${transitLabel()} in transit. A tracking number is sent on the morning of dispatch.`
+    : `Each tin is machined to order. Current lead time is ${leadTimeLabel()} to dispatch, followed by ${transitLabel()} in transit. A tracking number is sent on the morning of dispatch.`;
 
 function plain(o: OrderEmail) {
   const items = o.lines
@@ -94,7 +94,7 @@ function plain(o: OrderEmail) {
     .join("\n");
 
   return [
-    `Thanks${o.shippingName ? `, ${o.shippingName.split(" ")[0]}` : ""} — that is yours.`,
+    `Thank you for your order${o.shippingName ? `, ${o.shippingName.split(" ")[0]}` : ""}.`,
     "",
     `Order ${o.reference}`,
     "",
@@ -104,9 +104,9 @@ function plain(o: OrderEmail) {
     "",
     timing(),
     "",
-    "One Chillcore ice pack ships inside the tin. Ninety minutes in any freezer drawer and it is ready.",
+    "One Chillcore ice pack ships inside the tin. It is ready after ninety minutes in a standard freezer.",
     "",
-    `Reply to this email if anything needs changing — the address on it is a real inbox.`,
+    "Reply to this email if anything about the order needs to be changed.",
     "",
     "Ice Tins Supply Co.",
     "8105 North Fraser Way, Burnaby, BC V5J 5M8",
@@ -131,7 +131,7 @@ function html(o: OrderEmail) {
 <html><body style="margin:0;background:#f4f6f7;padding:32px 16px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#111a1f;line-height:1.6;">
   <div style="max-width:520px;margin:0 auto;background:#ffffff;border:1px solid #e6eaec;border-radius:4px;padding:32px;">
     <p style="margin:0 0 4px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a91;">Order ${escape(o.reference)}</p>
-    <h1 style="margin:0 0 20px;font-size:26px;letter-spacing:-.02em;">That is yours.</h1>
+    <h1 style="margin:0 0 20px;font-size:26px;letter-spacing:-.02em;">Order confirmed.</h1>
 
     <table style="width:100%;border-collapse:collapse;font-size:14px;">${rows}
       <tr>
@@ -144,10 +144,10 @@ function html(o: OrderEmail) {
 
     <p style="margin:24px 0 0;font-size:14px;color:#55636a;">${escape(timing())}</p>
     <p style="margin:16px 0 0;font-size:14px;color:#55636a;">
-      One Chillcore ice pack ships inside the tin. Ninety minutes in any freezer drawer and it is ready.
+      One Chillcore ice pack ships inside the tin. It is ready after ninety minutes in a standard freezer.
     </p>
     <p style="margin:16px 0 0;font-size:14px;color:#55636a;">
-      Reply to this email if anything needs changing — the address on it is a real inbox.
+      Reply to this email if anything about the order needs to be changed.
     </p>
 
     <p style="margin:28px 0 0;padding-top:16px;border-top:1px solid #e6eaec;font-size:12px;color:#7c8a91;">
@@ -159,10 +159,10 @@ function html(o: OrderEmail) {
 }
 
 /** One reminder, and the sign-off says so, because it is true. */
-const SIGNOFF = "This is the only reminder we will send about this bag.";
+const SIGNOFF = "This is the only reminder we will send regarding this order.";
 
 const OPENING =
-  "You left this in your bag. The link below picks up exactly where you stopped — and if it was the price or a question that stopped you, just reply. This is a real inbox.";
+  "The following items are still in your bag. The link below returns you to checkout with them in place. If you have a question about the product or the price, reply to this email and we will answer it.";
 
 export type RecoveryEmail = {
   to: string;
@@ -184,7 +184,7 @@ export async function sendRecoveryEmail(o: RecoveryEmail): Promise<boolean> {
     return false;
   }
 
-  const subject = "Your bag is still here";
+  const subject = "Your bag is still saved";
 
   const items = o.lines.map((l) => `  ${l.name} x${l.qty}   ${money(l.total_amount)}`).join("\n");
 
@@ -195,7 +195,7 @@ export async function sendRecoveryEmail(o: RecoveryEmail): Promise<boolean> {
     "",
     `Subtotal   ${money(o.subtotal)} ${o.currency.toUpperCase()}`,
     "",
-    `Finish here: ${o.url}`,
+    `Return to checkout: ${o.url}`,
     "",
     "Ice Tins Supply Co. — Vancouver, BC",
     SIGNOFF,

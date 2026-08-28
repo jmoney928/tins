@@ -17,14 +17,14 @@
 export const GUARANTEE_DAYS = 30;
 
 /** Buy box, footer badges — one line, no clauses. */
-export const GUARANTEE_SHORT = `${GUARANTEE_DAYS}-day cold-or-refund guarantee — we pay return shipping.`;
+export const GUARANTEE_SHORT = `${GUARANTEE_DAYS}-day cold-or-refund guarantee, return shipping paid.`;
 
 /** Under a CTA, where there is room for the reason but not the detail. */
-export const GUARANTEE_MEDIUM = `Carry it for ${GUARANTEE_DAYS} days. If it does not keep your pouches colder and your pockets cleaner, send it back for a full refund and we cover the postage.`;
+export const GUARANTEE_MEDIUM = `Use the tin for ${GUARANTEE_DAYS} days. If it does not hold pouches colder and keep spent ones separated, return it for a full refund with return shipping paid.`;
 
-export const GUARANTEE_TITLE = "Cold and clean, or your money back.";
+export const GUARANTEE_TITLE = "Thirty days, used, fully refundable.";
 
-export const GUARANTEE_BODY = `Carry it for ${GUARANTEE_DAYS} days. If it does not keep your pouches colder and your pockets cleaner than whatever you are using now, send it back for a full refund — and we will cover return shipping. No "unused, in original packaging" fine print: using it is the entire point. The shell's lifetime warranty runs either way.`;
+export const GUARANTEE_BODY = `Use the tin in normal daily conditions for ${GUARANTEE_DAYS} days. If it does not hold pouches colder, or does not keep spent ones separated from fresh, return it for a full refund with return shipping paid. There is no requirement that it be unused or in its original packaging — the guarantee exists so the product can be tested properly. The lifetime warranty on the shell applies regardless.`;
 
 /**
  * The one exception, and it stays an exception rather than a headline. A gel
@@ -33,4 +33,4 @@ export const GUARANTEE_BODY = `Carry it for ${GUARANTEE_DAYS} days. If it does n
  * footnote second.
  */
 export const GUARANTEE_EXCEPTION =
-  "Opened Chillcore packs are not returnable — once a gel pack has been frozen it cannot be resold. Everything else comes back for a full refund.";
+  "Opened Chillcore packs are not returnable, as a gel pack that has been frozen cannot be resold. All other items are refundable in full.";

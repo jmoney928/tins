@@ -35,8 +35,8 @@ export function SiteFooter() {
           <div className="col-span-2 sm:col-span-4 lg:col-span-1">
             <BrandMark size={52} tagline />
             <p className="mt-4 max-w-[38ch] text-sm leading-relaxed text-fog">
-              A three-floor snus can with a slim ice pack in the base. Made in
-              Vancouver, BC, shipped worldwide.
+              A three-floor machined snus can with a slim ice pack in the
+              base. Made in Vancouver, BC, and shipped worldwide.
             </p>
             <p className="mt-6 font-mono text-[11px] leading-relaxed text-fog/60">
               8105 North Fraser Way, Burnaby, BC V5J 5M8

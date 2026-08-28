@@ -83,13 +83,13 @@ export function CheckoutClient() {
           Your bag is empty.
         </h1>
         <p className="max-w-[36ch] text-sm leading-relaxed text-fog">
-          Nothing to check out yet. Add a tin to get started.
+          There is nothing to check out. Add a tin to continue.
         </p>
         <Link
           href="/#collection"
           className="mt-2 rounded-full bg-ink px-6 py-3.5 text-sm font-medium text-paper transition-colors duration-300 hover:bg-ice-700"
         >
-          Look at the tin
+          View the tin
         </Link>
       </main>
     );
@@ -106,7 +106,7 @@ export function CheckoutClient() {
           className="flex items-center gap-2 font-mono text-[11px] tracking-[0.18em] text-fog uppercase transition-colors hover:text-frost"
         >
           <ArrowLeftIcon size={13} weight="bold" />
-          Keep looking
+          Continue shopping
         </Link>
       </div>
 
@@ -114,14 +114,14 @@ export function CheckoutClient() {
         Checkout
       </h1>
       <p className="mt-4 max-w-[52ch] text-sm leading-relaxed text-fog">
-        Payment, address and delivery are handled on Stripe&rsquo;s secure page.
-        You will land back here the moment it clears.
+        Payment, address and delivery are handled on Stripe&rsquo;s secure
+        page. You will be returned here once the payment clears.
       </p>
 
       {cancelled && (
         <p className="mt-6 flex items-start gap-2 rounded-2xl border border-frost/12 bg-abyss/70 px-4 py-3 text-sm text-fog">
           <WarningCircleIcon size={15} weight="fill" className="mt-0.5 shrink-0 text-ice-500" />
-          You came back without paying. Your bag is exactly where you left it.
+          The payment was not completed. Your bag has been kept as it was.
         </p>
       )}
 
@@ -206,8 +206,9 @@ export function CheckoutClient() {
             className="mt-2 w-full rounded-2xl border border-frost/12 bg-paper/60 px-4 py-3.5 text-sm text-frost outline-none transition-colors duration-300 placeholder:text-fog/60 focus:border-ice-500/60"
           />
           <p id="checkout-email-note" className="mt-2 text-xs leading-relaxed text-fog/80">
-            Your receipt and tracking go here. If you do not finish, we will
-            email your bag back to you once — and nothing else.
+            Your receipt and tracking details are sent to this address. If
+            the order is not completed, we will send a single reminder and
+            nothing further.
           </p>
         </div>
 

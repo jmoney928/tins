@@ -23,7 +23,7 @@ export const CATALOG: Record<string, Product> = {
   "ice-tin": {
     id: "ice-tin",
     name: "The Ice Tin",
-    tagline: "A sealed floor for the spent ones, twenty-five fresh",
+    tagline: "Twenty-five fresh, held cold, with a sealed floor for spent pouches",
     price: 7999,
     image: "/side-product.jpg",
     /**
@@ -53,12 +53,12 @@ export const CATALOG: Record<string, Product> = {
       "The Ice Tin surrounded by a burst of powdered ice and cold vapour",
     ],
     blurb:
-      "Three compartments, one job: your pouches stay right. Twenty-five fresh sit on a perforated tray over a slim ice pack that holds fridge temperature for six hours — a full shift. On top, a sealed floor takes the spent ones, so the used pouch stops riding in your pocket.",
+      "Three compartments in the footprint of a standard can. Twenty-five fresh pouches sit on a perforated tray above a slim ice pack, which holds fridge temperature for six hours. A sealed upper floor takes spent pouches, keeping them separate until they can be disposed of.",
     // benefit first, engineering second — the order a buyer cares about
     points: [
       "Sealed top floor for spent pouches",
-      "Twenty-five fresh, cold for 6 hours",
-      "Perforated floor so the cold rises",
+      "Twenty-five held at fridge temperature for 6 hours",
+      "Perforated floor for direct cold transfer",
       "Two silicone O-rings, IPX6",
       "One Chillcore pack in the box",
       "Lifetime warranty on the shell",
@@ -86,7 +86,7 @@ export const CATALOG: Record<string, Product> = {
       "Three Chillcore ice packs with dimensions labelled: 6.7 cm across, 1.3 cm thick each",
     ],
     blurb:
-      "One pack ships inside every can, which is enough until you want it cold again the same day. With three you stop waiting on the freezer: one in the base, one setting up, one spare in the door.",
+      "One pack ships inside every can, which is sufficient for a single daily cycle. A three-pack removes the wait between uses: one in the base, one freezing, one in reserve.",
     points: [
       "Three discs per pack",
       "Ninety minutes to freeze",

@@ -35,11 +35,11 @@ export function Collection() {
           {/* flat declarative on purpose — the two-tone headline runs in four
               other sections, and dropping it once is what keeps it working */}
           <h2 className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
-            We make one can, and the packs that go in it.
+            One can, and the packs that go in it.
           </h2>
           <p className="mx-auto mt-5 max-w-[46ch] text-sm leading-relaxed text-fog">
-            No colourways to pick between and nothing bolted on — just the
-            thing, machined once and machined right.
+            A single configuration, made properly, with no variants to
+            choose between and nothing added that does not earn its place.
           </p>
         </div>
 

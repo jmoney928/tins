@@ -43,9 +43,10 @@ export function ColdSystem() {
           <span className="text-ice-300/75"> is a freezer.</span>
         </h2>
         <p className="mt-6 max-w-[58ch] text-base leading-relaxed text-ice-100/75">
-          We split a can into three floors — 8 mm of spent, 20 mm of fresh,
-          13 mm of ice — and kept the diameter standard. 68 mm across, 41 mm
-          tall: it goes in the pocket the old can came out of.
+          The can is divided into three floors — 8 mm for spent pouches,
+          20 mm for fresh, 13 mm for the ice pack — while retaining a standard
+          diameter. At 68 mm across and 41 mm tall, it occupies the same
+          pocket as a conventional can.
         </p>
 
         <ol className="mt-12 border-t border-white/12">

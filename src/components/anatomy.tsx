@@ -6,22 +6,22 @@ const LAYERS = [
   {
     n: "01",
     title: "Spent floor, on top",
-    body: "Fifteen used pouches — they pack down — sealed away from the fresh ones. No wet lump in a napkin, no bin hunt, no smell in the coat pocket.",
+    body: "Holds roughly fifteen used pouches, which compress as they stack, sealed away from the fresh ones. No wrapping, no disposal en route, and no odour transfer to a pocket or bag.",
   },
   {
     n: "02",
     title: "Pouch floor, middle",
-    body: "Twenty-five sitting flat on a perforated floor, so the cold comes straight up out of the tray instead of creeping around the walls. The floor you actually open.",
+    body: "Twenty-five pouches sit flat on a perforated floor, so cold rises directly from the tray beneath rather than travelling around the walls. This is the floor opened in normal use.",
   },
   {
     n: "03",
     title: "Ice tray, underneath",
-    body: "The slim Chillcore pack drops into the base and clicks flat. It never touches a pouch — the aluminium does the carrying.",
+    body: "The slim Chillcore pack seats into the base and locks flat. It makes no contact with the pouches; the aluminium conducts the cold.",
   },
   {
     n: "04",
     title: "Two seals, one turn",
-    body: "Each floor unscrews on a double-start thread in 0.6 of a turn, onto its own silicone O-ring. The seals are what buy you the six hours.",
+    body: "Each floor opens on a double-start thread in 0.6 of a turn and closes onto its own silicone O-ring. These seals are what sustain the six-hour hold.",
   },
 ];
 
@@ -41,7 +41,7 @@ export function Anatomy() {
           </p>
           <h2 className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
             Every floor
-            <span className="text-fog"> does a job.</span>
+            <span className="text-fog"> has a function.</span>
           </h2>
 
           {/* multiply drops the render's white ground into the page and leaves
