@@ -9,10 +9,10 @@ import { BrandMark } from "./brand-mark";
 
 const LINKS = [
   { label: "Shop", href: "/products/ice-tin" },
-  { label: "Cold system", href: "#cold" },
-  { label: "Build", href: "#anatomy" },
-  { label: "Cold facts", href: "#facts" },
-  { label: "Testers", href: "#carriers" },
+  { label: "Cold system", href: "/cold-system" },
+  { label: "Build", href: "/build" },
+  { label: "Field notes", href: "/field-notes" },
+  { label: "Guarantee", href: "/guarantee" },
 ];
 
 export function SiteNav() {

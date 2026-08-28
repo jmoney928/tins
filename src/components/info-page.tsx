@@ -4,8 +4,8 @@ import { SiteFooter } from "./site-footer";
 
 /**
  * Shared shell for footer utility pages — shipping, warranty, careers, etc.
- * Reuses ProductNav rather than the full SiteNav: those links anchor into
- * homepage sections (#cold, #anatomy…) that don't exist here.
+ * Reuses ProductNav rather than the full SiteNav, which carries the full
+ * topic navigation these pages do not need.
  */
 export function InfoPage({
   eyebrow,

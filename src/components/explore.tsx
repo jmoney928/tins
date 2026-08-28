@@ -1,0 +1,65 @@
+import Link from "next/link";
+import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
+
+/**
+ * Links out to the topic pages that used to be homepage anchors.
+ *
+ * These are summaries, not copies: the full sections live on their own URLs
+ * now, and repeating them here would recreate the problem splitting them was
+ * meant to solve — one document competing with itself for every query.
+ *
+ * The card titles deliberately differ from the headings on the pages they
+ * link to. Reusing a page's own H2 as its teaser puts the two URLs back in
+ * competition for the same phrase, which is the thing being fixed.
+ */
+const TOPICS = [
+  {
+    href: "/cold-system",
+    eyebrow: "The cold system",
+    title: "How the cold actually works",
+    body: "A perforated tray of twenty-five over a slim frozen pack, sealed on two O-rings. Six hours at room temperature, and the testing that got us there.",
+  },
+  {
+    href: "/build",
+    eyebrow: "The build",
+    title: "What it is machined from",
+    body: "Cerakote over 6061-T6, bead-blasted matte black. 68 mm across, 41 mm tall, three floors at 8, 20 and 13 mm.",
+  },
+  {
+    href: "/field-notes",
+    eyebrow: "Field notes",
+    title: "Who carried one first",
+    body: "Five people carried one through a season of real shifts — a lift mechanic, a bar manager, a joiner, a dock hand, a sound engineer.",
+  },
+];
+
+export function Explore() {
+  return (
+    <section className="py-20 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="grid grid-cols-1 gap-px overflow-hidden rounded-[2rem] bg-frost/8 sm:grid-cols-3">
+          {TOPICS.map((t) => (
+            <Link
+              key={t.href}
+              href={t.href}
+              className="group flex flex-col gap-3 bg-void p-7 transition-colors duration-500 hover:bg-slate-deep/30 sm:p-8"
+            >
+              <p className="font-mono text-[11px] tracking-[0.24em] text-ice-500 uppercase">
+                {t.eyebrow}
+              </p>
+              <h3 className="flex items-start gap-2 text-xl leading-tight tracking-tight text-white-ice">
+                {t.title}
+                <ArrowUpRightIcon
+                  size={16}
+                  weight="bold"
+                  className="mt-1 shrink-0 text-fog transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-ice-300"
+                />
+              </h3>
+              <p className="text-sm leading-relaxed text-fog">{t.body}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

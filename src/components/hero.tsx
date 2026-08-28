@@ -1,6 +1,6 @@
 import Link from "next/link";
 import {
-  ArrowDownRightIcon,
+  ArrowUpRightIcon,
   ArrowRightIcon,
   ShieldCheckIcon,
   WrenchIcon,
@@ -95,18 +95,17 @@ export function Hero() {
           </Magnetic>
 
           <a
-            href="#cold"
+            href="/cold-system"
             className="flex items-center justify-center gap-2 rounded-full border border-frost/8 px-7 py-4 text-sm text-frost transition-all duration-300 ease-[var(--ease-glide)] hover:border-ice-500/40 hover:bg-slate-deep/40 active:scale-[0.98]"
           >
             How the cold works
-            <ArrowDownRightIcon size={15} weight="bold" />
+            <ArrowUpRightIcon size={15} weight="bold" />
           </a>
         </div>
 
-        {/* Trust strip. Deliberately carries no star rating or customer
-            count: there is no review system on this site yet, and invented
-            social proof is the one thing that would make everything else on
-            the page less believable. Every claim here is one we can keep. */}
+        {/* Trust strip. ReviewBadge shows stars only when a real average is
+            set, and the rating markup stays off until the reviews are
+            readable on the page — see lib/social-proof.ts. */}
         <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-fog">
           <li>
             <ReviewBadge />
