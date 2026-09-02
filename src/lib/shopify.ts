@@ -118,11 +118,41 @@ export async function shopifyDiagnostics(): Promise<Record<string, unknown>> {
   try {
     const data = await shopifyFetch<{
       shop: { name: string; paymentSettings: { currencyCode: string } };
-      products: { nodes: { handle: string; title: string; variants: { nodes: { id: string }[] } }[] };
+      products: {
+        nodes: {
+          handle: string;
+          title: string;
+          variants: {
+            nodes: {
+              id: string;
+              sku: string | null;
+              quantityAvailable: number | null;
+              availableForSale: boolean;
+              price: { amount: string };
+              compareAtPrice: { amount: string } | null;
+            }[];
+          };
+        }[];
+      };
     }>(
       `query Diagnostics {
          shop { name paymentSettings { currencyCode } }
-         products(first: 20) { nodes { handle title variants(first: 5) { nodes { id } } } }
+         products(first: 20) {
+           nodes {
+             handle
+             title
+             variants(first: 5) {
+               nodes {
+                 id
+                 sku
+                 quantityAvailable
+                 availableForSale
+                 price { amount }
+                 compareAtPrice { amount }
+               }
+             }
+           }
+         }
        }`,
     );
 
@@ -131,9 +161,16 @@ export async function shopifyDiagnostics(): Promise<Record<string, unknown>> {
       tokenKind,
       shop: data.shop.name,
       currency: data.shop.paymentSettings.currencyCode,
+      // enough to confirm an import actually mapped: a product that exists
+       // but carries no SKU, no price or no stock is not a usable catalogue
       products: data.products.nodes.map((p) => ({
         handle: p.handle,
         title: p.title,
+        sku: p.variants.nodes[0]?.sku ?? null,
+        price: p.variants.nodes[0]?.price.amount ?? null,
+        compareAt: p.variants.nodes[0]?.compareAtPrice?.amount ?? null,
+        available: p.variants.nodes[0]?.availableForSale ?? null,
+        stock: p.variants.nodes[0]?.quantityAvailable ?? null,
         variants: p.variants.nodes.length,
       })),
     };
