@@ -104,6 +104,26 @@ export async function shopifyFetch<T>(
  * endpoint. Reports what it can rather than throwing, because a diagnostic
  * that fails the same way as a real outage is not a diagnostic.
  */
+type DiagnosticsData = {
+  shop: { name: string; paymentSettings: { currencyCode: string } };
+  products: {
+    nodes: {
+      handle: string;
+      title: string;
+      variants: {
+        nodes: {
+          id: string;
+          sku: string | null;
+          quantityAvailable?: number | null;
+          availableForSale: boolean;
+          price: { amount: string };
+          compareAtPrice: { amount: string } | null;
+        }[];
+      };
+    }[];
+  };
+};
+
 export async function shopifyDiagnostics(): Promise<Record<string, unknown>> {
   if (!shopifyConfigured()) {
     return {
@@ -115,26 +135,16 @@ export async function shopifyDiagnostics(): Promise<Record<string, unknown>> {
 
   const tokenKind = process.env.SHOPIFY_STOREFRONT_PRIVATE_TOKEN ? "private" : "public";
 
-  try {
-    const data = await shopifyFetch<{
-      shop: { name: string; paymentSettings: { currencyCode: string } };
-      products: {
-        nodes: {
-          handle: string;
-          title: string;
-          variants: {
-            nodes: {
-              id: string;
-              sku: string | null;
-              quantityAvailable: number | null;
-              availableForSale: boolean;
-              price: { amount: string };
-              compareAtPrice: { amount: string } | null;
-            }[];
-          };
-        }[];
-      };
-    }>(
+  /**
+   * quantityAvailable needs its own scope, and Shopify refuses the whole
+   * query when it is absent rather than omitting the field. So it is asked
+   * for optionally: if the token cannot read inventory we say so and report
+   * everything else, because a diagnostic that returns nothing over one
+   * missing scope is worse than one that returns most of the answer.
+   */
+  const withInventory = async (inventory: boolean) => {
+    const qty = inventory ? "quantityAvailable" : "";
+    return shopifyFetch<DiagnosticsData>(
       `query Diagnostics {
          shop { name paymentSettings { currencyCode } }
          products(first: 20) {
@@ -145,7 +155,7 @@ export async function shopifyDiagnostics(): Promise<Record<string, unknown>> {
                nodes {
                  id
                  sku
-                 quantityAvailable
+                 ${qty}
                  availableForSale
                  price { amount }
                  compareAtPrice { amount }
@@ -155,10 +165,25 @@ export async function shopifyDiagnostics(): Promise<Record<string, unknown>> {
          }
        }`,
     );
+  };
+
+  let inventoryReadable = true;
+  try {
+    let data: DiagnosticsData;
+    try {
+      data = await withInventory(true);
+    } catch (err) {
+      if (!/unauthenticated_read_product_inventory/.test(String(err))) throw err;
+      inventoryReadable = false;
+      data = await withInventory(false);
+    }
 
     return {
       state: "connected",
       tokenKind,
+      inventoryScope: inventoryReadable
+        ? "granted"
+        : "missing unauthenticated_read_product_inventory — stock counts unavailable",
       shop: data.shop.name,
       currency: data.shop.paymentSettings.currencyCode,
       // enough to confirm an import actually mapped: a product that exists
