@@ -54,7 +54,10 @@ async function shopifyCheckout(
   bag: Line[],
   email: string,
 ): Promise<
-  | { url: string; cost: { subtotal: string; total: string; discount: string } }
+  | {
+      url: string;
+      cost: { subtotal: string; total: string; discount: string; codes: string[] };
+    }
   | { error: string; status: number }
 > {
   const live = await liveCatalog();
@@ -87,6 +90,7 @@ async function shopifyCheckout(
       subtotal: cart.cost.subtotalAmount.amount,
       total: cart.cost.totalAmount.amount,
       discount: discount.toFixed(2),
+      codes: cart.discountCodes.map((c) => `${c.code}:${c.applicable ? "ok" : "not applicable"}`),
     },
   };
 }

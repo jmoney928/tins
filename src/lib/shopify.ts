@@ -419,13 +419,36 @@ export type ShopifyCart = {
     totalAmount: { amount: string; currencyCode: string };
   };
   discountAllocations: { discountedAmount: { amount: string } }[];
+  discountCodes: { code: string; applicable: boolean }[];
 };
+
+/**
+ * Discount codes applied to every cart, from SHOPIFY_DISCOUNT_CODES
+ * (comma-separated).
+ *
+ * Shopify offers two kinds of discount and they are identical to configure
+ * except for one toggle: an automatic one applies itself, a coded one waits
+ * for someone to type the code. Attaching the codes here makes that toggle
+ * irrelevant — an automatic discount still applies on its own, and a coded
+ * one is applied for the shopper, who never sees a code box or has to know
+ * one exists.
+ *
+ * Codes that do not apply are reported by Shopify as inapplicable rather than
+ * failing the cart, so a stale code costs nothing.
+ */
+function configuredDiscountCodes(): string[] {
+  return (process.env.SHOPIFY_DISCOUNT_CODES ?? "")
+    .split(",")
+    .map((c) => c.trim())
+    .filter(Boolean);
+}
 
 export async function createCart(
   lines: CartLine[],
   attributes: CartAttributes = {},
   buyerEmail?: string | null,
 ): Promise<ShopifyCart> {
+  const codes = configuredDiscountCodes();
   const data = await shopifyFetch<{
     cartCreate: {
       cart: ShopifyCart | null;
@@ -443,6 +466,7 @@ export async function createCart(
              totalAmount { amount currencyCode }
            }
            discountAllocations { discountedAmount { amount } }
+           discountCodes { code applicable }
          }
          userErrors { field message }
        }
@@ -453,6 +477,7 @@ export async function createCart(
         attributes: Object.entries(attributes)
           .filter(([, value]) => Boolean(value))
           .map(([key, value]) => ({ key, value: value.slice(0, 255) })),
+        ...(codes.length ? { discountCodes: codes } : {}),
         ...(buyerEmail ? { buyerIdentity: { email: buyerEmail } } : {}),
       },
     },
