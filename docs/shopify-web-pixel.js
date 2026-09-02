@@ -73,7 +73,9 @@ analytics.subscribe("checkout_completed", (event) => {
     },
     {
       // shared with the future server-side copy so Meta de-duplicates
-      eventID: "purchase." + (checkout.order ? checkout.order.id : checkout.token),
+      // the order webhook keys on checkout_token too, so the browser and
+      // server copies of this sale carry the same id and Meta merges them
+      eventID: "purchase." + checkout.token,
     },
   );
 });
