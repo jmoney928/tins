@@ -104,16 +104,34 @@ export const CATALOG: Record<string, Product> = {
   },
 };
 
-/**
- * Shipping is free on one order shape only: a tin with a Chillcore pack.
- *
- * Not a spend threshold. A threshold rewards whatever gets the total over
- * the line, which on a two-product shop means two tins as readily as the
- * refill nobody thinks to buy — and the refill is the repeat purchase this
- * business actually runs on. Tying the perk to the pair points it at the
- * order worth encouraging rather than at the bigger one.
- */
 export const SHIPPING_FLAT = 800;
+
+/**
+ * Free shipping threshold, set to sit between a tin on its own and a tin with
+ * a pack.
+ *
+ * This was a pure "cart contains both products" rule, which is the offer we
+ * actually want. Shopify's native automatic discounts cannot express it — they
+ * condition on spend or quantity, not on cart composition — and the exact rule
+ * would need a Shopify Function, which is an app deployment for one line of
+ * logic.
+ *
+ * $55 reproduces the offer at every price point that exists today:
+ *
+ *   tin alone        $49.99  → under, pays $8
+ *   pack alone       $19.99  → under, pays $8
+ *   tin + pack       $69.98  → over, free   (the pair, as intended)
+ *
+ * The one behaviour it adds is that two tins ($99.98) also ship free. That is
+ * a bigger order paying us more, so it is a tolerable thing to give away, and
+ * it is the reason this number lives here rather than being inferred from the
+ * bundle.
+ *
+ * It must stay equal to the minimum on the Shopify free-shipping discount. If
+ * these two disagree, the cart shows one total and the checkout charges
+ * another.
+ */
+export const FREE_SHIPPING_OVER = 5500;
 
 /**
  * One-day free-shipping promo, triggered by adding to cart. Anchored to a
@@ -179,9 +197,14 @@ export function hasBundle(lines: { id: string; qty: number }[]): boolean {
   return BUNDLE_PARTS.every((id) => lines.some((l) => l.id === id && l.qty > 0));
 }
 
-/** Free shipping is earned by the pair, not by the size of the order. */
-export function qualifiesForFreeShipping(lines: { id: string; qty: number }[]): boolean {
-  return hasBundle(lines);
+/**
+ * Mirrors the Shopify discount exactly, so the total shown in the bag is the
+ * total Shopify charges. Measured on the goods subtotal before the bundle
+ * saving, which is the figure Shopify tests its minimum against.
+ */
+export function qualifiesForFreeShipping(lines: { id: string; qty: number }[], now?: Date): boolean {
+  const subtotal = lines.reduce((n, l) => n + currentPrice(l.id, now) * l.qty, 0);
+  return subtotal >= FREE_SHIPPING_OVER;
 }
 
 /** The saving for a bag, in cents. Applies once, not once per pair. */
