@@ -213,6 +213,81 @@ export async function shopifyDiagnostics(): Promise<Record<string, unknown>> {
   }
 }
 
+/**
+ * The Admin API half, for the health endpoint.
+ *
+ * Reports whether the token authenticates and exactly which scopes it was
+ * granted, so a missing one is named rather than discovered later as a webhook
+ * that quietly delivers blank customer fields.
+ *
+ * The token itself never leaves Vercel — this asks Shopify what it can do and
+ * reports the answer.
+ */
+const ADMIN_SCOPES_NEEDED = ["read_orders", "read_products", "read_inventory"];
+
+export async function shopifyAdminDiagnostics(): Promise<Record<string, unknown>> {
+  const token = process.env.SHOPIFY_ADMIN_TOKEN;
+  const domain = process.env.SHOPIFY_STORE_DOMAIN;
+
+  if (!domain || !token) {
+    return {
+      state: "not configured",
+      token: token ? "set" : "missing SHOPIFY_ADMIN_TOKEN",
+      webhookSecret: process.env.SHOPIFY_WEBHOOK_SECRET ? "set" : "missing SHOPIFY_WEBHOOK_SECRET",
+    };
+  }
+
+  const host = domain.replace(/^https?:\/\//, "").replace(/\/+$/, "");
+
+  try {
+    const res = await fetch(`https://${host}/admin/api/${API_VERSION}/graphql.json`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Shopify-Access-Token": token },
+      body: JSON.stringify({
+        query: `query { currentAppInstallation { accessScopes { handle } } shop { name } }`,
+      }),
+      signal: AbortSignal.timeout(6000),
+    });
+
+    const text = await res.text();
+    if (!res.ok) {
+      return { state: "unreachable", error: `${res.status}: ${text.slice(0, 200)}` };
+    }
+
+    const json = JSON.parse(text) as {
+      data?: {
+        currentAppInstallation: { accessScopes: { handle: string }[] } | null;
+        shop: { name: string };
+      };
+      errors?: { message: string }[];
+    };
+
+    if (json.errors?.length) {
+      return { state: "error", error: json.errors.map((e) => e.message).join("; ").slice(0, 250) };
+    }
+
+    const granted = (json.data?.currentAppInstallation?.accessScopes ?? []).map((s) => s.handle);
+    const missing = ADMIN_SCOPES_NEEDED.filter((s) => !granted.includes(s));
+
+    return {
+      state: "connected",
+      shop: json.data?.shop.name,
+      webhookSecret: process.env.SHOPIFY_WEBHOOK_SECRET ? "set" : "missing SHOPIFY_WEBHOOK_SECRET",
+      scopes: granted,
+      missingScopes: missing.length ? missing : "none",
+      // Shopify blanks customer fields on order payloads unless protected
+      // customer data access is approved in the app config — a separate
+      // switch from scopes, and one that fails silently
+      note: "Protected customer data access must also be approved for order webhooks to include email and address.",
+    };
+  } catch (err) {
+    return {
+      state: "unreachable",
+      error: (err instanceof Error ? err.message : String(err)).slice(0, 250),
+    };
+  }
+}
+
 /* ─────────────────────────── products ─────────────────────────── */
 
 export type ShopifyVariant = {
