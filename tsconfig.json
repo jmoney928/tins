@@ -30,5 +30,9 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  // scripts/ are standalone, run by `node --experimental-strip-types`, which
+  // requires the .ts extension on relative imports — the opposite of what the
+  // bundler resolution used for the app allows. They are type-checked by node
+  // at run time instead.
+  "exclude": ["node_modules", "scripts"]
 }
