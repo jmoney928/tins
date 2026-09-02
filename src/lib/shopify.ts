@@ -408,6 +408,17 @@ export type ShopifyCart = {
   id: string;
   checkoutUrl: string;
   totalQuantity: number;
+  /**
+   * What Shopify will actually charge, including any automatic discount it
+   * decided to apply. Worth having: the checkout page computes its total in
+   * the browser, so scraping the HTML cannot tell a discounted cart from an
+   * undiscounted one — but the cart mutation says so plainly.
+   */
+  cost: {
+    subtotalAmount: { amount: string; currencyCode: string };
+    totalAmount: { amount: string; currencyCode: string };
+  };
+  discountAllocations: { discountedAmount: { amount: string } }[];
 };
 
 export async function createCart(
@@ -423,7 +434,16 @@ export async function createCart(
   }>(
     `mutation CartCreate($input: CartInput!) {
        cartCreate(input: $input) {
-         cart { id checkoutUrl totalQuantity }
+         cart {
+           id
+           checkoutUrl
+           totalQuantity
+           cost {
+             subtotalAmount { amount currencyCode }
+             totalAmount { amount currencyCode }
+           }
+           discountAllocations { discountedAmount { amount } }
+         }
          userErrors { field message }
        }
      }`,

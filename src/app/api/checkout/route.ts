@@ -53,7 +53,10 @@ async function shopifyCheckout(
   request: NextRequest,
   bag: Line[],
   email: string,
-): Promise<{ url: string } | { error: string; status: number }> {
+): Promise<
+  | { url: string; cost: { subtotal: string; total: string; discount: string } }
+  | { error: string; status: number }
+> {
   const live = await liveCatalog();
   if (!live) {
     return { error: "Checkout is unavailable right now. Try again shortly.", status: 503 };
@@ -71,7 +74,21 @@ async function shopifyCheckout(
   }
 
   const cart = await createCart(lines, attribution(request), email);
-  return { url: cart.checkoutUrl };
+
+  // Returned so the total Shopify intends to charge can be read directly,
+  // rather than inferred from a checkout page that computes it in the browser.
+  const discount = cart.discountAllocations.reduce(
+    (n, d) => n + Number(d.discountedAmount.amount),
+    0,
+  );
+  return {
+    url: cart.checkoutUrl,
+    cost: {
+      subtotal: cart.cost.subtotalAmount.amount,
+      total: cart.cost.totalAmount.amount,
+      discount: discount.toFixed(2),
+    },
+  };
 }
 
 /**
@@ -238,6 +255,7 @@ export async function POST(request: NextRequest) {
       if ("error" in result) {
         return NextResponse.json({ error: result.error }, { status: result.status });
       }
+      console.log("[checkout] shopify cart", JSON.stringify(result.cost));
       // Deliberately not recorded for recovery. Our reminder is cancelled by
       // markRecovered(), which only the Stripe webhook calls — and that
       // webhook never fires once Shopify takes the payment. Every row would
@@ -251,7 +269,7 @@ export async function POST(request: NextRequest) {
       // Shopify's thank-you page and never comes back to ours, where the bag
       // is cleared today. Leaving it full invites a second order of something
       // they have already bought.
-      return NextResponse.json({ url: result.url, provider: "shopify" });
+      return NextResponse.json({ url: result.url, provider: "shopify", cost: result.cost });
     } catch (err) {
       console.error("[checkout] shopify:", err instanceof Error ? err.message : String(err));
       return NextResponse.json(
