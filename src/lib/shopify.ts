@@ -99,6 +99,58 @@ export async function shopifyFetch<T>(
   return json.data;
 }
 
+/**
+ * A single call that answers "is this wired up correctly", for the health
+ * endpoint. Reports what it can rather than throwing, because a diagnostic
+ * that fails the same way as a real outage is not a diagnostic.
+ */
+export async function shopifyDiagnostics(): Promise<Record<string, unknown>> {
+  if (!shopifyConfigured()) {
+    return {
+      state: "not configured",
+      domain: process.env.SHOPIFY_STORE_DOMAIN ? "set" : "missing",
+      token: "missing SHOPIFY_STOREFRONT_PRIVATE_TOKEN (or SHOPIFY_STOREFRONT_TOKEN)",
+    };
+  }
+
+  const tokenKind = process.env.SHOPIFY_STOREFRONT_PRIVATE_TOKEN ? "private" : "public";
+
+  try {
+    const data = await shopifyFetch<{
+      shop: { name: string; paymentSettings: { currencyCode: string } };
+      products: { nodes: { handle: string; title: string; variants: { nodes: { id: string }[] } }[] };
+    }>(
+      `query Diagnostics {
+         shop { name paymentSettings { currencyCode } }
+         products(first: 20) { nodes { handle title variants(first: 5) { nodes { id } } } }
+       }`,
+    );
+
+    return {
+      state: "connected",
+      tokenKind,
+      shop: data.shop.name,
+      currency: data.shop.paymentSettings.currencyCode,
+      products: data.products.nodes.map((p) => ({
+        handle: p.handle,
+        title: p.title,
+        variants: p.variants.nodes.length,
+      })),
+    };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return {
+      state: "unreachable",
+      tokenKind,
+      error: message.slice(0, 300),
+      // the single most common cause on a store that is not open yet
+      hint: /unauthorized|401|403/i.test(message)
+        ? "A public Storefront token is refused while the store has its password page up — use the private token."
+        : undefined,
+    };
+  }
+}
+
 /* ─────────────────────────── products ─────────────────────────── */
 
 export type ShopifyVariant = {

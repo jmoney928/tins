@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { dbConfig, db } from "@/lib/db";
 import { inspectKey } from "@/lib/stripe";
+import { shopifyDiagnostics } from "@/lib/shopify";
 
 export const dynamic = "force-dynamic";
 
@@ -80,6 +81,7 @@ export async function GET() {
       : "missing META_PIXEL_ID or META_CAPI_ACCESS_TOKEN",
     email: process.env.RESEND_API_KEY ? "configured" : "missing RESEND_API_KEY",
     cronSecret: process.env.CRON_SECRET ? "set" : "missing",
+    shopify: await shopifyDiagnostics(),
     supabase,
   });
 }
