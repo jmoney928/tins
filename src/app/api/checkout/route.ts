@@ -238,23 +238,14 @@ export async function POST(request: NextRequest) {
       if ("error" in result) {
         return NextResponse.json({ error: result.error }, { status: result.status });
       }
-      // recorded before the redirect, same as the Stripe path — Shopify
-      // recovers abandoned checkouts natively too, and the duplicate goes
-      // away with the rest of this route in step 08
-      await recordAbandoned({
-        sessionId: `shopify:${Date.now()}:${email}`,
-        email,
-        lines: priced.map((l) => ({
-          sku: l.product.id,
-          name: l.product.name,
-          qty: l.qty,
-          total_amount: currentPrice(l.product.id) * l.qty,
-        })),
-        subtotalCents: subtotal,
-        currency: CURRENCY,
-        checkoutUrl: result.url,
-        attribution: attribution(request),
-      });
+      // Deliberately not recorded for recovery. Our reminder is cancelled by
+      // markRecovered(), which only the Stripe webhook calls — and that
+      // webhook never fires once Shopify takes the payment. Every row would
+      // stay open forever, and the daily cron would mail everyone who had
+      // successfully paid to say their bag was still waiting.
+      //
+      // Shopify recovers its own abandoned checkouts, and it knows which ones
+      // completed. Recovery is its job from here.
       // the browser is told which checkout it is going to, because it has to
       // clear the local bag itself: with Shopify the shopper finishes on
       // Shopify's thank-you page and never comes back to ours, where the bag
