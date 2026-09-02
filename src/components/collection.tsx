@@ -11,13 +11,19 @@ import {
 } from "@/lib/catalog";
 import { AddButton } from "./add-button";
 import { QuickView } from "./quick-view";
+import { liveCatalog } from "@/lib/live-catalog";
 
-export function Collection() {
-  // one source of truth: the same records Stripe is charged from
+export async function Collection() {
   const tin = CATALOG["ice-tin"];
   const core = CATALOG["chillcore-3"];
   const onSale = tinOnSale();
-  const tinPrice = currentPrice("ice-tin");
+
+  // priced from Shopify where it can answer, from the local catalogue where
+  // it cannot — the same fallback the product page uses
+  const live = await liveCatalog();
+  const tinPrice = live?.["ice-tin"]?.price ?? currentPrice("ice-tin");
+  const tinWas = live?.["ice-tin"]?.compareAt ?? tin.price;
+  const corePrice = live?.["chillcore-3"]?.price ?? core.price;
 
   return (
     <section id="collection" className="relative overflow-hidden py-20 sm:py-28">
@@ -26,7 +32,7 @@ export function Collection() {
         <div className="mx-auto max-w-2xl text-center">
           {onSale && (
             <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-ice-500 px-3.5 py-1.5 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
-              Launch price {money(tinPrice)} — reg. {money(tin.price)}
+              Launch price {money(tinPrice)} — reg. {money(tinWas)}
             </span>
           )}
           <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
@@ -95,7 +101,7 @@ export function Collection() {
               <span className="flex items-baseline gap-2.5">
                 {onSale && (
                   <span className="font-mono text-base text-fog line-through decoration-fog/50">
-                    {money(tin.price)}
+                    {money(tinWas)}
                   </span>
                 )}
                 <span className="font-mono text-2xl tracking-tight text-white-ice">
@@ -161,7 +167,7 @@ export function Collection() {
 
             <div className="mt-auto flex items-center justify-between gap-5 border-t border-frost/8 pt-5">
               <span className="font-mono text-lg tracking-tight text-white-ice">
-                {money(core.price)}
+                {money(corePrice)}
                 <span className="ml-2 text-xs text-fog">{CURRENCY_LABEL}</span>
               </span>
               <div className="flex items-center gap-3">

@@ -31,6 +31,7 @@ import { Guarantee } from "@/components/guarantee";
 import { SPECS, STEPS } from "@/lib/products";
 import { CARRIERS } from "@/lib/testers";
 import { remaining } from "@/lib/stock";
+import { liveCatalog } from "@/lib/live-catalog";
 import { ORG_NAME, SITE_URL, absoluteUrl } from "@/lib/seo";
 
 const PDP_URL = absoluteUrl("/products/ice-tin");
@@ -148,12 +149,19 @@ function buildFaqs(promoToday: boolean) {
 export default async function IceTinPage() {
   const tin = CATALOG["ice-tin"];
   const core = CATALOG["chillcore-3"];
+  // Shopify is the authority for price and stock once it can answer;
+  // Supabase and the local catalogue remain the fallback while the
+  // migration is in progress, so an outage degrades rather than breaks.
+  const live = await liveCatalog();
+  const liveTin = live?.["ice-tin"];
+
   const stock = await remaining("ice-tin");
   const left =
-    stock.ok && Number.isFinite(stock.remaining) ? stock.remaining : (tin.remaining ?? null);
+    liveTin?.stock ??
+    (stock.ok && Number.isFinite(stock.remaining) ? stock.remaining : (tin.remaining ?? null));
   const promoToday = freeShippingToday();
   const onSale = tinOnSale();
-  const unitPrice = currentPrice("ice-tin");
+  const unitPrice = liveTin?.price ?? currentPrice("ice-tin");
   const FAQS = buildFaqs(promoToday);
 
   const productJsonLd = {
@@ -224,7 +232,11 @@ export default async function IceTinPage() {
       <main className="pt-24 sm:pt-28">
         {/* buy box */}
         <section id="top" className="mx-auto max-w-7xl px-4 sm:px-6 scroll-mt-24">
-          <TinBuyBox remaining={left} />
+          <TinBuyBox
+            remaining={left}
+            price={liveTin?.price}
+            compareAt={liveTin ? liveTin.compareAt : undefined}
+          />
         </section>
 
         {/* the price justification, kept close to the button — at this price

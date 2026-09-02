@@ -293,6 +293,8 @@ export async function shopifyAdminDiagnostics(): Promise<Record<string, unknown>
 export type ShopifyVariant = {
   id: string;
   title: string;
+  /** deliberately matches the ids used in lib/catalog.ts, so no lookup table */
+  sku: string | null;
   availableForSale: boolean;
   quantityAvailable: number | null;
   /** cents, to match the rest of this codebase — Shopify returns decimals */
@@ -319,6 +321,7 @@ const PRODUCT_FIELDS = `
     nodes {
       id
       title
+      sku
       availableForSale
       quantityAvailable
       price { amount currencyCode }
@@ -341,6 +344,7 @@ type RawProduct = {
     nodes: {
       id: string;
       title: string;
+      sku: string | null;
       availableForSale: boolean;
       quantityAvailable: number | null;
       price: { amount: string };
@@ -359,6 +363,7 @@ function normalise(p: RawProduct): ShopifyProduct {
     variants: p.variants.nodes.map((v) => ({
       id: v.id,
       title: v.title,
+      sku: v.sku,
       availableForSale: v.availableForSale,
       quantityAvailable: v.quantityAvailable,
       price: toCents(v.price.amount)!,

@@ -60,6 +60,11 @@ export function CheckoutClient() {
         return;
       }
 
+      // Shopify keeps its own copy of this cart and recovers it by email if
+      // the shopper abandons, so clearing ours loses nothing they cannot get
+      // back — and prevents a stale bag greeting a customer who has paid.
+      if (data.provider === "shopify") cart.clear();
+
       trackPixel("InitiateCheckout", {
         lines: cart.lines.map((l) => ({ id: l.id, qty: l.qty })),
         currency: CURRENCY_LABEL,
