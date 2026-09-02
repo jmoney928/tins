@@ -37,7 +37,21 @@ type State = "idle" | "adding" | "added";
  * to be landed on mid-scroll from an ad, the CTA has to be reachable from
  * anywhere, not just the top.
  */
-export function TinBuyBox({ remaining }: { remaining: number | null }) {
+/**
+  * Price and compare-at arrive as props so the server can hand down whatever
+  * Shopify says. They fall back to the local catalogue, which keeps the page
+  * rendering if Shopify is unreachable rather than showing a shop with no
+  * prices.
+  */
+export function TinBuyBox({
+  remaining,
+  price,
+  compareAt,
+}: {
+  remaining: number | null;
+  price?: number;
+  compareAt?: number | null;
+}) {
   const product = CATALOG["ice-tin"];
   const cart = useCart();
   const router = useRouter();
@@ -83,7 +97,8 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
 
   const promoToday = freeShippingToday();
   const onSale = tinOnSale();
-  const unitPrice = currentPrice(product.id);
+  const unitPrice = price ?? currentPrice(product.id);
+  const wasPrice = compareAt === undefined ? product.price : compareAt;
   // the buy box only ever holds the tin, so shipping here is the flat rate
   // with the pair named as the way out of it
   const packName = CATALOG["chillcore-3"].name;
@@ -125,7 +140,7 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
           {onSale && (
             <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-ice-500 px-4 py-2 font-mono text-[11px] tracking-[0.16em] text-paper uppercase">
               <SnowflakeIcon size={13} weight="fill" />
-              Launch price {money(unitPrice)} — reg. {money(product.price)}
+              Launch price {money(unitPrice)} — reg. {money(wasPrice ?? product.price)}
             </div>
           )}
 
@@ -159,9 +174,9 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
               it over the price only made the offer look like it was pleading */}
           <div ref={ctaRef} className="mt-8 border-t border-frost/8 pt-7">
             <div className="flex items-baseline gap-2.5">
-              {onSale && (
+              {onSale && wasPrice && (
                 <span className="font-mono text-lg text-fog line-through decoration-fog/50">
-                  {money(product.price * qty)}
+                  {money(wasPrice * qty)}
                 </span>
               )}
               <span className="font-mono text-3xl tracking-tight text-white-ice">
@@ -262,9 +277,9 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
             <div className="min-w-0 flex-1">
               <p className="truncate text-xs text-fog">{product.name}</p>
               <p className="flex items-baseline gap-2 font-mono text-base tracking-tight text-white-ice">
-                {onSale && (
+                {onSale && wasPrice && (
                   <span className="text-xs text-fog line-through decoration-fog/50">
-                    {money(product.price * qty)}
+                    {money(wasPrice * qty)}
                   </span>
                 )}
                 {money(unitPrice * qty)}
