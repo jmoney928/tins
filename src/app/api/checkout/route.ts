@@ -13,6 +13,8 @@ import { remaining } from "@/lib/stock";
 import { COOKIE } from "@/lib/attribution";
 import { TRANSIT_DAYS } from "@/lib/fulfilment";
 import { recordAbandoned } from "@/lib/abandoned";
+import { liveCatalog } from "@/lib/live-catalog";
+import { createCart } from "@/lib/shopify";
 
 /**
  * Creates a Stripe Checkout Session and hands back its URL.
@@ -24,6 +26,53 @@ import { recordAbandoned } from "@/lib/abandoned";
  */
 
 type Line = { id: string; qty: number };
+
+/**
+ * Which checkout takes the money.
+ *
+ * A switch rather than a replacement, because flipping payment providers is
+ * not a thing to discover has happened. Set CHECKOUT_PROVIDER=shopify when
+ * Shopify Payments is active and the bundle discount has been rebuilt as a
+ * Shopify automatic discount — until then Shopify's checkout would charge
+ * full price for the pair and silently drop the offer the site advertises.
+ */
+const provider = () => (process.env.CHECKOUT_PROVIDER === "shopify" ? "shopify" : "stripe");
+
+/**
+ * Hands the bag to Shopify and returns its checkout URL.
+ *
+ * The click identity travels as cart attributes, which is the Shopify
+ * equivalent of the Stripe session metadata doing that job today: they ride
+ * with the cart, survive the redirect and come back on the order, so a sale
+ * can still be traced to the ad that produced it.
+ *
+ * Prices, shipping and discounts are Shopify's from here. This route stops
+ * computing them rather than computing them twice and disagreeing.
+ */
+async function shopifyCheckout(
+  request: NextRequest,
+  bag: Line[],
+  email: string,
+): Promise<{ url: string } | { error: string; status: number }> {
+  const live = await liveCatalog();
+  if (!live) {
+    return { error: "Checkout is unavailable right now. Try again shortly.", status: 503 };
+  }
+
+  const lines = [];
+  for (const l of bag) {
+    const item = live[l.id];
+    if (!item) return { error: "Your bag is out of date. Reload the page.", status: 400 };
+    if (!item.available) return { error: `${CATALOG[l.id].name} is sold out.`, status: 409 };
+    if (item.stock !== null && item.stock < l.qty) {
+      return { error: `Only ${item.stock} of ${CATALOG[l.id].name} left.`, status: 409 };
+    }
+    lines.push({ variantId: item.variantId, quantity: l.qty });
+  }
+
+  const cart = await createCart(lines, attribution(request), email);
+  return { url: cart.checkoutUrl };
+}
 
 /**
  * The bundle discount as a Stripe coupon.
@@ -90,8 +139,13 @@ function attribution(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const usingShopify = provider() === "shopify";
+
+  // Stripe's key only has to be present when Stripe is taking the money.
+  // Gating every checkout on it would keep the shop tied to a provider it is
+  // no longer using.
   const key = inspectKey();
-  if (!key.ok) {
+  if (!usingShopify && !key.ok) {
     // one clear line in the log instead of an opaque 502 from Stripe later
     console.error("[checkout]", keyDiagnosis(key));
     return NextResponse.json(
@@ -149,7 +203,12 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       );
 
-    const stock = await remaining(id);
+    // Shopify owns the allocation once it owns checkout, and it is checked
+    // against live inventory in shopifyCheckout — asking Supabase as well
+    // would let a stale table refuse a sale Shopify would have accepted.
+    const stock = usingShopify
+      ? ({ ok: true, remaining: Number.POSITIVE_INFINITY } as const)
+      : await remaining(id);
     if (!stock.ok)
       // the store is unreachable — refuse rather than sell what we cannot verify
       return NextResponse.json({ error: stock.reason }, { status: 503 });
@@ -172,6 +231,39 @@ export async function POST(request: NextRequest) {
   // recomputed here rather than trusted from the client, like every other
   // number in this route
   const bag = priced.map((l) => ({ id: l.product.id, qty: l.qty }));
+
+  if (usingShopify) {
+    try {
+      const result = await shopifyCheckout(request, bag, email);
+      if ("error" in result) {
+        return NextResponse.json({ error: result.error }, { status: result.status });
+      }
+      // recorded before the redirect, same as the Stripe path — Shopify
+      // recovers abandoned checkouts natively too, and the duplicate goes
+      // away with the rest of this route in step 08
+      await recordAbandoned({
+        sessionId: `shopify:${Date.now()}:${email}`,
+        email,
+        lines: priced.map((l) => ({
+          sku: l.product.id,
+          name: l.product.name,
+          qty: l.qty,
+          total_amount: currentPrice(l.product.id) * l.qty,
+        })),
+        subtotalCents: subtotal,
+        currency: CURRENCY,
+        checkoutUrl: result.url,
+        attribution: attribution(request),
+      });
+      return NextResponse.json({ url: result.url });
+    } catch (err) {
+      console.error("[checkout] shopify:", err instanceof Error ? err.message : String(err));
+      return NextResponse.json(
+        { error: "Could not start checkout. Try again in a moment." },
+        { status: 502 },
+      );
+    }
+  }
   const saving = bundleSaving(bag);
   const goods = subtotal - saving;
   const shipping =
