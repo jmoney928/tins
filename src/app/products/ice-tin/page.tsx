@@ -15,7 +15,7 @@ import { ProductArt } from "@/components/product-art";
 import { SiteFooter } from "@/components/site-footer";
 import { ViewContent } from "@/components/view-content";
 import {
-  BUNDLE_SAVING,
+  bundleOffer,
   CATALOG,
   CURRENCY_LABEL,
   SHIPPING_FLAT,
@@ -371,7 +371,7 @@ export default async function IceTinPage() {
                 <p className="mt-1.5 text-sm leading-relaxed text-fog">
                   {promoToday
                     ? "Ships worldwide from Vancouver, BC. Free today on every order."
-                    : `Ships worldwide from Vancouver, BC. ${money(SHIPPING_FLAT)} flat, free when you add a ${PACK_LABEL}.`}
+                    : `Ships worldwide from Vancouver, BC. ${money(SHIPPING_FLAT)} flat, or add a ${PACK_LABEL} for ${bundleOffer()}.`}
                 </p>
               </div>
             </div>
@@ -407,10 +407,10 @@ export default async function IceTinPage() {
             <div className="min-w-0 flex-1">
               <h3 className="text-lg leading-tight tracking-tight text-white-ice">{core.name}</h3>
               <p className="mt-1.5 max-w-[46ch] text-sm leading-relaxed text-fog">
-                One pack ships in every tin. Add this if you want a spare
-                already freezing on day one —{" "}
+                One pack ships in every tin. A three-pack keeps a frozen
+                spare available at all times —{" "}
                 <span className="text-frost">
-                  {money(BUNDLE_SAVING)} comes off when both are in the bag.
+                  ordered with a tin it is {bundleOffer()}.
                 </span>
               </p>
             </div>

@@ -24,6 +24,7 @@ import {
   currentPrice,
   money,
 } from "@/lib/catalog";
+import { bundleOffer } from "@/lib/catalog";
 import { dispatchSentence } from "@/lib/fulfilment";
 import { GuaranteeLine } from "../guarantee";
 import { ReviewBadge } from "../review-badge";
@@ -226,7 +227,7 @@ export function TinBuyBox({ remaining }: { remaining: number | null }) {
               <TruckIcon size={13} weight="light" />
               {promoToday
                 ? "Free shipping today — already applied."
-                : `${money(SHIPPING_FLAT)} flat shipping — free when you add a ${packName}.`}
+                : `${money(SHIPPING_FLAT)} flat shipping. Add a ${packName} for ${bundleOffer()}.`}
             </p>
             {/* the guarantee sits with the button, not on a policy page:
                 this is the moment the doubt actually occurs */}

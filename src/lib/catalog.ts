@@ -200,6 +200,23 @@ export function currentPrice(id: string, now?: Date): number {
   return CATALOG[id].price;
 }
 
+/**
+ * The bundle offer, in words, from the same numbers the cart charges.
+ *
+ * Both halves of it are stated together everywhere it appears. They were
+ * introduced separately — the discount first, free shipping later — and ended
+ * up mentioned in different places: the shop card named the money off, the
+ * buy box named the shipping, and nowhere told a shopper that adding one pack
+ * does both. An offer a customer has to assemble from three pages is not an
+ * offer they will act on.
+ */
+export const bundleOffer = () =>
+  `${money(BUNDLE_SAVING)} off and free shipping`;
+
+/** Full sentence, for cards and drawers with room for one. */
+export const bundleOfferSentence = () =>
+  `Add a ${CATALOG["chillcore-3"].name} to a tin for ${bundleOffer()}.`;
+
 export const money = (cents: number) =>
   `$${(cents / 100).toFixed(2).replace(/\.00$/, "")}`;
 

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon, CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import {
-  BUNDLE_SAVING,
+  bundleOffer,
   CATALOG,
   CURRENCY_LABEL,
   currentPrice,
@@ -141,8 +141,7 @@ export function Collection() {
               {core.tagline}
             </p>
             <p className="mt-2.5 text-sm leading-relaxed text-frost">
-              Take one with the tin and {money(BUNDLE_SAVING)} comes off the
-              order.
+              Ordered together with a tin: {bundleOffer()}.
             </p>
 
             {/* two columns, so four short points fill the row the photo sets

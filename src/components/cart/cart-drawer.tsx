@@ -13,7 +13,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { useCart } from "./cart-context";
 import { ProductArt } from "../product-art";
-import { CATALOG, SHIPPING_FLAT, money } from "@/lib/catalog";
+import { CATALOG, SHIPPING_FLAT, bundleOffer, money } from "@/lib/catalog";
 
 export function CartDrawer() {
   const cart = useCart();
@@ -168,7 +168,7 @@ export function CartDrawer() {
                       : cart.freeShipping
                         ? "Free shipping unlocked"
                         : needsPack
-                          ? `Add a ${CATALOG["chillcore-3"].name} for free shipping`
+                          ? `Add a ${CATALOG["chillcore-3"].name} for ${bundleOffer()}`
                           : `${money(SHIPPING_FLAT)} shipping — free with a tin and a pack`}
                   </p>
 
