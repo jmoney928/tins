@@ -255,7 +255,12 @@ export async function POST(request: NextRequest) {
         checkoutUrl: result.url,
         attribution: attribution(request),
       });
-      return NextResponse.json({ url: result.url });
+      // the browser is told which checkout it is going to, because it has to
+      // clear the local bag itself: with Shopify the shopper finishes on
+      // Shopify's thank-you page and never comes back to ours, where the bag
+      // is cleared today. Leaving it full invites a second order of something
+      // they have already bought.
+      return NextResponse.json({ url: result.url, provider: "shopify" });
     } catch (err) {
       console.error("[checkout] shopify:", err instanceof Error ? err.message : String(err));
       return NextResponse.json(
