@@ -22,7 +22,7 @@ export const CARRIERS = [
     city: "Chicago",
     tint: "from-[#2e9dc8] to-[#12475f] text-white",
     quote:
-      "August behind a bar with no air. In a normal can the last few pouches of a double are warm and taste like nothing — a warm pouch is a warm beer, you will have it but you will not enjoy it. With this they are the same at midnight as at four. The spent floor is honestly what I use most. Nothing damp goes in the apron.",
+      "August behind a bar with no air. In a normal can the last few pouches of a double are warm and taste like nothing — a warm pouch is a warm beer, you will have it but you will not enjoy it. With this they are the same at midnight as at four. It sits less flat in an apron pocket than the old one did, which I have got used to.",
   },
   {
     name: "Kasper Lindqvist",

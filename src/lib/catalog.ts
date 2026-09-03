@@ -21,7 +21,7 @@ export const CATALOG: Record<string, Product> = {
   "ice-tin": {
     id: "ice-tin",
     name: "The Ice Tin",
-    tagline: "Twenty-five fresh, held cold, with a sealed floor for spent pouches",
+    tagline: "Twenty-five pouches, held fridge-cold for six hours",
     price: 7999,
     image: "/side-product.jpg",
     /**
@@ -51,11 +51,11 @@ export const CATALOG: Record<string, Product> = {
       "The Ice Tin surrounded by a burst of powdered ice and cold vapour",
     ],
     blurb:
-      "Three compartments in the footprint of a standard can. Twenty-five fresh pouches sit on a perforated tray above a slim ice pack, which holds fridge temperature for six hours. A sealed upper floor takes spent pouches, keeping them separate until they can be disposed of.",
+      "Three compartments in the footprint of a standard can. Twenty-five fresh pouches sit on a perforated tray above a slim ice pack, which holds fridge temperature for six hours. The upper floor takes the spent ones; every floor closes on its own O-ring.",
     // benefit first, engineering second — the order a buyer cares about
     points: [
-      "Sealed top floor for spent pouches",
       "Twenty-five held at fridge temperature for 6 hours",
+      "Three floors: spent, fresh, ice pack",
       "Perforated floor for direct cold transfer",
       "Two silicone O-rings, IPX6",
       "One Chillcore pack in the box",

@@ -16,8 +16,8 @@ const PROBLEMS = [
     body: "A pocket sits at body temperature. By early afternoon the moisture has left the pouch and the flavour has gone flat, so the last five are never the ones paid for. The tin holds fridge temperature for six hours; the pouch taken at six is the pouch taken at one.",
   },
   {
-    k: "Nowhere for the spent ones",
-    body: "A used pouch goes back under the lid with the fresh, into a pocket, or over a shoulder. The sealed upper floor takes up to fifteen of them, away from the fresh ones and from everything else in the pocket.",
+    k: "Nothing actually seals",
+    body: "A snap lid keeps pouches in; it does not keep air out or a wet pocket out. Every floor here closes onto its own silicone O-ring, sealed to IPX6. That seal is what makes six hours possible, because cold that leaks is cold that is gone by ten.",
   },
   {
     k: "The can gives up",

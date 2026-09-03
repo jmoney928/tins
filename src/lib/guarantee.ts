@@ -20,11 +20,11 @@ export const GUARANTEE_DAYS = 30;
 export const GUARANTEE_SHORT = `${GUARANTEE_DAYS}-day cold-or-refund guarantee, return shipping paid.`;
 
 /** Under a CTA, where there is room for the reason but not the detail. */
-export const GUARANTEE_MEDIUM = `Use the tin for ${GUARANTEE_DAYS} days. If it does not hold pouches colder and keep spent ones separated, return it for a full refund with return shipping paid.`;
+export const GUARANTEE_MEDIUM = `Use the tin for ${GUARANTEE_DAYS} days. If it does not hold pouches colder for the length of a shift, return it for a full refund with return shipping paid.`;
 
 export const GUARANTEE_TITLE = "Thirty days, used, fully refundable.";
 
-export const GUARANTEE_BODY = `Use the tin in normal daily conditions for ${GUARANTEE_DAYS} days. If it does not hold pouches colder, or does not keep spent ones separated from fresh, return it for a full refund with return shipping paid. There is no requirement that it be unused or in its original packaging — the guarantee exists so the product can be tested properly. The lifetime warranty on the shell applies regardless.`;
+export const GUARANTEE_BODY = `Use the tin in normal daily conditions for ${GUARANTEE_DAYS} days. If it does not hold pouches noticeably colder for the length of a working shift, return it for a full refund with return shipping paid. There is no requirement that it be unused or in its original packaging — the guarantee exists so the product can be tested properly. The lifetime warranty on the shell applies regardless.`;
 
 /**
  * The one exception, and it stays an exception rather than a headline. A gel

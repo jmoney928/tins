@@ -7,7 +7,7 @@ const LAYERS = [
   {
     n: "01",
     title: "Spent floor, on top",
-    body: "Holds roughly fifteen used pouches, which compress as they stack, sealed away from the fresh ones. No wrapping, no disposal en route, and no odour transfer to a pocket or bag.",
+    body: "Holds roughly fifteen used pouches, which compress as they stack, behind its own O-ring rather than a snap lid.",
   },
   {
     n: "02",

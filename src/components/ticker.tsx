@@ -16,7 +16,6 @@ const BASE_WORDS = [
   "One tin, one refill pack",
   "Twenty-five fresh, fifteen spent",
   "Cold for 6 hours",
-  "Sealed floor for spent pouches",
   "6061-T6, sealed to IPX6",
   "Machined in Vancouver, BC",
   "Freezer to ready in 90 min",
