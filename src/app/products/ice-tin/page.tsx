@@ -15,7 +15,7 @@ import { ProductArt } from "@/components/product-art";
 import { SiteFooter } from "@/components/site-footer";
 import { ViewContent } from "@/components/view-content";
 import {
-  bundleOffer,
+  bundlePair,
   CATALOG,
   CURRENCY_LABEL,
   SHIPPING_FLAT,
@@ -383,7 +383,7 @@ export default async function IceTinPage() {
                 <p className="mt-1.5 text-sm leading-relaxed text-fog">
                   {promoToday
                     ? "Ships worldwide from Vancouver, BC. Free today on every order."
-                    : `Ships worldwide from Vancouver, BC. ${money(SHIPPING_FLAT)} flat, or add a ${PACK_LABEL} for ${bundleOffer()}.`}
+                    : `Ships worldwide from Vancouver, BC. ${money(SHIPPING_FLAT)} flat, and free on any order with a tin and a ${PACK_LABEL} in it.`}
                 </p>
               </div>
             </div>
@@ -422,7 +422,8 @@ export default async function IceTinPage() {
                 One pack ships in every tin. A three-pack keeps a frozen
                 spare available at all times —{" "}
                 <span className="text-frost">
-                  ordered with a tin it is {bundleOffer()}.
+                  ordered with a tin, the two come to {money(bundlePair().total)}{" "}
+                  delivered instead of {money(bundlePair().list)}.
                 </span>
               </p>
             </div>

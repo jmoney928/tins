@@ -3,12 +3,13 @@ import {
   ArrowUpRightIcon,
   ArrowRightIcon,
   ShieldCheckIcon,
+  TruckIcon,
   WrenchIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { ProductStage } from "./product-stage";
 import { Magnetic } from "./magnetic";
 import { Splatter } from "./splatter";
-import { CATALOG, currentPrice, money, tinOnSale } from "@/lib/catalog";
+import { CATALOG, bundlePair, currentPrice, money, tinOnSale } from "@/lib/catalog";
 import { GUARANTEE_SHORT } from "@/lib/guarantee";
 import { ReviewBadge } from "./review-badge";
 
@@ -109,6 +110,10 @@ export function Hero() {
         <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-fog">
           <li>
             <ReviewBadge />
+          </li>
+          <li className="flex items-center gap-2">
+            <TruckIcon size={14} weight="light" className="text-ice-500" />
+            Free shipping on a tin and a pack — {money(bundlePair().total)} for both
           </li>
           <li className="flex items-center gap-2">
             <ShieldCheckIcon size={14} weight="light" className="text-ice-500" />

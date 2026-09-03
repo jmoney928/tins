@@ -7,7 +7,7 @@
 
 ## The product
 
-- **The Ice Tin** — $79.99 CAD, on sale at $49.99 CAD through Aug 22, 2026. A
+- **The Ice Tin** — $49.99 CAD launch price, regularly $79.99 CAD. A
   three-floor can, standard diameter (68 mm),
   41 mm tall: an empty top floor for spent pouches, a middle floor that holds
   25 fresh pouches, and a slim Chillcore ice pack in the base. Sealed on two
@@ -20,6 +20,10 @@
   18 g each, food-safe gel, sealed). 90 minutes to freeze. Sold as a spare so
   one is always in the tin, one is freezing, and one is in reserve.
 
+- **Tin and pack together** — $59.99 CAD delivered, against $77.98 for the two
+  bought separately with shipping. Ordering a tin and a Chillcore three-pack
+  in the same order takes $9.99 off and makes shipping free.
+
 ## Company facts
 
 - Based in Vancouver, BC, Canada. Ships worldwide.
@@ -30,7 +34,7 @@
   full refund with return shipping paid. Lifetime warranty on the shell.
 - Machined in small batches; restocked as needed rather than sold as
   one-time limited drops.
-- Checkout is handled by Stripe. Card details never touch Ice Tins' servers.
+- Checkout is hosted and encrypted. Card details never touch Ice Tins' servers.
 
 ## Pages
 

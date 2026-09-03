@@ -13,7 +13,8 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { useCart } from "./cart-context";
 import { ProductArt } from "../product-art";
-import { CATALOG, SHIPPING_FLAT, bundleOffer, money } from "@/lib/catalog";
+import { BundleCard } from "../bundle-card";
+import { SHIPPING_FLAT, money } from "@/lib/catalog";
 
 export function CartDrawer() {
   const cart = useCart();
@@ -32,8 +33,8 @@ export function CartDrawer() {
     return () => window.removeEventListener("keydown", onKey);
   }, [closeDrawer]);
 
-  // free shipping is earned by the pair, so the prompt names the missing
-  // half rather than a number the shopper has to do arithmetic against
+  // free shipping is earned by the pair, so the bag offers the missing half
+  // as something to add rather than a number to work out
   const needsPack = !cart.freeShipping && cart.lines.some((l) => l.id === "ice-tin");
 
   return (
@@ -161,15 +162,22 @@ export function CartDrawer() {
                   ))}
                 </ul>
 
+                {/* the upsell sits above the totals rather than inside them:
+                    it changes three of the four lines below, so a shopper
+                    should meet it before reading a total it would alter */}
+                {needsPack && !cart.freeShippingPromo && (
+                  <div className="border-t border-frost/8 px-6 pt-5">
+                    <BundleCard variant="drawer" />
+                  </div>
+                )}
+
                 <footer className="border-t border-frost/8 px-6 py-6">
                   <p className="mb-4 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase">
                     {cart.freeShippingPromo
                       ? "Free shipping unlocked — today only"
                       : cart.freeShipping
                         ? "Free shipping unlocked"
-                        : needsPack
-                          ? `Add a ${CATALOG["chillcore-3"].name} for ${bundleOffer()}`
-                          : `${money(SHIPPING_FLAT)} shipping — free with a tin and a pack`}
+                        : `${money(SHIPPING_FLAT)} shipping — free with a tin and a pack`}
                   </p>
 
                   <dl className="flex flex-col gap-2 text-sm">
@@ -179,7 +187,7 @@ export function CartDrawer() {
                     </div>
                     {cart.saving > 0 && (
                       <div className="flex justify-between text-ice-700">
-                        <dt>Tin + pack bundle</dt>
+                        <dt>Tin + pack saving</dt>
                         <dd className="font-mono">−{money(cart.saving)}</dd>
                       </div>
                     )}

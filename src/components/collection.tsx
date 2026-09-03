@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon, CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import {
-  bundleOffer,
+  bundlePair,
   CATALOG,
   CURRENCY_LABEL,
   currentPrice,
@@ -146,8 +146,11 @@ export async function Collection() {
             <p className="mt-1.5 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase">
               {core.tagline}
             </p>
+            {/* the pair, totalled — the offer was previously stated as a
+                deduction the reader had to apply to a price on another card */}
             <p className="mt-2.5 text-sm leading-relaxed text-frost">
-              Ordered together with a tin: {bundleOffer()}.
+              Ordered with a tin, the two come to {money(bundlePair().total)}{" "}
+              delivered instead of {money(bundlePair().list)}.
             </p>
 
             {/* two columns, so four short points fill the row the photo sets

@@ -43,8 +43,9 @@ export default async function SuccessPage({
           No order to show.
         </h1>
         <p className="mt-4 text-sm leading-relaxed text-fog">
-          This page needs a Stripe session to look up. If you have just paid,
-          check your email — the confirmation is the receipt that matters.
+          This page needs an order reference to look up. If you have just
+          paid, check your email — the confirmation is the receipt that
+          matters.
         </p>
         <Link
           href="/"
@@ -70,7 +71,7 @@ export default async function SuccessPage({
           We could not find that order.
         </h1>
         <p className="mt-4 text-sm leading-relaxed text-fog">
-          The link may have expired. Your email confirmation from Stripe is the
+          The link may have expired. Your email confirmation is the
           authoritative receipt.
         </p>
         <Link

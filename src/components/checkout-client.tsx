@@ -11,6 +11,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { useCart } from "./cart/cart-context";
 import { ProductArt } from "./product-art";
+import { BundleCard } from "./bundle-card";
 import { BrandMark } from "./brand-mark";
 import { CURRENCY_LABEL, money } from "@/lib/catalog";
 import { GUARANTEE_SHORT } from "@/lib/guarantee";
@@ -33,7 +34,7 @@ export function CheckoutClient() {
     if (busy) return;
 
     // checked here as well as on the server, so a typo costs a glance rather
-    // than a round trip out to Stripe and back
+    // than a round trip out to the payment page and back
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
       setError("Enter the email your receipt should go to.");
       return;
@@ -71,14 +72,20 @@ export function CheckoutClient() {
         value: cart.total / 100,
       });
 
-      // hand off to Stripe; the bag is cleared on the success page, not here,
-      // so backing out of Stripe leaves the shopper's bag intact
+      // hand off to the payment page; on the Stripe path the bag is cleared
+      // on the success page rather than here, so backing out leaves it intact
       window.location.href = data.url;
     } catch {
       setError("No connection. Check your network and try again.");
       setBusy(false);
     }
   };
+
+  // tin in the bag, pack missing: the offer is still available and still
+  // worth stating, because the total on this page is the one it changes
+  const needsPack =
+    cart.lines.some((l) => l.id === "ice-tin") &&
+    !cart.lines.some((l) => l.id === "chillcore-3");
 
   if (cart.ready && cart.lines.length === 0) {
     return (
@@ -119,8 +126,8 @@ export function CheckoutClient() {
         Checkout
       </h1>
       <p className="mt-4 max-w-[52ch] text-sm leading-relaxed text-fog">
-        Payment, address and delivery are handled on Stripe&rsquo;s secure
-        page. You will be returned here once the payment clears.
+        Payment, address and delivery are taken on our secure payment page.
+        You will be returned here once the payment clears.
       </p>
 
       {cancelled && (
@@ -163,6 +170,10 @@ export function CheckoutClient() {
           ))}
         </ul>
 
+        {/* the last place the pair can still be taken, and the one place the
+            shopper is already looking at a total it would change */}
+        {needsPack && <BundleCard variant="drawer" className="mt-7" />}
+
         <dl className="mt-7 flex flex-col gap-2 border-t border-frost/8 pt-6 text-sm">
           <div className="flex justify-between text-fog">
             <dt>Subtotal</dt>
@@ -170,7 +181,7 @@ export function CheckoutClient() {
           </div>
           {cart.saving > 0 && (
             <div className="flex justify-between text-ice-700">
-              <dt>Tin + pack bundle</dt>
+              <dt>Tin + pack saving</dt>
               <dd className="font-mono">−{money(cart.saving)}</dd>
             </div>
           )}
@@ -186,7 +197,7 @@ export function CheckoutClient() {
           </div>
         </dl>
 
-        {/* asked here rather than on Stripe's page, and passed through so it
+        {/* asked here rather than on the payment page, and passed through so it
             arrives prefilled — one field earlier, not one field more */}
         <div className="mt-7">
           <label
@@ -225,7 +236,7 @@ export function CheckoutClient() {
           {busy ? (
             <>
               <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-paper/35 border-t-paper" />
-              Opening Stripe
+              Opening secure checkout
             </>
           ) : (
             <>
@@ -241,7 +252,7 @@ export function CheckoutClient() {
 
         <p className="mt-4 flex items-center justify-center gap-2 text-xs text-fog/80">
           <LockSimpleIcon size={13} weight="fill" />
-          Secured by Stripe. Card details never touch our servers.
+          Encrypted checkout. Card details never touch our servers.
         </p>
         {/* the last thing read before paying should be the way out, not the
             lock icon */}

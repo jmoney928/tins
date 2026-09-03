@@ -246,3 +246,28 @@ export const money = (cents: number) =>
 /** Amount plus the currency code, for anywhere the code is not already shown. */
 export const priceWithCurrency = (cents: number) =>
   `${money(cents)} ${CURRENCY_LABEL}`;
+
+/**
+ * The pair, priced end to end.
+ *
+ * The offer was true everywhere but stated nowhere: the discount was named on
+ * one line, free shipping on another, and no surface ever showed a shopper
+ * what the two of them together actually cost. A saving nobody can total is a
+ * saving nobody acts on.
+ *
+ * Every number a customer reads about the bundle comes from here, so the
+ * arithmetic printed on the product page cannot drift from the total the bag
+ * charges. `list` deliberately includes the flat shipping the pair avoids —
+ * that is a real cost a buyer would otherwise pay, and leaving it out would
+ * understate the offer rather than overstate it.
+ *
+ * The pair must clear FREE_SHIPPING_OVER for `total` to be honest. At today's
+ * prices it does, with room to spare: $69.98 against a $55 minimum.
+ */
+export function bundlePair(now?: Date) {
+  const tin = currentPrice("ice-tin", now);
+  const pack = currentPrice("chillcore-3", now);
+  const list = tin + pack + SHIPPING_FLAT;
+  const total = tin + pack - BUNDLE_SAVING;
+  return { tin, pack, list, total, saving: list - total };
+}

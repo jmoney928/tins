@@ -24,7 +24,7 @@ import {
   currentPrice,
   money,
 } from "@/lib/catalog";
-import { bundleOffer } from "@/lib/catalog";
+import { BundleCard } from "../bundle-card";
 import { dispatchSentence } from "@/lib/fulfilment";
 import { GuaranteeLine } from "../guarantee";
 import { ReviewBadge } from "../review-badge";
@@ -99,34 +99,55 @@ export function TinBuyBox({
   const onSale = tinOnSale();
   const unitPrice = price ?? currentPrice(product.id);
   const wasPrice = compareAt === undefined ? product.price : compareAt;
-  // the buy box only ever holds the tin, so shipping here is the flat rate
-  // with the pair named as the way out of it
-  const packName = CATALOG["chillcore-3"].name;
 
   return (
     <>
       <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-[1.05fr_1fr] lg:items-start lg:gap-14">
-        {/* gallery */}
-        <div>
-          <div className="overflow-hidden rounded-[1.75rem] bg-ink sm:rounded-[2rem]">
+        {/*
+          Gallery. Eight photos used to wrap onto two rows of a strip built for
+          three, which read as an accident and pushed the buy column down the
+          page. They now sit in one rail — a column beside the photo on desktop,
+          a scrolling row beneath it on narrower screens — and the photo is
+          ordered first in the DOM, so a screen reader and the tab order both
+          meet the image before its index.
+        */}
+        <div className="flex min-w-0 flex-col gap-3 lg:sticky lg:top-24 lg:flex-row-reverse lg:gap-4">
+          <div className="relative min-w-0 flex-1 overflow-hidden rounded-[1.75rem] bg-ink sm:rounded-[2rem]">
             <ProductArt
               product={product}
               src={product.gallery[shot]}
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              sizes="(max-width: 1024px) 100vw, 45vw"
               className="aspect-square w-full"
             />
+            {/* which of the eight you are looking at — the one thing a wrapped
+                strip could never say at a glance */}
+            <span className="pointer-events-none absolute right-4 bottom-4 rounded-full bg-ink/70 px-2.5 py-1 font-mono text-[10px] tracking-[0.14em] text-ice-300 backdrop-blur-md">
+              {shot + 1} / {product.gallery.length}
+            </span>
           </div>
-          {/* wraps rather than scrolls: eight thumbnails overflow the column
-              on every viewport, and a hidden thumbnail is a photo nobody
-              looks at */}
-          <div className="mt-3 flex flex-wrap gap-2.5">
+
+          {/*
+            The lg rail is 3.5rem wide for a reason: eight 56px squares and
+            seven 8px gaps come to 504px, just inside the ~530px the photo
+            occupies in this grid. A rail taller than the photo it indexes is
+            exactly what made the old strip look unplanned.
+          */}
+          <div
+            role="group"
+            aria-label="Product photographs"
+            className="flex min-w-0 snap-x snap-mandatory gap-2 overflow-x-auto pb-1 lg:w-14 lg:snap-none lg:flex-col lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden"
+            style={{ scrollbarWidth: "none" }}
+          >
             {product.gallery.map((g, i) => (
               <button
                 key={g}
                 onClick={() => setShot(i)}
-                aria-label={`View image ${i + 1}`}
-                className={`h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-ink transition-all duration-300 sm:h-[4.5rem] sm:w-[4.5rem] ${
-                  i === shot ? "ring-2 ring-ice-500 ring-offset-2" : "opacity-55 hover:opacity-90"
+                aria-label={product.galleryAlt[i] ?? `View image ${i + 1}`}
+                aria-current={i === shot}
+                className={`aspect-square w-14 shrink-0 snap-start overflow-hidden rounded-xl bg-ink transition-all duration-300 sm:w-16 lg:w-full ${
+                  i === shot
+                    ? "ring-2 ring-ice-500 ring-offset-2 ring-offset-paper"
+                    : "opacity-55 hover:opacity-100"
                 }`}
               >
                 <ProductArt product={product} src={g} sizes="72px" className="h-full w-full" />
@@ -238,11 +259,17 @@ export function TinBuyBox({
               {buying ? "Taking you to checkout" : "Checkout now"}
             </button>
 
-            <p className="mt-3 flex items-center gap-1.5 text-xs text-fog">
+            {/* The offer, priced out, at the moment the decision is made.
+                It used to be a clause on the shipping line — the one line a
+                shopper skims — which meant the best-value option on the shop
+                was also the least visible thing on the page. */}
+            {!promoToday && <BundleCard className="mt-6" />}
+
+            <p className="mt-4 flex items-center gap-1.5 text-xs text-fog">
               <TruckIcon size={13} weight="light" />
               {promoToday
                 ? "Free shipping today — already applied."
-                : `${money(SHIPPING_FLAT)} flat shipping. Add a ${packName} for ${bundleOffer()}.`}
+                : `${money(SHIPPING_FLAT)} flat shipping on the tin on its own.`}
             </p>
             {/* the guarantee sits with the button, not on a policy page:
                 this is the moment the doubt actually occurs */}
@@ -253,7 +280,7 @@ export function TinBuyBox({
             </p>
             <p className="mt-1.5 flex items-center gap-1.5 text-xs text-fog">
               <LockSimpleIcon size={13} weight="fill" />
-              Secure checkout via Stripe — card details never touch our servers.
+              Encrypted checkout. Card details never touch our servers.
             </p>
             <p className="mt-3 flex items-start gap-1.5 text-xs leading-relaxed text-fog">
               <PackageIcon size={13} weight="light" className="mt-0.5 shrink-0" />
