@@ -180,17 +180,33 @@ export function tinOnSale(_now: Date = new Date()) {
  * Modelled as a saving rather than a fixed bundle price on purpose: a fixed
  * "$89.99 bundle" would be *more* than the two items cost during the sale,
  * so it would quietly stop being an offer for exactly the week it matters
- * most. As a deduction it stacks on whatever the live price is —
- * $59.99 during the sale, $89.99 after it — and needs no maintenance when
- * the window closes.
+ * most. As a deduction it stacks on whatever the live price is and needs no
+ * maintenance when the window closes.
  *
- * $9.99 rather than a round $10 so both totals land on a real price point.
+ * ── Why $4.99, and why this number was wrong ────────────────────────────
+ * This read $9.99 and Shopify was giving $4.99. The site advertised the pair
+ * at $59.99 and the checkout charged $64.99, so every bundle order was billed
+ * five dollars over the displayed price — the dangerous direction of the two.
+ * It surfaced only because the offer was rewritten as a total a shopper could
+ * read, which made it worth measuring against what Shopify actually returns.
+ *
+ * $9.99 was also too deep to want back. Two incentives were stacking on one
+ * $19.99 item — the discount plus $8 of waived shipping — which would have
+ * put the three-pack out at $2, ninety percent off, and left the $19.99
+ * standalone price impossible to defend. At $4.99 the pack adds $7.00 to a
+ * single-tin order: plainly a deal, and no longer two prices for one product.
+ *
+ * MUST equal the "Buy X get Y" amount on the Shopify automatic discount.
+ * Verified against it by POSTing a tin and a pack to /api/checkout and
+ * reading cost.total, which is the only thing that proves these agree — the
+ * Storefront cart does not evaluate automatic discounts, so nothing short of
+ * a real cart total will catch a drift like this one.
  */
-export const BUNDLE_SAVING = 999;
+export const BUNDLE_SAVING = 499;
 const BUNDLE_PARTS = ["ice-tin", "chillcore-3"] as const;
 
 /**
- * The bundle condition, stated once. The $9.99 discount and free shipping
+ * The bundle condition, stated once. The bundle discount and free shipping
  * both hang off it, so they can never disagree about what qualifies.
  */
 export function hasBundle(lines: { id: string; qty: number }[]): boolean {
@@ -282,7 +298,7 @@ export function bundlePair(now?: Date) {
    * `alone` and `step` are the two numbers a shopper can actually use.
    *
    * The offer was being explained as a mechanism — a $49.99 tin, a $19.99
-   * pack, $9.99 off, shipping waived — which is four figures and two rules,
+   * pack, a bundle discount, shipping waived — four figures and two rules,
    * and nobody standing in a shop does that arithmetic. Set against the only
    * alternative they have, it collapses into one sentence: a tin on its own
    * is $57.99 delivered, the tin with three packs is $59.99 delivered, so the
