@@ -72,7 +72,21 @@ export function Splatter({
   const grad = `${scope}-grad`;
 
   return (
-    <svg viewBox="0 0 200 200" className={className} aria-hidden focusable="false">
+    /*
+      overflow visible, because an SVG root clips to its own viewBox by
+      default and the group below is rotated. Rotation carries the outermost
+      spray dots past the 200x200 box — four to six of them in every instance
+      on the site — and each one was rendering as a half circle sliced on a
+      dead-straight line. The shape is authored to bleed; the element it is
+      drawn in has to let it.
+    */
+    <svg
+      viewBox="0 0 200 200"
+      className={className}
+      style={{ overflow: "visible" }}
+      aria-hidden
+      focusable="false"
+    >
       <defs>
         <filter id={goo} x="-20%" y="-20%" width="140%" height="140%">
           <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b" />
@@ -123,7 +137,13 @@ export function Flecks({
   color?: string;
 }) {
   return (
-    <svg viewBox="0 0 200 200" className={className} aria-hidden focusable="false">
+    <svg
+      viewBox="0 0 200 200"
+      className={className}
+      style={{ overflow: "visible" }}
+      aria-hidden
+      focusable="false"
+    >
       <g fill={color}>
         {SPRAY.map(([cx, cy, r], i) => (
           <circle key={`${scope}-${i}`} cx={cx} cy={cy} r={r} />
