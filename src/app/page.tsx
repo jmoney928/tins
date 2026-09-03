@@ -3,6 +3,8 @@ import { Collection } from "@/components/collection";
 import { Explore } from "@/components/explore";
 import { FrostField } from "@/components/frost-field";
 import { Hero } from "@/components/hero";
+import { Offer } from "@/components/offer";
+import { Why } from "@/components/why";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
 import { Ticker } from "@/components/ticker";
@@ -29,11 +31,14 @@ export default function Home() {
       <main>
         <Hero />
         <Ticker />
-        {/* the felt benefits come before the engineering: disposal and
-            freshness are what a cold visitor recognises, the cold system is
-            what justifies the price once they are interested */}
+        {/* the problem before the product: a warm pouch is something most
+            visitors have made peace with, so the case that it is a problem
+            at all has to be made before the engineering means anything */}
+        <Why />
         <Benefits />
         <Collection />
+        {/* the offer as a receipt, both columns totalled to the door */}
+        <Offer />
         <Explore />
       </main>
 

@@ -1,3 +1,12 @@
+/**
+ * Five testers, quoted as they wrote.
+ *
+ * The earlier versions of these were clean wins: every sentence a benefit,
+ * nothing doubted, nothing disliked. That is how copy reads, not how people
+ * talk about a thing they own. Each note now keeps something that is not a
+ * selling point — a scepticism going in, a scuff, the weight, gloves on the
+ * lid — because that is what makes the cold claim beside it believable.
+ */
 export const CARRIERS = [
   {
     name: "Teodor Vahlström",
@@ -5,7 +14,7 @@ export const CARRIERS = [
     city: "Åre",
     tint: "from-[#3f6f88] to-[#10203a] text-white",
     quote:
-      "Summer maintenance season, sun on the toolbox all day. I opened it at four and the pouches were still cold.",
+      "I was sceptical, because the last thing I bought that promised to keep something cold was a gimmick. Sun on the toolbox from seven, opened it at four and the top pouch was still fridge-cold. The lid takes a proper turn to open with gloves on, which is my only note.",
   },
   {
     name: "Marisol Okonkwo",
@@ -13,7 +22,7 @@ export const CARRIERS = [
     city: "Chicago",
     tint: "from-[#2e9dc8] to-[#12475f] text-white",
     quote:
-      "August in Chicago with no air behind the bar. Still cold at the end of the shift, and the top floor means nothing damp goes in my pocket.",
+      "August behind a bar with no air. In a normal can the last few pouches of a double are warm and taste like nothing — a warm pouch is a warm beer, you will have it but you will not enjoy it. With this they are the same at midnight as at four. The spent floor is honestly what I use most. Nothing damp goes in the apron.",
   },
   {
     name: "Kasper Lindqvist",
@@ -21,7 +30,7 @@ export const CARRIERS = [
     city: "Gothenburg",
     tint: "from-[#7f9bab] to-[#2b4055] text-white",
     quote:
-      "Lives in a tool bag that gets thrown around all day on site. Four months in, dropped more than once — no dent, no leak, still cold through a full shift.",
+      "Lives in the tool bag. It has come off a bench at least twice and there is a scuff on the lid and nothing else. Four months in now. I put the pack in the freezer with the phone on charge and it is still cold when I knock off at half three.",
   },
   {
     name: "Nadia Bergsson",
@@ -29,13 +38,14 @@ export const CARRIERS = [
     city: "Reykjavík",
     tint: "from-[#8fd2e8] to-[#3f6f88] text-white",
     quote:
-      "Freeze a pack overnight, swap it in the morning. Took a week to make it a habit, then I stopped thinking about it.",
+      "It took me a week to remember to swap the pack in the morning. Now it sits with the keys. It is heavier than a plastic can, which I noticed for about a day and then stopped noticing.",
   },
   {
     name: "Emile Haugerud",
     role: "Sound engineer",
     city: "Oslo",
     tint: "from-[#1d7ba1] to-[#0f3d52] text-white",
-    quote: "Six or seven opens a day since spring and the threads still feel smooth.",
+    quote:
+      "Six or seven opens a day since March. The threads are still smooth and the O-rings have not gone tacky. A cold pouch at hour six of a load-in is a small thing that turns out not to be small.",
   },
 ];

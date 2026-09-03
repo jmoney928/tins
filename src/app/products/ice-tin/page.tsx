@@ -15,6 +15,7 @@ import { ProductArt } from "@/components/product-art";
 import { SiteFooter } from "@/components/site-footer";
 import { ViewContent } from "@/components/view-content";
 import { Reveal } from "@/components/reveal";
+import { Offer } from "@/components/offer";
 import {
   bundlePair,
   CATALOG,
@@ -131,7 +132,7 @@ function buildFaqs(promoToday: boolean) {
       // doubt is the objection, so meeting it is worth more than restating
       // the benefit
       q: "Do pouches really go stale otherwise?",
-      a: "Warmth dries a pouch out and flattens its flavour as the moisture is lost. Held at fridge temperature, a pouch taken at hour six is materially the same as one taken at hour one. Our test conditions are a frozen pack, a closed lid and a 22°C room, which holds for six hours; the same can with an empty tray holds approximately one.",
+      a: "Yes, in the way a beer goes stale warm: still usable, no longer the thing you paid for. Warmth dries a pouch out and flattens its flavour as the moisture is lost. Held at fridge temperature, a pouch taken at hour six is materially the same as one taken at hour one. Our test conditions are a frozen pack, a closed lid and a 22°C room, which holds for six hours; the same can with an empty tray holds approximately one.",
     },
     {
       q: "When will it actually arrive?",
@@ -283,6 +284,8 @@ export default async function IceTinPage() {
             </p>
           </Reveal>
         </section>
+
+        <Offer />
 
         {/* stock and shipping reassurance */}
         <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">

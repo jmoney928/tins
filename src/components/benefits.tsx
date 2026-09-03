@@ -26,7 +26,7 @@ const BLOCKS = [
   {
     Icon: SnowflakeIcon,
     title: "Twenty-five pouches held cold",
-    body: "A perforated tray sits directly over the frozen pack, holding fridge temperature for six hours. Flavour and moisture are preserved from the first pouch to the last.",
+    body: "A perforated tray sits directly over the frozen pack, holding fridge temperature for six hours. A warm pouch is a warm beer: the last one of the day tastes the same as the first.",
   },
   {
     Icon: WrenchIcon,
