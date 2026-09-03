@@ -29,7 +29,11 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative mx-auto grid min-h-[100dvh] w-full max-w-7xl grid-cols-1 content-center gap-8 px-4 pt-28 pb-16 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:grid-rows-[auto_auto] lg:gap-x-8 lg:pt-24 lg:pb-0"
+      /* overflow-x-clip contains the splatter below, which bleeds 288px past
+         the right edge. Every other section carrying one already clips; this
+         one did not, and on a phone that overflow widened the layout viewport
+         and pushed the nav's bag and menu buttons off the screen. */
+      className="relative mx-auto grid min-h-[100dvh] w-full max-w-7xl grid-cols-1 content-center gap-8 overflow-x-clip px-4 pt-28 pb-16 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:grid-rows-[auto_auto] lg:gap-x-8 lg:pt-24 lg:pb-0"
     >
       <Splatter
         scope="hero-splat"

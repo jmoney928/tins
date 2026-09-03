@@ -57,6 +57,20 @@ export function BundleCard({
 
   const pair = bundlePair();
 
+  /**
+   * What the pack actually costs this shopper, right now.
+   *
+   * A bag holding one tin is $57.99 with shipping; the pair is $59.99
+   * delivered. So the three-pack — $19.99 on its own — is two dollars from
+   * here, and that is a far stronger sentence than "save $9.99". Only shown
+   * when the bag is exactly one tin, because that is the only arrangement
+   * where the difference is this clean and this true.
+   */
+  const soleTin =
+    cart.lines.length === 1 && cart.lines[0]?.id === "ice-tin" && cart.lines[0].qty === 1;
+  const step = pair.total - cart.total;
+  const showStep = soleTin && step > 0;
+
   const add = () => {
     if (state !== "idle") return;
     setState("adding");
@@ -131,6 +145,12 @@ export function BundleCard({
         {money(pair.tin)} tin + {money(pair.pack)} pack, less {money(BUNDLE_SAVING)}, and
         shipping is free on the pair.
       </p>
+
+      {showStep && (
+        <p className="mt-2 text-xs font-medium text-ice-700">
+          {money(step)} more than your bag as it stands, for a {money(pair.pack)} pack.
+        </p>
+      )}
 
       <button
         onClick={add}

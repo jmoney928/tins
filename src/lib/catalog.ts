@@ -243,6 +243,14 @@ export const bundleOfferSentence = () =>
 export const money = (cents: number) =>
   `$${(cents / 100).toFixed(2).replace(/\.00$/, "")}`;
 
+/**
+ * Money with the cents always shown, for the totals columns in the bag and at
+ * checkout. money() drops a trailing .00 because "$8 flat shipping" reads
+ * better than "$8.00 flat shipping" in a sentence — but in a right-aligned
+ * column beside $49.99 and $57.99, a bare "$8" reads as unfinished.
+ */
+export const moneyExact = (cents: number) => `$${(cents / 100).toFixed(2)}`;
+
 /** Amount plus the currency code, for anywhere the code is not already shown. */
 export const priceWithCurrency = (cents: number) =>
   `${money(cents)} ${CURRENCY_LABEL}`;

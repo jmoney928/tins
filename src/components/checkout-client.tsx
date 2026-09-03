@@ -13,7 +13,7 @@ import { useCart } from "./cart/cart-context";
 import { ProductArt } from "./product-art";
 import { BundleCard } from "./bundle-card";
 import { BrandMark } from "./brand-mark";
-import { CURRENCY_LABEL, money } from "@/lib/catalog";
+import { CURRENCY_LABEL, money, moneyExact } from "@/lib/catalog";
 import { GUARANTEE_SHORT } from "@/lib/guarantee";
 import { trackPixel } from "@/lib/pixel";
 
@@ -155,8 +155,13 @@ export function CheckoutClient() {
         <ul className="mt-6 flex flex-col gap-5">
           {cart.lines.map((l) => (
             <li key={l.id} className="flex items-center gap-4">
-              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-ink">
-                <ProductArt product={l.product} sizes="64px" className="h-full w-full" />
+              {/* the badge hangs outside the thumbnail, so the clipping has to
+                  happen on an inner wrapper — on the outer one it sliced the
+                  quantity in half */}
+              <div className="relative h-16 w-16 shrink-0">
+                <div className="h-full w-full overflow-hidden rounded-xl bg-ink">
+                  <ProductArt product={l.product} sizes="64px" className="h-full w-full" />
+                </div>
                 <span className="absolute -top-1.5 -right-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-ink px-1 font-mono text-[10px] text-paper">
                   {l.qty}
                 </span>
@@ -165,7 +170,7 @@ export function CheckoutClient() {
                 <p className="truncate text-sm text-white-ice">{l.product.name}</p>
                 <p className="truncate text-xs text-fog">{l.product.tagline}</p>
               </div>
-              <span className="font-mono text-sm text-white-ice">{money(l.total)}</span>
+              <span className="font-mono text-sm text-white-ice">{moneyExact(l.total)}</span>
             </li>
           ))}
         </ul>
@@ -177,23 +182,23 @@ export function CheckoutClient() {
         <dl className="mt-7 flex flex-col gap-2 border-t border-frost/8 pt-6 text-sm">
           <div className="flex justify-between text-fog">
             <dt>Subtotal</dt>
-            <dd className="font-mono">{money(cart.subtotal)}</dd>
+            <dd className="font-mono">{moneyExact(cart.subtotal)}</dd>
           </div>
           {cart.saving > 0 && (
             <div className="flex justify-between text-ice-700">
               <dt>Tin + pack saving</dt>
-              <dd className="font-mono">−{money(cart.saving)}</dd>
+              <dd className="font-mono">−{moneyExact(cart.saving)}</dd>
             </div>
           )}
           <div className="flex justify-between text-fog">
             <dt>Shipping</dt>
             <dd className="font-mono">
-              {cart.shipping === 0 ? "Free" : money(cart.shipping)}
+              {cart.shipping === 0 ? "Free" : moneyExact(cart.shipping)}
             </dd>
           </div>
           <div className="mt-2 flex justify-between border-t border-frost/8 pt-3 text-white-ice">
             <dt className="font-medium">Total</dt>
-            <dd className="font-mono text-lg">{money(cart.total)}</dd>
+            <dd className="font-mono text-lg">{moneyExact(cart.total)}</dd>
           </div>
         </dl>
 
@@ -240,7 +245,7 @@ export function CheckoutClient() {
             </>
           ) : (
             <>
-              Pay {money(cart.total)}
+              Pay {moneyExact(cart.total)}
               <ArrowRightIcon
                 size={14}
                 weight="bold"

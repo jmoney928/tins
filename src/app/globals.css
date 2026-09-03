@@ -39,6 +39,20 @@
 html {
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
+  /*
+   * Decorative bleeds — the hero splatter sits 288px past the right edge —
+   * used to be contained by overflow-x on the body alone. That is enough on
+   * a desktop browser and not enough on a phone: mobile Chrome and Safari
+   * widen the layout viewport to fit overflowing content, which stretched
+   * every fixed element with it. The nav grew to 678px at a 390px viewport
+   * and took the bag and menu buttons off the right of the screen, so on a
+   * phone the shop had no way to open the bag.
+   *
+   * clip rather than hidden: it bounds the content without making the root
+   * a scroll container, so sticky positioning and smooth scrolling still
+   * behave.
+   */
+  overflow-x: clip;
 }
 
 body {

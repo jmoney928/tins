@@ -14,7 +14,7 @@ import {
 import { useCart } from "./cart-context";
 import { ProductArt } from "../product-art";
 import { BundleCard } from "../bundle-card";
-import { SHIPPING_FLAT, money } from "@/lib/catalog";
+import { SHIPPING_FLAT, money, moneyExact } from "@/lib/catalog";
 
 export function CartDrawer() {
   const cart = useCart();
@@ -121,7 +121,7 @@ export function CartDrawer() {
                             {line.product.name}
                           </h3>
                           <span className="shrink-0 font-mono text-sm text-white-ice">
-                            {money(line.total)}
+                            {moneyExact(line.total)}
                           </span>
                         </div>
                         <p className="mt-1 truncate text-xs text-fog">
@@ -172,34 +172,39 @@ export function CartDrawer() {
                 )}
 
                 <footer className="border-t border-frost/8 px-6 py-6">
-                  <p className="mb-4 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase">
-                    {cart.freeShippingPromo
-                      ? "Free shipping unlocked — today only"
-                      : cart.freeShipping
-                        ? "Free shipping unlocked"
-                        : `${money(SHIPPING_FLAT)} shipping — free with a tin and a pack`}
-                  </p>
+                  {/* silent while the card above is showing, which already says
+                      shipping is free on the pair — stacked twice it read as a
+                      nag rather than an offer */}
+                  {!needsPack && (
+                    <p className="mb-4 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase">
+                      {cart.freeShippingPromo
+                        ? "Free shipping unlocked — today only"
+                        : cart.freeShipping
+                          ? "Free shipping unlocked"
+                          : `${money(SHIPPING_FLAT)} shipping — free with a tin and a pack`}
+                    </p>
+                  )}
 
                   <dl className="flex flex-col gap-2 text-sm">
                     <div className="flex justify-between text-fog">
                       <dt>Subtotal</dt>
-                      <dd className="font-mono">{money(cart.subtotal)}</dd>
+                      <dd className="font-mono">{moneyExact(cart.subtotal)}</dd>
                     </div>
                     {cart.saving > 0 && (
                       <div className="flex justify-between text-ice-700">
                         <dt>Tin + pack saving</dt>
-                        <dd className="font-mono">−{money(cart.saving)}</dd>
+                        <dd className="font-mono">−{moneyExact(cart.saving)}</dd>
                       </div>
                     )}
                     <div className="flex justify-between text-fog">
                       <dt>Shipping</dt>
                       <dd className="font-mono">
-                        {cart.shipping === 0 ? "Free" : money(cart.shipping)}
+                        {cart.shipping === 0 ? "Free" : moneyExact(cart.shipping)}
                       </dd>
                     </div>
                     <div className="mt-2 flex justify-between border-t border-frost/8 pt-3 text-white-ice">
                       <dt className="font-medium">Total</dt>
-                      <dd className="font-mono text-lg">{money(cart.total)}</dd>
+                      <dd className="font-mono text-lg">{moneyExact(cart.total)}</dd>
                     </div>
                   </dl>
 
