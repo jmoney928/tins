@@ -25,13 +25,21 @@ const COLUMNS = [
       { label: "Careers", href: "/careers" },
     ],
   },
+  {
+    title: "Legal",
+    links: [
+      { label: "Privacy policy", href: "/privacy" },
+      { label: "Terms of sale", href: "/terms" },
+      { label: "Cookies", href: "/cookies" },
+    ],
+  },
 ];
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-frost/8 bg-abyss/40">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20">
-        <div className="grid grid-cols-2 gap-10 sm:grid-cols-4 lg:grid-cols-[1.6fr_repeat(3,1fr)]">
+        <div className="grid grid-cols-2 gap-10 sm:grid-cols-4 lg:grid-cols-[1.5fr_repeat(4,1fr)]">
           <div className="col-span-2 sm:col-span-4 lg:col-span-1">
             <BrandMark size={52} tagline />
             <p className="mt-4 max-w-[38ch] text-sm leading-relaxed text-fog">

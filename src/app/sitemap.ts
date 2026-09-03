@@ -18,6 +18,14 @@ const INFO_PAGES = [
   "careers",
 ];
 
+/**
+ * Indexed, but at the bottom. These have to be reachable — Meta's ad review
+ * looks for a privacy policy on the advertised domain, and a page no crawler
+ * can find is a page that review may not find either — while never competing
+ * with the pages that sell anything.
+ */
+const LEGAL_PAGES = ["privacy", "terms", "cookies"];
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
   return [
@@ -25,7 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${SITE_URL}/products/ice-tin`,
       lastModified: now,
-      changeFrequency: "daily", // stock count changes on every order
+      changeFrequency: "daily", // live pricing, rendered per request
       priority: 0.9,
     },
     ...TOPIC_PAGES.map((slug) => ({
@@ -39,6 +47,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.3,
+    })),
+    ...LEGAL_PAGES.map((slug) => ({
+      url: `${SITE_URL}/${slug}`,
+      lastModified: now,
+      changeFrequency: "yearly" as const,
+      priority: 0.1,
     })),
   ];
 }
