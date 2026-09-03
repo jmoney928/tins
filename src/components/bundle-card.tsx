@@ -47,11 +47,13 @@ export function BundleCard({
 
   useEffect(() => () => timers.current.forEach(window.clearTimeout), []);
 
-  // rendered on the server as "not yet added", so hold the offer back until
-  // the bag has been read — otherwise it flashes at a shopper who has one
-  const hasPack = cart.lines.some((l) => l.id === "chillcore-3");
-  const hasTin = cart.lines.some((l) => l.id === "ice-tin");
-  if (!cart.ready) return null;
+  // The offer renders on the server in its selling state and only changes for
+  // the minority who already hold both halves. Waiting for the bag to be read
+  // before drawing anything would keep the most valuable block on the page out
+  // of the initial HTML, so it would pop in after hydration and be invisible
+  // to anything that does not run JavaScript.
+  const hasPack = cart.ready && cart.lines.some((l) => l.id === "chillcore-3");
+  const hasTin = cart.ready && cart.lines.some((l) => l.id === "ice-tin");
 
   const pair = bundlePair();
 
