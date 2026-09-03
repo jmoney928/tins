@@ -163,7 +163,7 @@ export function QuickView({
                   <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-frost/8">
                     {product.specs.slice(0, 6).map((s) => (
                       <div key={s.k} className="bg-paper px-4 py-3">
-                        <dt className="font-mono text-[10px] tracking-[0.16em] text-fog uppercase">
+                        <dt className="font-mono text-[11px] tracking-[0.16em] text-fog uppercase sm:text-[10px]">
                           {s.k}
                         </dt>
                         <dd className="mt-1 font-mono text-sm text-frost">

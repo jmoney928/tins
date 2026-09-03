@@ -65,7 +65,11 @@ export function SiteNav() {
               : "border border-transparent"
           }`}
         >
-          <a href="#top" aria-label="Ice Tins Supply Co., home">
+          <a
+            href="#top"
+            aria-label="Ice Tins Supply Co., home"
+            className="-my-2 flex min-h-11 items-center py-2"
+          >
             <BrandMark size={30} />
           </a>
 
@@ -101,7 +105,7 @@ export function SiteNav() {
             <button
               onClick={cart.openDrawer}
               aria-label={cart.count ? `Bag, ${cart.count} items` : "Bag, empty"}
-              className="hairline relative rounded-full border p-2.5 text-fog transition-colors duration-300 hover:text-frost"
+              className="hairline relative grid size-11 place-items-center rounded-full border text-fog transition-colors duration-300 hover:text-frost"
             >
               <HandbagIcon size={17} weight="light" />
               {cart.count > 0 && (
@@ -123,7 +127,7 @@ export function SiteNav() {
             <button
               onClick={() => setOpen(true)}
               aria-label="Open menu"
-              className="hairline rounded-full border p-2.5 text-frost md:hidden"
+              className="hairline grid size-11 place-items-center rounded-full border text-frost md:hidden"
             >
               <ListIcon size={17} weight="light" />
             </button>

@@ -110,12 +110,16 @@ export function CheckoutClient() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
       <div className="flex items-center justify-between">
-        <Link href="/" aria-label="Ice Tins Supply Co., home">
+        <Link
+          href="/"
+          aria-label="Ice Tins Supply Co., home"
+          className="-my-2 flex min-h-11 items-center py-2"
+        >
           <BrandMark size={30} />
         </Link>
         <Link
           href="/"
-          className="flex items-center gap-2 font-mono text-[11px] tracking-[0.18em] text-fog uppercase transition-colors hover:text-frost"
+          className="-my-2 flex min-h-11 items-center gap-2 py-2 font-mono text-[11px] tracking-[0.18em] text-fog uppercase transition-colors hover:text-frost"
         >
           <ArrowLeftIcon size={13} weight="bold" />
           Continue shopping
@@ -224,7 +228,11 @@ export function CheckoutClient() {
             }}
             placeholder="you@example.com"
             aria-describedby="checkout-email-note"
-            className="mt-2 w-full rounded-2xl border border-frost/12 bg-paper/60 px-4 py-3.5 text-sm text-frost outline-none transition-colors duration-300 placeholder:text-fog/60 focus:border-ice-500/60"
+            /* text-base, not text-sm: iOS Safari zooms the viewport whenever a
+               focused field is under 16px, and it does not zoom back out. On
+               the one form that takes money, that is a lurch at the worst
+               possible moment. */
+            className="mt-2 w-full rounded-2xl border border-frost/12 bg-paper/60 px-4 py-3.5 text-base text-frost outline-none transition-colors duration-300 placeholder:text-fog/60 focus:border-ice-500/60"
           />
           <p id="checkout-email-note" className="mt-2 text-xs leading-relaxed text-fog/80">
             Your receipt and tracking details are sent to this address. If

@@ -207,7 +207,7 @@ export function TinBuyBox({
                 <button
                   onClick={() => setQty((q) => Math.max(1, q - 1))}
                   aria-label="One fewer"
-                  className="px-4 py-3.5 text-fog transition-colors hover:text-frost"
+                  className="flex min-h-11 items-center px-4 text-fog transition-colors hover:text-frost"
                 >
                   <MinusIcon size={14} weight="bold" />
                 </button>
@@ -215,7 +215,7 @@ export function TinBuyBox({
                 <button
                   onClick={() => setQty((q) => Math.min(99, q + 1))}
                   aria-label="One more"
-                  className="px-4 py-3.5 text-fog transition-colors hover:text-frost"
+                  className="flex min-h-11 items-center px-4 text-fog transition-colors hover:text-frost"
                 >
                   <PlusIcon size={14} weight="bold" />
                 </button>

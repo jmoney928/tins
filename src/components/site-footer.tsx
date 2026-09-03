@@ -56,12 +56,14 @@ export function SiteFooter() {
               <h3 className="font-mono text-[11px] tracking-[0.2em] text-fog uppercase">
                 {col.title}
               </h3>
-              <ul className="mt-5 flex flex-col gap-3">
+              <ul className="mt-4 flex flex-col gap-0.5">
                 {col.links.map((l) => (
                   <li key={l.label}>
                     <a
                       href={l.href}
-                      className="text-sm text-frost/80 transition-colors duration-300 hover:text-ice-300"
+                      /* block with padding rather than a bare inline link:
+                         18px of text is not a tap target on a phone */
+                      className="-mx-2 flex min-h-11 items-center rounded-lg px-2 text-sm text-frost/80 transition-colors duration-300 hover:text-ice-300"
                     >
                       {l.label}
                     </a>

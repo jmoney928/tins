@@ -60,7 +60,7 @@ export function Anatomy() {
           <dl className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-frost/8">
             {SPECS.map((s) => (
               <div key={s.k} className="bg-void p-4">
-                <dt className="font-mono text-[10px] tracking-[0.18em] text-fog uppercase">
+                <dt className="font-mono text-[11px] tracking-[0.18em] text-fog uppercase sm:text-[10px]">
                   {s.k}
                 </dt>
                 <dd

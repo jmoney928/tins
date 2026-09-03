@@ -353,7 +353,7 @@ export default async function IceTinPage() {
           <dl className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-frost/8 sm:grid-cols-3">
             {SPECS.map((s) => (
               <div key={s.k} className="bg-paper p-5">
-                <dt className="font-mono text-[10px] tracking-[0.18em] text-fog uppercase">
+                <dt className="font-mono text-[11px] tracking-[0.18em] text-fog uppercase sm:text-[10px]">
                   {s.k}
                 </dt>
                 <dd className={`mt-1.5 text-sm text-frost ${s.mono ? "font-mono" : ""}`}>
@@ -393,7 +393,7 @@ export default async function IceTinPage() {
                   </span>
                   <span className="min-w-0">
                     <span className="block truncate text-sm text-white-ice">{c.name}</span>
-                    <span className="block font-mono text-[10px] text-fog">
+                    <span className="block font-mono text-[11px] text-fog">
                       {c.role} — {c.city}
                     </span>
                   </span>

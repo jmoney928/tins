@@ -38,7 +38,7 @@ export function AddButton({
   return (
     <button
       onClick={add}
-      className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ease-[var(--ease-glide)] active:scale-[0.97] ${
+      className={`flex min-h-11 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ease-[var(--ease-glide)] active:scale-[0.97] ${
         state === "added"
           ? "bg-ice-500 text-paper"
           : "bg-ink text-paper hover:bg-ice-700"
