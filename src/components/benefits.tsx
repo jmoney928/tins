@@ -5,6 +5,7 @@ import {
   TimerIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { Flecks } from "./splatter";
+import { Reveal } from "./reveal";
 
 /**
  * The four blocks directly under the hero.
@@ -49,13 +50,17 @@ export function Benefits() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid grid-cols-1 gap-px overflow-hidden rounded-[2rem] bg-frost/8 sm:grid-cols-2 lg:grid-cols-4">
-          {BLOCKS.map(({ Icon, title, body }) => (
-            <div key={title} className="flex flex-col gap-4 bg-void p-7 sm:p-8">
-              <Icon size={22} weight="light" className="text-ice-500" />
-              <h3 className="text-lg leading-tight tracking-tight text-white-ice">
-                {title}
-              </h3>
-              <p className="text-sm leading-relaxed text-fog">{body}</p>
+          {BLOCKS.map(({ Icon, title, body }, i) => (
+            <div key={title} className="bg-void p-7 sm:p-8">
+              {/* the cell stays put and its contents rise into it, so the
+                  grid's hairlines never read as grey placeholder cards */}
+              <Reveal delay={i * 70} className="flex flex-col gap-4">
+                <Icon size={22} weight="light" className="text-ice-500" />
+                <h3 className="text-lg leading-tight tracking-tight text-white-ice">
+                  {title}
+                </h3>
+                <p className="text-sm leading-relaxed text-fog">{body}</p>
+              </Reveal>
             </div>
           ))}
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { CheckIcon, PlusIcon } from "@phosphor-icons/react/dist/ssr";
 import { useCart } from "./cart/cart-context";
 import { ProductArt } from "./product-art";
@@ -66,26 +67,39 @@ export function BundleCard({
     );
   };
 
-  // both halves present: confirm what it cost, stop selling it
-  if (hasPack && hasTin) {
-    return (
-      <div
-        className={`flex items-start gap-2.5 rounded-2xl border border-ice-500/25 bg-ice-100/70 px-4 py-3 ${className}`}
-      >
-        <CheckIcon size={15} weight="bold" className="mt-0.5 shrink-0 text-ice-700" />
-        <p className="text-sm leading-relaxed text-ice-700">
-          <span className="font-medium">Packs added.</span> Shipping is free and{" "}
-          {money(BUNDLE_SAVING)} is off, so the three-pack added {money(pair.step)}{" "}
-          to this order.
-        </p>
-      </div>
-    );
-  }
-
   const compact = variant === "drawer";
+  const done = hasPack && hasTin;
+
+  // The offer and its confirmation swap with a short crossfade rather than a
+  // cut: the shopper has just pressed the button, and the thing they pressed
+  // turning into the sentence that says what it did is the receipt.
+  const swap = {
+    initial: { opacity: 0, y: 8 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -6 },
+    transition: { duration: 0.24, ease: [0.16, 1, 0.3, 1] as const },
+  };
 
   return (
-    <div
+    <AnimatePresence mode="wait" initial={false}>
+      {done ? (
+        // both halves present: confirm what it cost, stop selling it
+        <motion.div
+          key="done"
+          {...swap}
+          className={`flex items-start gap-2.5 rounded-2xl border border-ice-500/25 bg-ice-100/70 px-4 py-3 ${className}`}
+        >
+          <CheckIcon size={15} weight="bold" className="mt-0.5 shrink-0 text-ice-700" />
+          <p className="text-sm leading-relaxed text-ice-700">
+            <span className="font-medium">Packs added.</span> Shipping is free and{" "}
+            {money(BUNDLE_SAVING)} is off, so the three-pack added {money(pair.step)}{" "}
+            to this order.
+          </p>
+        </motion.div>
+      ) : (
+    <motion.div
+      key="offer"
+      {...swap}
       className={`rounded-[1.5rem] border border-ice-500/25 bg-ice-100/60 ${
         compact ? "p-4" : "p-5 sm:p-6"
       } ${className}`}
@@ -163,6 +177,8 @@ export function BundleCard({
           </>
         )}
       </button>
-    </div>
+    </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

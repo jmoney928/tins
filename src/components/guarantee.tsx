@@ -5,6 +5,7 @@ import {
   GUARANTEE_SHORT,
   GUARANTEE_TITLE,
 } from "@/lib/guarantee";
+import { Reveal } from "./reveal";
 
 /**
  * The guarantee, given a section of its own.
@@ -19,6 +20,7 @@ export function Guarantee() {
   return (
     <section id="guarantee" className="relative overflow-hidden py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <Reveal>
         <div className="glass-edge relative overflow-hidden rounded-[2rem] bg-abyss/80 p-8 backdrop-blur-md sm:p-12">
           <div className="pointer-events-none absolute -top-24 -left-16 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(46,157,200,0.22),transparent_65%)] blur-3xl" />
 
@@ -40,6 +42,7 @@ export function Guarantee() {
             </div>
           </div>
         </div>
+        </Reveal>
       </div>
     </section>
   );

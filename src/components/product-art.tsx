@@ -9,6 +9,7 @@ export function ProductArt({
   alt,
   className = "",
   sizes,
+  onLoad,
 }: {
   product: Product;
   src?: string;
@@ -16,6 +17,8 @@ export function ProductArt({
   alt?: string;
   className?: string;
   sizes?: string;
+  /** fires once the photograph has decoded — the gallery crossfades on it */
+  onLoad?: () => void;
 }) {
   const file = src ?? product.image;
 
@@ -37,6 +40,7 @@ export function ProductArt({
       width={1000}
       height={1000}
       sizes={sizes}
+      onLoad={onLoad}
       className={`object-cover ${className}`}
     />
   );

@@ -14,6 +14,7 @@ import { QuickView } from "@/components/quick-view";
 import { ProductArt } from "@/components/product-art";
 import { SiteFooter } from "@/components/site-footer";
 import { ViewContent } from "@/components/view-content";
+import { Reveal } from "@/components/reveal";
 import {
   bundlePair,
   CATALOG,
@@ -269,7 +270,7 @@ export default async function IceTinPage() {
         {/* the price justification, kept close to the button — at this price
             the objection is what it costs, not what it does */}
         <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
-          <div className="grid grid-cols-1 gap-5 border-t border-frost/8 pt-10 sm:grid-cols-[minmax(0,20rem)_1fr] sm:gap-10">
+          <Reveal className="grid grid-cols-1 gap-5 border-t border-frost/8 pt-10 sm:grid-cols-[minmax(0,20rem)_1fr] sm:gap-10">
             <h2 className="text-2xl leading-tight tracking-tight text-white-ice sm:text-3xl">
               What the price reflects.
             </h2>
@@ -280,12 +281,12 @@ export default async function IceTinPage() {
               preceded this revision, and the shell carries a lifetime
               warranty.
             </p>
-          </div>
+          </Reveal>
         </section>
 
         {/* stock and shipping reassurance */}
         <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
-          <div className="glass-edge relative overflow-hidden rounded-[2rem] bg-abyss/80 p-7 backdrop-blur-md sm:p-10">
+          <Reveal className="glass-edge relative overflow-hidden rounded-[2rem] bg-abyss/80 p-7 backdrop-blur-md sm:p-10">
             <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(46,157,200,0.24),transparent_65%)] blur-2xl" />
             <div className="relative grid grid-cols-1 gap-8 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-10">
               <PackageIcon size={32} weight="thin" className="text-ice-500" />
@@ -302,22 +303,26 @@ export default async function IceTinPage() {
                 </p>
               </div>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         {/* how it works */}
         <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
-          <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
-            How it works
-          </p>
-          <h2 className="mt-4 max-w-[20ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
-            Three steps to set up.
-          </h2>
+          <Reveal>
+            <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
+              How it works
+            </p>
+            <h2 className="mt-4 max-w-[20ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
+              Three steps to set up.
+            </h2>
+          </Reveal>
 
           <ol className="mt-10 border-t border-frost/8">
-            {STEPS.map((s) => (
-              <li
+            {STEPS.map((s, i) => (
+              <Reveal
+                as="li"
                 key={s.n}
+                delay={i * 90}
                 className="group grid grid-cols-[auto_1fr] items-baseline gap-x-6 gap-y-3 border-b border-frost/8 py-7 transition-colors duration-500 hover:bg-slate-deep/25 sm:grid-cols-[auto_1fr_auto] sm:gap-x-10"
               >
                 <span className="font-mono text-sm text-ice-700 transition-colors duration-500 group-hover:text-ice-300">
@@ -332,25 +337,27 @@ export default async function IceTinPage() {
                 <p className="col-start-2 max-w-[52ch] text-sm leading-relaxed text-fog sm:col-span-2">
                   {s.body}
                 </p>
-              </li>
+              </Reveal>
             ))}
           </ol>
         </section>
 
         {/* the details — clearly laid out, nothing left implicit */}
         <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
-          <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
-            The details
-          </p>
-          <h2 className="mt-4 max-w-[22ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
-            What the order includes.
-          </h2>
-          <p className="mt-4 max-w-[56ch] text-sm leading-relaxed text-fog">
-            One machined can and one Chillcore pack, supplied together. A
-            single configuration, with no tiers or optional extras.
-          </p>
+          <Reveal>
+            <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
+              The details
+            </p>
+            <h2 className="mt-4 max-w-[22ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
+              What the order includes.
+            </h2>
+            <p className="mt-4 max-w-[56ch] text-sm leading-relaxed text-fog">
+              One machined can and one Chillcore pack, supplied together. A
+              single configuration, with no tiers or optional extras.
+            </p>
+          </Reveal>
 
-          <dl className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-frost/8 sm:grid-cols-3">
+          <Reveal as="dl" delay={80} className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-frost/8 sm:grid-cols-3">
             {SPECS.map((s) => (
               <div key={s.k} className="bg-paper p-5">
                 <dt className="font-mono text-[11px] tracking-[0.18em] text-fog uppercase sm:text-[10px]">
@@ -361,22 +368,26 @@ export default async function IceTinPage() {
                 </dd>
               </div>
             ))}
-          </dl>
+          </Reveal>
         </section>
 
         {/* field notes — real testers, named, no star ratings */}
         <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
-          <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
-            Field notes
-          </p>
-          <h2 className="mt-4 max-w-[22ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
-            Tested before you get one.
-          </h2>
+          <Reveal>
+            <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
+              Field notes
+            </p>
+            <h2 className="mt-4 max-w-[22ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
+              Tested before you get one.
+            </h2>
+          </Reveal>
 
           <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-3">
-            {NOTES.map((c) => (
-              <figure
+            {NOTES.map((c, i) => (
+              <Reveal
+                as="figure"
                 key={c.name}
+                delay={i * 100}
                 className="glass-edge flex flex-col justify-between rounded-[1.75rem] bg-paper/75 p-6 backdrop-blur-sm sm:p-7"
               >
                 <blockquote className="text-base leading-snug tracking-tight text-frost">
@@ -398,7 +409,7 @@ export default async function IceTinPage() {
                     </span>
                   </span>
                 </figcaption>
-              </figure>
+              </Reveal>
             ))}
           </div>
         </section>
@@ -406,7 +417,7 @@ export default async function IceTinPage() {
         {/* objections, answered before they're asked */}
         <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
           <div className="grid grid-cols-1 gap-8 border-t border-frost/8 pt-10 sm:grid-cols-3 sm:gap-10">
-            <div className="flex gap-4">
+            <Reveal className="flex gap-4">
               <TruckIcon size={20} weight="light" className="mt-0.5 shrink-0 text-ice-500" />
               <div>
                 <h3 className="text-sm font-medium text-white-ice">Shipping</h3>
@@ -416,8 +427,8 @@ export default async function IceTinPage() {
                     : `Ships worldwide from Vancouver, BC. ${money(SHIPPING_FLAT)} flat, and free on any order with a tin and a ${PACK_LABEL} in it.`}
                 </p>
               </div>
-            </div>
-            <div className="flex gap-4">
+            </Reveal>
+            <Reveal delay={90} className="flex gap-4">
               <ShieldCheckIcon size={20} weight="light" className="mt-0.5 shrink-0 text-ice-500" />
               <div>
                 <h3 className="text-sm font-medium text-white-ice">Warranty</h3>
@@ -426,8 +437,8 @@ export default async function IceTinPage() {
                   thread. Email us and we replace it.
                 </p>
               </div>
-            </div>
-            <div className="flex gap-4">
+            </Reveal>
+            <Reveal delay={180} className="flex gap-4">
               <PackageIcon size={20} weight="light" className="mt-0.5 shrink-0 text-ice-500" />
               <div>
                 <h3 className="text-sm font-medium text-white-ice">What is in the box</h3>
@@ -436,13 +447,13 @@ export default async function IceTinPage() {
                   packs only — no nicotine or tobacco, ever.
                 </p>
               </div>
-            </div>
+            </Reveal>
           </div>
         </section>
 
         {/* cross-sell — kept short, this page's job is the tin */}
         <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
-          <div className="glass-edge flex flex-col gap-6 rounded-[2rem] bg-paper/75 p-6 backdrop-blur-sm sm:flex-row sm:items-center sm:gap-8 sm:p-7">
+          <Reveal className="glass-edge flex flex-col gap-6 rounded-[2rem] bg-paper/75 p-6 backdrop-blur-sm sm:flex-row sm:items-center sm:gap-8 sm:p-7">
             <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-xl bg-ink">
               <ProductArt product={core} sizes="96px" className="h-full w-full" />
             </div>
@@ -468,33 +479,35 @@ export default async function IceTinPage() {
                 <AddButton productId="chillcore-3" label="Add pack" openBag={false} />
               </div>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         <Guarantee />
 
         {/* faq — the same questions as the FAQPage JSON-LD above, verbatim */}
         <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
-          <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
-            Questions
-          </p>
-          <h2 className="mt-4 max-w-[22ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
-            Frequently asked questions.
-          </h2>
+          <Reveal>
+            <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
+              Questions
+            </p>
+            <h2 className="mt-4 max-w-[22ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
+              Frequently asked questions.
+            </h2>
+          </Reveal>
 
-          <dl className="mt-10 divide-y divide-frost/8 border-t border-frost/8">
+          <Reveal as="dl" delay={80} className="mt-10 divide-y divide-frost/8 border-t border-frost/8">
             {FAQS.map((f) => (
               <div key={f.q} className="grid grid-cols-1 gap-2 py-6 sm:grid-cols-[minmax(0,22rem)_1fr] sm:gap-10">
                 <dt className="text-base font-medium text-white-ice">{f.q}</dt>
                 <dd className="max-w-[58ch] text-sm leading-relaxed text-fog">{f.a}</dd>
               </div>
             ))}
-          </dl>
+          </Reveal>
         </section>
 
         {/* final push */}
         <section className="mx-auto mt-16 max-w-7xl px-4 pb-8 sm:mt-24 sm:px-6">
-          <div className="glass-edge relative overflow-hidden rounded-[2.5rem] bg-abyss/80 px-6 py-14 text-center backdrop-blur-md sm:px-14 sm:py-16">
+          <Reveal className="glass-edge relative overflow-hidden rounded-[2.5rem] bg-abyss/80 px-6 py-14 text-center backdrop-blur-md sm:px-14 sm:py-16">
             <div className="pointer-events-none absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(46,157,200,0.22),transparent_65%)] blur-3xl" />
             <div className="relative">
               <h2 className="mx-auto max-w-[24ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
@@ -525,7 +538,7 @@ export default async function IceTinPage() {
                 />
               </Link>
             </div>
-          </div>
+          </Reveal>
         </section>
       </main>
 

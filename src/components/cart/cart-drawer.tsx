@@ -15,6 +15,9 @@ import { useCart } from "./cart-context";
 import { ProductArt } from "../product-art";
 import { BundleCard } from "../bundle-card";
 import { SHIPPING_FLAT, money, moneyExact } from "@/lib/catalog";
+import { AnimatedMoney } from "../animated-money";
+
+const GLIDE = [0.16, 1, 0.3, 1] as const;
 
 export function CartDrawer() {
   const cart = useCart();
@@ -34,8 +37,10 @@ export function CartDrawer() {
   }, [closeDrawer]);
 
   // free shipping is earned by the pair, so the bag offers the missing half
-  // as something to add rather than a number to work out
-  const needsPack = !cart.freeShipping && cart.lines.some((l) => l.id === "ice-tin");
+  // as something to add rather than a number to work out. The card stays
+  // once the pack is in — it turns into the line confirming what the pair
+  // cost, which is the last thing read before the checkout button.
+  const showOffer = !cart.freeShippingPromo && cart.lines.some((l) => l.id === "ice-tin");
 
   return (
     <AnimatePresence>
@@ -105,8 +110,16 @@ export function CartDrawer() {
                 )}
 
                 <ul className="flex-1 divide-y divide-frost/8 overflow-y-auto px-6">
+                  <AnimatePresence initial={false}>
                   {cart.lines.map((line) => (
-                    <li key={line.id} className="flex gap-4 py-6">
+                    <motion.li
+                      key={line.id}
+                      initial={{ opacity: 0, y: 14 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, height: 0, paddingTop: 0, paddingBottom: 0, borderTopWidth: 0 }}
+                      transition={{ duration: 0.32, ease: GLIDE }}
+                      className="flex gap-4 overflow-hidden py-6"
+                    >
                       <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-ink">
                         <ProductArt
                           product={line.product}
@@ -120,9 +133,10 @@ export function CartDrawer() {
                           <h3 className="text-sm leading-tight text-white-ice">
                             {line.product.name}
                           </h3>
-                          <span className="shrink-0 font-mono text-sm text-white-ice">
-                            {moneyExact(line.total)}
-                          </span>
+                          <AnimatedMoney
+                            cents={line.total}
+                            className="shrink-0 font-mono text-sm text-white-ice tabular-nums"
+                          />
                         </div>
                         <p className="mt-1 truncate text-xs text-fog">
                           {line.product.tagline}
@@ -158,24 +172,36 @@ export function CartDrawer() {
                           </button>
                         </div>
                       </div>
-                    </li>
+                    </motion.li>
                   ))}
+                  </AnimatePresence>
                 </ul>
 
                 {/* the upsell sits above the totals rather than inside them:
                     it changes three of the four lines below, so a shopper
                     should meet it before reading a total it would alter */}
-                {needsPack && !cart.freeShippingPromo && (
-                  <div className="border-t border-frost/8 px-6 pt-5">
-                    <BundleCard variant="drawer" />
-                  </div>
-                )}
+                <AnimatePresence initial={false}>
+                  {showOffer && (
+                    <motion.div
+                      key="offer"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.36, ease: GLIDE }}
+                      className="shrink-0 overflow-hidden"
+                    >
+                      <div className="border-t border-frost/8 px-6 pt-5">
+                        <BundleCard variant="drawer" />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 <footer className="border-t border-frost/8 px-6 py-6">
                   {/* silent while the card above is showing, which already says
                       shipping is free on the pair — stacked twice it read as a
                       nag rather than an offer */}
-                  {!needsPack && (
+                  {!showOffer && (
                     <p className="mb-4 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase">
                       {cart.freeShippingPromo
                         ? "Free shipping unlocked — today only"
@@ -185,26 +211,51 @@ export function CartDrawer() {
                     </p>
                   )}
 
+                  {/* every figure here rolls to its new value, and the saving
+                      line slides in when the pair is completed — the total
+                      has to be seen to change in response to the offer */}
                   <dl className="flex flex-col gap-2 text-sm">
                     <div className="flex justify-between text-fog">
                       <dt>Subtotal</dt>
-                      <dd className="font-mono">{moneyExact(cart.subtotal)}</dd>
+                      <AnimatedMoney cents={cart.subtotal} className="font-mono tabular-nums" />
                     </div>
-                    {cart.saving > 0 && (
-                      <div className="flex justify-between text-ice-700">
-                        <dt>Tin + pack saving</dt>
-                        <dd className="font-mono">−{moneyExact(cart.saving)}</dd>
-                      </div>
-                    )}
+                    <AnimatePresence initial={false}>
+                      {cart.saving > 0 && (
+                        <motion.div
+                          key="saving"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: GLIDE }}
+                          className="overflow-hidden"
+                        >
+                          <div className="flex justify-between text-ice-700">
+                            <dt>Tin + pack saving</dt>
+                            <dd className="font-mono tabular-nums">−{moneyExact(cart.saving)}</dd>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                     <div className="flex justify-between text-fog">
                       <dt>Shipping</dt>
-                      <dd className="font-mono">
-                        {cart.shipping === 0 ? "Free" : moneyExact(cart.shipping)}
+                      <dd className="font-mono tabular-nums">
+                        <AnimatePresence mode="popLayout" initial={false}>
+                          <motion.span
+                            key={cart.shipping === 0 ? "free" : "flat"}
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -6 }}
+                            transition={{ duration: 0.22, ease: GLIDE }}
+                            className="inline-block"
+                          >
+                            {cart.shipping === 0 ? "Free" : moneyExact(cart.shipping)}
+                          </motion.span>
+                        </AnimatePresence>
                       </dd>
                     </div>
                     <div className="mt-2 flex justify-between border-t border-frost/8 pt-3 text-white-ice">
                       <dt className="font-medium">Total</dt>
-                      <dd className="font-mono text-lg">{moneyExact(cart.total)}</dd>
+                      <AnimatedMoney cents={cart.total} className="font-mono text-lg tabular-nums" />
                     </div>
                   </dl>
 

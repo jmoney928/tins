@@ -175,6 +175,50 @@ body {
   animation-delay: calc(var(--index, 0) * 90ms);
 }
 
+/**
+ * Scroll reveal, driven by components/reveal.tsx.
+ *
+ * The attribute has three states: "" (server HTML, hidden), "armed" (mounted,
+ * waiting to enter the viewport) and "in". The hidden state is applied here
+ * rather than by script so the first paint already has it — a script that
+ * hides content after it has been painted produces a flash. The fallback
+ * animation on the "" state is insurance: if hydration never arrives, every
+ * section is on screen within a few seconds regardless.
+ */
+[data-reveal] {
+  transition:
+    opacity 0.9s var(--ease-glide),
+    transform 0.9s var(--ease-glide);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-reveal=""],
+[data-reveal="armed"] {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+}
+[data-reveal=""] {
+  animation: reveal-fallback 0.9s var(--ease-glide) 2.5s forwards;
+}
+@keyframes reveal-fallback {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Page fade on navigation — see app/template.tsx. Opacity only. */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.page-enter {
+  animation: page-enter 0.45s var(--ease-glide) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -183,5 +227,10 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
   }
 }

@@ -1,6 +1,7 @@
 import { SPECS } from "@/lib/products";
 import Image from "next/image";
 import { Flecks } from "./splatter";
+import { Reveal } from "./reveal";
 
 const LAYERS = [
   {
@@ -75,9 +76,11 @@ export function Anatomy() {
 
         {/* layer notes — divided rows, no cards */}
         <ul className="divide-y divide-frost/8 border-t border-frost/8">
-          {LAYERS.map((l) => (
-            <li
+          {LAYERS.map((l, i) => (
+            <Reveal
+              as="li"
               key={l.n}
+              delay={i * 80}
               className="group grid grid-cols-[auto_1fr] gap-6 py-9 transition-colors duration-500 hover:bg-slate-deep/25 sm:gap-10"
             >
               <span className="font-mono text-sm text-ice-700 transition-colors duration-500 group-hover:text-ice-300">
@@ -91,7 +94,7 @@ export function Anatomy() {
                   {l.body}
                 </p>
               </div>
-            </li>
+            </Reveal>
           ))}
         </ul>
       </div>

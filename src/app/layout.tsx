@@ -5,6 +5,7 @@ import "./globals.css";
 import { Attribution } from "@/components/attribution";
 import { CartProvider } from "@/components/cart/cart-context";
 import { CartDrawer } from "@/components/cart/cart-drawer";
+import { SiteMotion } from "@/components/motion-config";
 import { ORG_NAME, SITE_URL } from "@/lib/seo";
 
 const META_PIXEL_ID = "4563845340565065";
@@ -117,12 +118,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           />
         </noscript>
 
+        {/* sections below the fold reveal on scroll; with scripts off, they
+            are simply there — see components/reveal.tsx */}
+        <noscript>
+          <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
+
         <Attribution />
 
-        <CartProvider>
-          {children}
-          <CartDrawer />
-        </CartProvider>
+        <SiteMotion>
+          <CartProvider>
+            {children}
+            <CartDrawer />
+          </CartProvider>
+        </SiteMotion>
       </body>
     </html>
   );

@@ -16,6 +16,7 @@ import { BrandMark } from "./brand-mark";
 import { CURRENCY_LABEL, money, moneyExact } from "@/lib/catalog";
 import { GUARANTEE_SHORT } from "@/lib/guarantee";
 import { trackPixel } from "@/lib/pixel";
+import { AnimatedMoney } from "./animated-money";
 
 export function CheckoutClient() {
   const cart = useCart();
@@ -81,11 +82,10 @@ export function CheckoutClient() {
     }
   };
 
-  // tin in the bag, pack missing: the offer is still available and still
-  // worth stating, because the total on this page is the one it changes
-  const needsPack =
-    cart.lines.some((l) => l.id === "ice-tin") &&
-    !cart.lines.some((l) => l.id === "chillcore-3");
+  // tin in the bag: the offer is still available and still worth stating,
+  // because the total on this page is the one it changes — and once the
+  // pack is added the card becomes the line confirming what the pair cost
+  const showOffer = cart.lines.some((l) => l.id === "ice-tin");
 
   if (cart.ready && cart.lines.length === 0) {
     return (
@@ -174,19 +174,19 @@ export function CheckoutClient() {
                 <p className="truncate text-sm text-white-ice">{l.product.name}</p>
                 <p className="truncate text-xs text-fog">{l.product.tagline}</p>
               </div>
-              <span className="font-mono text-sm text-white-ice">{moneyExact(l.total)}</span>
+              <AnimatedMoney cents={l.total} className="font-mono text-sm text-white-ice tabular-nums" />
             </li>
           ))}
         </ul>
 
         {/* the last place the pair can still be taken, and the one place the
             shopper is already looking at a total it would change */}
-        {needsPack && <BundleCard variant="drawer" className="mt-7" />}
+        {showOffer && <BundleCard variant="drawer" className="mt-7" />}
 
         <dl className="mt-7 flex flex-col gap-2 border-t border-frost/8 pt-6 text-sm">
           <div className="flex justify-between text-fog">
             <dt>Subtotal</dt>
-            <dd className="font-mono">{moneyExact(cart.subtotal)}</dd>
+            <AnimatedMoney cents={cart.subtotal} className="font-mono tabular-nums" />
           </div>
           {cart.saving > 0 && (
             <div className="flex justify-between text-ice-700">
@@ -202,7 +202,7 @@ export function CheckoutClient() {
           </div>
           <div className="mt-2 flex justify-between border-t border-frost/8 pt-3 text-white-ice">
             <dt className="font-medium">Total</dt>
-            <dd className="font-mono text-lg">{moneyExact(cart.total)}</dd>
+            <AnimatedMoney cents={cart.total} className="font-mono text-lg tabular-nums" />
           </div>
         </dl>
 
@@ -253,7 +253,7 @@ export function CheckoutClient() {
             </>
           ) : (
             <>
-              Pay {moneyExact(cart.total)}
+              Pay <AnimatedMoney cents={cart.total} className="tabular-nums" />
               <ArrowRightIcon
                 size={14}
                 weight="bold"

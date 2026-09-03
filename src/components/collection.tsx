@@ -14,6 +14,7 @@ import { availabilityShort } from "@/lib/fulfilment";
 import { AddButton } from "./add-button";
 import { QuickView } from "./quick-view";
 import { liveCatalog } from "@/lib/live-catalog";
+import { Reveal } from "./reveal";
 
 export async function Collection() {
   const tin = CATALOG["ice-tin"];
@@ -31,7 +32,7 @@ export async function Collection() {
     <section id="collection" className="relative overflow-hidden py-20 sm:py-28">
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         {/* centred, to break the left-head / right-body pattern used elsewhere */}
-        <div className="mx-auto max-w-2xl text-center">
+        <Reveal className="mx-auto max-w-2xl text-center">
           <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
             The tin
           </p>
@@ -44,10 +45,11 @@ export async function Collection() {
             A single configuration, made properly, with no variants to
             choose between and nothing added that does not earn its place.
           </p>
-        </div>
+        </Reveal>
 
         <div className="mt-12 grid grid-cols-1 gap-5 lg:grid-cols-[1.05fr_0.95fr]">
           {/* shot dark — the one place the page goes to black */}
+          <Reveal className="grid">
           <Link
             href="/products/ice-tin"
             className="group relative overflow-hidden rounded-[2rem] bg-ink"
@@ -66,7 +68,9 @@ export async function Collection() {
               {availabilityShort()}
             </span>
           </Link>
+          </Reveal>
 
+          <Reveal delay={110} className="grid">
           <div className="glass-edge flex flex-col rounded-[2rem] bg-paper/75 p-8 backdrop-blur-sm sm:p-10">
             <h3 className="text-2xl leading-tight tracking-tight text-white-ice">
               {tin.name}
@@ -123,12 +127,14 @@ export async function Collection() {
               </Link>
             </div>
           </div>
+          </Reveal>
         </div>
 
         {/* The refill borrows the tin's framing — same gutter, same radius, a
             full-bleed photo panel beside a glass card — but at roughly half the
             height, so it reads as the same family without rivalling the tin. */}
         <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-[13rem_1fr] lg:grid-cols-[16rem_1fr]">
+          <Reveal className="grid">
           <div className="relative overflow-hidden rounded-[2rem] bg-ink">
             <Image
               src={core.image!}
@@ -139,7 +145,9 @@ export async function Collection() {
               className="h-full w-full object-cover"
             />
           </div>
+          </Reveal>
 
+          <Reveal delay={110} className="grid">
           <div className="glass-edge flex flex-col rounded-[2rem] bg-paper/75 p-6 backdrop-blur-sm sm:p-7">
             <h3 className="text-lg leading-tight tracking-tight text-white-ice">
               {core.name}
@@ -181,6 +189,7 @@ export async function Collection() {
               </div>
             </div>
           </div>
+          </Reveal>
         </div>
       </div>
     </section>

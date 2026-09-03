@@ -1,4 +1,6 @@
 import { Splatter } from "./splatter";
+import { Reveal } from "./reveal";
+import { CountUp } from "./count-up";
 
 /**
  * Three rows, each stating one measurement and the conditions behind it.
@@ -21,12 +23,14 @@ import { Splatter } from "./splatter";
  */
 const FACTS = [
   {
-    n: "6 hours",
+    value: 6,
+    unit: "hours",
     k: "Cold hold, sealed",
     body: "Measured with a frozen pack, the lid closed, in a 22°C room — the length of a full working shift.",
   },
   {
-    n: "1 hour",
+    value: 1,
+    unit: "hour",
     k: "Cold hold, empty tray",
     body: "The same can in the same room, with nothing in the ice tray. Aluminium on its own holds fridge temperature for an hour — the other five come from the frozen pack.",
   },
@@ -36,7 +40,8 @@ const FACTS = [
     // buyer can act on. Recharge time is the third number in the daily cycle
     // the other two rows describe: how long it holds, what the metal does
     // alone, and how long before it is ready again.
-    n: "90 min",
+    value: 90,
+    unit: "min",
     k: "Freezer to ready",
     body: "From room temperature to fully set, laid flat in a standard freezer drawer. Leaving it in longer does no harm, so a spare can simply live there.",
   },
@@ -53,7 +58,7 @@ export function Facts() {
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="max-w-2xl">
+        <Reveal className="max-w-2xl">
           <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
             Cold facts
           </p>
@@ -61,24 +66,29 @@ export function Facts() {
             Tested
             <span className="text-fog"> before release.</span>
           </h2>
-        </div>
+        </Reveal>
 
         <div className="mt-12 border-t border-frost/8">
-          {FACTS.map((f) => (
-            <div
+          {FACTS.map((f, i) => (
+            <Reveal
               key={f.k}
+              delay={i * 90}
               className="group grid grid-cols-1 gap-4 border-b border-frost/8 py-8 transition-colors duration-500 hover:bg-slate-deep/25 sm:grid-cols-[minmax(0,11rem)_minmax(0,14rem)_1fr] sm:items-baseline sm:gap-10 sm:px-4"
             >
-              <span className="font-mono text-3xl leading-none tracking-tight text-white-ice tabular-nums sm:text-4xl">
-                {f.n}
-              </span>
+              {/* the measurement counts up to itself as the row arrives — the
+                  one flourish spent on the numbers a buyer is asked to trust */}
+              <CountUp
+                value={f.value}
+                suffix={` ${f.unit}`}
+                className="font-mono text-3xl leading-none tracking-tight text-white-ice tabular-nums sm:text-4xl"
+              />
               <span className="font-mono text-[11px] tracking-[0.2em] text-ice-500 uppercase">
                 {f.k}
               </span>
               <p className="max-w-[62ch] text-sm leading-relaxed text-fog">
                 {f.body}
               </p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

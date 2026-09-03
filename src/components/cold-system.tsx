@@ -1,5 +1,6 @@
 import { STEPS } from "@/lib/products";
 import { Splatter } from "./splatter";
+import { Reveal } from "./reveal";
 
 /**
  * The one dark band on the page.
@@ -35,6 +36,7 @@ export function ColdSystem() {
       <div className="pointer-events-none absolute top-1/2 left-[20%] h-[34rem] w-[34rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(46,157,200,0.30),transparent_62%)] blur-3xl" />
 
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
+        <Reveal>
         <p className="font-mono text-[11px] tracking-[0.28em] text-ice-300 uppercase">
           The cold system
         </p>
@@ -48,11 +50,14 @@ export function ColdSystem() {
           diameter. At 68 mm across and 41 mm tall, it occupies the same
           pocket as a conventional can.
         </p>
+        </Reveal>
 
         <ol className="mt-12 border-t border-white/12">
-          {STEPS.map((s) => (
-            <li
+          {STEPS.map((s, i) => (
+            <Reveal
+              as="li"
               key={s.n}
+              delay={i * 90}
               className="group grid grid-cols-[auto_1fr] items-baseline gap-x-6 gap-y-3 border-b border-white/12 py-7 transition-colors duration-500 hover:bg-white/[0.04] sm:grid-cols-[auto_1fr_auto] sm:gap-x-10"
             >
               <span className="font-mono text-sm text-ice-500 transition-colors duration-500 group-hover:text-ice-300">
@@ -67,7 +72,7 @@ export function ColdSystem() {
               <p className="col-start-2 max-w-[52ch] text-sm leading-relaxed text-ice-100/65 sm:col-span-2">
                 {s.body}
               </p>
-            </li>
+            </Reveal>
           ))}
         </ol>
       </div>

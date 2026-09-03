@@ -27,6 +27,7 @@ import { BundleCard } from "../bundle-card";
 import { availabilityShort, dispatchSentence } from "@/lib/fulfilment";
 import { GuaranteeLine } from "../guarantee";
 import { ReviewBadge } from "../review-badge";
+import { AnimatedMoney } from "../animated-money";
 
 type State = "idle" | "adding" | "added";
 
@@ -52,7 +53,12 @@ export function TinBuyBox({
   const product = CATALOG["ice-tin"];
   const cart = useCart();
   const router = useRouter();
+  // `shot` is the photograph asked for, `shown` the one settled underneath.
+  // The new one fades in over the old only once it has decoded, so a click
+  // never swaps a photograph for a black square while the file arrives.
   const [shot, setShot] = useState(0);
+  const [shown, setShown] = useState(0);
+  const [loaded, setLoaded] = useState(true);
   const [qty, setQty] = useState(1);
   const [state, setState] = useState<State>("idle");
   const [buying, setBuying] = useState(false);
@@ -71,6 +77,12 @@ export function TinBuyBox({
     io.observe(el);
     return () => io.disconnect();
   }, []);
+
+  const pick = (i: number) => {
+    if (i === shot) return;
+    setLoaded(false);
+    setShot(i);
+  };
 
   const add = () => {
     if (state !== "idle") return;
@@ -109,13 +121,33 @@ export function TinBuyBox({
           meet the image before its index.
         */}
         <div className="flex min-w-0 flex-col gap-3 lg:sticky lg:top-24 lg:flex-row-reverse lg:gap-4">
-          <div className="relative min-w-0 flex-1 overflow-hidden rounded-[1.75rem] bg-ink sm:rounded-[2rem]">
+          <div className="relative aspect-square min-w-0 flex-1 overflow-hidden rounded-[1.75rem] bg-ink sm:rounded-[2rem]">
             <ProductArt
               product={product}
-              src={product.gallery[shot]}
+              src={product.gallery[shown]}
               sizes="(max-width: 1024px) 100vw, 45vw"
-              className="aspect-square w-full"
+              className="absolute inset-0 h-full w-full"
             />
+            {shot !== shown && (
+              <motion.div
+                key={shot}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: loaded ? 1 : 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                onAnimationComplete={() => {
+                  if (loaded) setShown(shot);
+                }}
+                className="absolute inset-0"
+              >
+                <ProductArt
+                  product={product}
+                  src={product.gallery[shot]}
+                  sizes="(max-width: 1024px) 100vw, 45vw"
+                  className="h-full w-full"
+                  onLoad={() => setLoaded(true)}
+                />
+              </motion.div>
+            )}
             {/* which of the eight you are looking at — the one thing a wrapped
                 strip could never say at a glance */}
             <span className="pointer-events-none absolute right-4 bottom-4 rounded-full bg-ink/70 px-2.5 py-1 font-mono text-[10px] tracking-[0.14em] text-ice-300 backdrop-blur-md">
@@ -138,7 +170,7 @@ export function TinBuyBox({
             {product.gallery.map((g, i) => (
               <button
                 key={g}
-                onClick={() => setShot(i)}
+                onClick={() => pick(i)}
                 aria-label={product.galleryAlt[i] ?? `View image ${i + 1}`}
                 aria-current={i === shot}
                 className={`aspect-square w-14 shrink-0 snap-start overflow-hidden rounded-xl bg-ink transition-all duration-300 sm:w-16 lg:w-full ${
@@ -191,13 +223,19 @@ export function TinBuyBox({
               </p>
             )}
             <div className="flex items-baseline gap-2.5">
-              <span className="font-mono text-3xl tracking-tight text-white-ice">
-                {money(unitPrice * qty)}
-              </span>
+              {/* both figures roll when the quantity changes, so the total is
+                  read as the result of the stepper rather than a new number */}
+              <AnimatedMoney
+                cents={unitPrice * qty}
+                format={money}
+                className="font-mono text-3xl tracking-tight text-white-ice tabular-nums"
+              />
               {onSale && wasPrice && (
-                <span className="font-mono text-lg text-fog line-through decoration-fog/50">
-                  {money(wasPrice * qty)}
-                </span>
+                <AnimatedMoney
+                  cents={wasPrice * qty}
+                  format={money}
+                  className="font-mono text-lg text-fog line-through decoration-fog/50 tabular-nums"
+                />
               )}
               <span className="text-xs text-fog">{CURRENCY_LABEL}</span>
             </div>
@@ -301,11 +339,13 @@ export function TinBuyBox({
               <p className="truncate text-xs text-fog">{product.name}</p>
               <p className="flex items-baseline gap-2 font-mono text-base tracking-tight text-white-ice">
                 {onSale && wasPrice && (
-                  <span className="text-xs text-fog line-through decoration-fog/50">
-                    {money(wasPrice * qty)}
-                  </span>
+                  <AnimatedMoney
+                    cents={wasPrice * qty}
+                    format={money}
+                    className="text-xs text-fog line-through decoration-fog/50"
+                  />
                 )}
-                {money(unitPrice * qty)}
+                <AnimatedMoney cents={unitPrice * qty} format={money} />
               </p>
             </div>
             <button

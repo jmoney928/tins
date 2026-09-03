@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
+import { Reveal } from "./reveal";
 
 /**
  * Links out to the topic pages that used to be homepage anchors.
@@ -40,12 +41,13 @@ export function Explore() {
     <section className="py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid grid-cols-1 gap-px overflow-hidden rounded-[2rem] bg-frost/8 sm:grid-cols-3">
-          {TOPICS.map((t) => (
+          {TOPICS.map((t, i) => (
             <Link
               key={t.href}
               href={t.href}
-              className="group flex flex-col gap-3 bg-void p-7 transition-colors duration-500 hover:bg-slate-deep/30 sm:p-8"
+              className="group block bg-void p-7 transition-colors duration-500 hover:bg-slate-deep/30 sm:p-8"
             >
+              <Reveal delay={i * 80} className="flex flex-col gap-3">
               <p className="font-mono text-[11px] tracking-[0.24em] text-ice-500 uppercase">
                 {t.eyebrow}
               </p>
@@ -58,6 +60,7 @@ export function Explore() {
                 />
               </h3>
               <p className="text-sm leading-relaxed text-fog">{t.body}</p>
+              </Reveal>
             </Link>
           ))}
         </div>

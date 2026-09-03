@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { ListIcon, XIcon, HandbagIcon } from "@phosphor-icons/react/dist/ssr";
+import { ListIcon, XIcon } from "@phosphor-icons/react/dist/ssr";
 import { Magnetic } from "./magnetic";
-import { useCart } from "./cart/cart-context";
 import { BrandMark } from "./brand-mark";
+import { BagButton } from "./bag-button";
 import { ShopMenu } from "./shop-menu";
 
 const LINKS = [
@@ -21,7 +21,6 @@ export function SiteNav() {
   const [open, setOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const { scrollY } = useScroll();
-  const cart = useCart();
 
   useMotionValueEvent(scrollY, "change", (v) => setCondensed(v > 40));
 
@@ -102,18 +101,7 @@ export function SiteNav() {
           </ul>
 
           <div className="ml-auto flex items-center gap-3 md:ml-0">
-            <button
-              onClick={cart.openDrawer}
-              aria-label={cart.count ? `Bag, ${cart.count} items` : "Bag, empty"}
-              className="hairline relative grid size-11 place-items-center rounded-full border text-fog transition-colors duration-300 hover:text-frost"
-            >
-              <HandbagIcon size={17} weight="light" />
-              {cart.count > 0 && (
-                <span className="absolute -top-1 -right-1 grid h-4.5 min-w-4.5 place-items-center rounded-full bg-ink px-1 font-mono text-[10px] leading-none text-paper">
-                  {cart.count}
-                </span>
-              )}
-            </button>
+            <BagButton />
 
             <Magnetic className="hidden sm:block">
               <a

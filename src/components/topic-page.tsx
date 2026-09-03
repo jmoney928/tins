@@ -4,6 +4,7 @@ import { FrostField } from "./frost-field";
 import { ProductNav } from "./pdp/product-nav";
 import { SiteFooter } from "./site-footer";
 import { currentPrice, money } from "@/lib/catalog";
+import { Reveal } from "./reveal";
 
 /**
  * Shell for the topic pages that used to be homepage anchors.
@@ -27,6 +28,7 @@ export function TopicPage({ children }: { children: React.ReactNode }) {
 
         {/* every topic page ends where the site wants the reader to go */}
         <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
+          <Reveal>
           <div className="glass-edge flex flex-col items-start gap-6 rounded-[2rem] bg-abyss/80 p-8 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between sm:p-10">
             <div>
               <h2 className="text-2xl leading-tight tracking-tight text-white-ice sm:text-3xl">
@@ -52,6 +54,7 @@ export function TopicPage({ children }: { children: React.ReactNode }) {
               />
             </Link>
           </div>
+          </Reveal>
         </section>
       </main>
 
