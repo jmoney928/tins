@@ -33,8 +33,8 @@ export function TopicPage({ children }: { children: React.ReactNode }) {
                 One tin, one ice pack in the box.
               </h2>
               <p className="mt-2 text-sm text-fog">
-                Machined in Vancouver. Free shipping with a Chillcore pack,
-                and a 30-day cold-or-refund guarantee.
+                Machined in Vancouver. Free shipping when a tin and a pack
+                ship together, and a 30-day cold-or-refund guarantee.
               </p>
             </div>
             <Link

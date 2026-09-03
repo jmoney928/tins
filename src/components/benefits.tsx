@@ -35,7 +35,7 @@ const BLOCKS = [
   {
     Icon: TimerIcon,
     title: "Ready in ninety minutes",
-    body: "The Chillcore pack freezes in ninety minutes in a standard freezer. Machined and dispatched from Vancouver, British Columbia, with worldwide shipping.",
+    body: "The Chillcore pack sets in ninety minutes in a standard freezer drawer. Freeze one overnight and swap it in the morning; a three-pack keeps a spare ready so there is never a wait.",
   },
 ];
 

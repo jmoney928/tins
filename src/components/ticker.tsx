@@ -2,16 +2,24 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { GUARANTEE_DAYS } from "@/lib/guarantee";
 
+/**
+ * Product facts only.
+ *
+ * This band sits directly under the hero's trust strip and used to repeat two
+ * of its four claims — the guarantee and the shipping offer — inside a
+ * hundred pixels. One of them was also wrong: "free shipping with a Chillcore
+ * pack" reads as a pack on its own earning it, and a $19.99 pack does not.
+ * Free shipping is the tin and the pack together.
+ */
 const BASE_WORDS = [
   "One tin, one refill pack",
+  "Twenty-five fresh, fifteen spent",
   "Cold for 6 hours",
   "Sealed floor for spent pouches",
+  "6061-T6, sealed to IPX6",
   "Machined in Vancouver, BC",
   "Freezer to ready in 90 min",
-  `${GUARANTEE_DAYS}-day cold-or-refund guarantee`,
-  "Free shipping with a Chillcore pack",
 ];
 
 /** Seamless single-direction band. Duplicated once, translated exactly -50%. */

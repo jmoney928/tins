@@ -12,7 +12,7 @@ export default function StockistsPage() {
     <InfoPage
       eyebrow="Company"
       title="Stockists"
-      intro="We're online-only right now — there's no store to walk into and no locator to search."
+      intro="Ice Tins sells online only. There is no shop to visit and no stockist list to search."
     >
       <section>
         <h2 className="text-lg font-medium text-white-ice">Buying one</h2>
@@ -21,8 +21,9 @@ export default function StockistsPage() {
           <Link href="/products/ice-tin" className="text-ice-700 underline underline-offset-2">
             the product page
           </Link>
-          . That's the only place we sell — nobody else is authorized to
-          carry it yet, so treat anything sold elsewhere as unverified.
+          . That is the only place we sell. No retailer is authorised to
+          carry the tin, so anything offered elsewhere should be treated as
+          unverified.
         </p>
       </section>
 
@@ -33,8 +34,8 @@ export default function StockistsPage() {
           <a href="mailto:shop@icetins.com" className="text-ice-700 underline underline-offset-2">
             shop@icetins.com
           </a>{" "}
-          with a bit about the store. We're not set up for wholesale yet, but
-          we're keeping a list.
+          with a short description of the shop. Wholesale is not open yet, but
+          enquiries are kept on file.
         </p>
       </section>
     </InfoPage>

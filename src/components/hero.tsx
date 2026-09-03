@@ -47,7 +47,7 @@ export function Hero() {
       >
         <span className="flex items-center gap-3 font-mono text-[11px] tracking-[0.28em] text-fog uppercase">
           <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
-          In stock, ships worldwide
+          Made to order, ships worldwide
         </span>
 
         <h1 className="mt-6 text-[3.25rem] leading-[0.88] font-medium tracking-tighter text-white-ice sm:text-7xl lg:text-[5.2rem]">
@@ -70,7 +70,7 @@ export function Hero() {
       >
         <p className="max-w-[50ch] text-base leading-relaxed text-fog">
           A slim frozen pack sits in the base, under a perforated tray that
-          lets the cold rise straight through. Above it, a sealed floor takes
+          puts the pouches in direct contact with the cold. Above it, a sealed floor takes
           the spent pouches. Standard 68 mm diameter, one floor deeper than a
           conventional can.
         </p>

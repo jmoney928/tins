@@ -11,7 +11,7 @@ const LAYERS = [
   {
     n: "02",
     title: "Pouch floor, middle",
-    body: "Twenty-five pouches sit flat on a perforated floor, so cold rises directly from the tray beneath rather than travelling around the walls. This is the floor opened in normal use.",
+    body: "Twenty-five pouches sit flat on a perforated floor, so the cold passes straight up from the tray beneath rather than travelling around the walls. This is the floor opened in normal use.",
   },
   {
     n: "03",

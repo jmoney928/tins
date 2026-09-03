@@ -24,8 +24,16 @@ import {
   currentPrice,
   money,
 } from "@/lib/catalog";
-import { availabilityHeadline, dispatchSentence } from "@/lib/fulfilment";
-import { GUARANTEE_BODY, GUARANTEE_EXCEPTION } from "@/lib/guarantee";
+import {
+  LEAD_TIME_WEEKS,
+  TRANSIT_DAYS,
+  availabilityHeadline,
+  dispatchSentence,
+  dispatchShort,
+  leadTimeLabel,
+  transitLabel,
+} from "@/lib/fulfilment";
+import { GUARANTEE_BODY, GUARANTEE_EXCEPTION, GUARANTEE_MEDIUM } from "@/lib/guarantee";
 import { aggregateRatingJsonLd } from "@/lib/social-proof";
 import { Guarantee } from "@/components/guarantee";
 import { SPECS, STEPS } from "@/lib/products";
@@ -45,7 +53,7 @@ const PACK_LABEL = "Chillcore pack";
 export async function generateMetadata(): Promise<Metadata> {
   const priceLine = tinOnSale()
     ? `Launch price ${money(currentPrice("ice-tin"))} CAD (regular ${money(CATALOG["ice-tin"].price)}).`
-    : `${money(currentPrice("ice-tin"))} CAD, in stock now.`;
+    : `${money(currentPrice("ice-tin"))} CAD, made to order in Vancouver.`;
 
   return {
     title: "The Ice Tin",
@@ -54,7 +62,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: "The Ice Tin — Cold to the last pouch",
       description:
-        "25 pouches across three floors, with a slim ice pack in the base. Stays cold for 6 hours. In stock now, ships worldwide.",
+        "25 pouches across three floors, with a slim ice pack in the base. Stays cold for 6 hours. Machined to order in Vancouver, shipped worldwide.",
       url: PDP_URL,
       type: "website",
       images: [
@@ -106,8 +114,8 @@ function buildFaqs(promoToday: boolean) {
     {
       q: "Where does it ship from, and how fast?",
       a: promoToday
-        ? `${dispatchSentence()} Shipping is free today on every order.`
-        : `${dispatchSentence()} Shipping is ${money(SHIPPING_FLAT)} flat, and free on any order with a tin and a ${PACK_LABEL} in it.`,
+        ? `Everything leaves Vancouver, BC. ${dispatchShort()} Shipping is free today on every order.`
+        : `Everything leaves Vancouver, BC. ${dispatchShort()} Shipping is ${money(SHIPPING_FLAT)} flat, and free on any order holding both a tin and a ${PACK_LABEL}.`,
     },
     {
       q: "Is there nicotine or tobacco inside?",
@@ -126,11 +134,11 @@ function buildFaqs(promoToday: boolean) {
     },
     {
       q: "When will it actually arrive?",
-      a: `${dispatchSentence()} You get a tracking number the morning it leaves Vancouver, and the lead time is stated here rather than sprung on you at checkout.`,
+      a: `Count ${leadTimeLabel()} for your tin to be made and dispatched, then ${transitLabel()} for the courier. A tracking number is emailed the morning it leaves the workshop. The wait is stated here, on the shop page and at checkout rather than after the payment.`,
     },
     {
       q: "What if I don't like it?",
-      a: `${GUARANTEE_BODY} ${GUARANTEE_EXCEPTION}`,
+      a: `${GUARANTEE_MEDIUM} There is no requirement that it be unused or in its original packaging. ${GUARANTEE_EXCEPTION}`,
     },
     {
       q: "Can I replace the O-rings or the ice pack?",
@@ -140,7 +148,7 @@ function buildFaqs(promoToday: boolean) {
       // the price is the objection at this end of the market, so it is
       // answered here too — this array feeds the FAQPage JSON-LD, which is
       // where answer engines read it
-      q: `Why is it ${money(CATALOG["ice-tin"].price)}?`,
+      q: `Why is it ${money(currentPrice("ice-tin"))}?`,
       a: "The tin is machined from solid 6061-T6 in small batches rather than pressed from sheet, the threads and O-rings are specified to keep sealing for six hours after a year of daily use, and the shell is covered for life. The price reflects a working cold system rather than a lid on a container.",
     },
   ];
@@ -181,6 +189,32 @@ export default async function IceTinPage() {
         left === null || left > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
       seller: { "@type": "Organization", name: ORG_NAME },
+      /**
+       * InStock is correct — the tin can be bought today — but on its own it
+       * tells Google the same thing a warehoused product would, and this one
+       * takes a fortnight to make. handlingTime is where that belongs, so the
+       * machine-readable promise matches the one on the page rather than
+       * quietly contradicting it in a shopping result.
+       */
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingDestination: { "@type": "DefinedRegion", addressCountry: "CA" },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          handlingTime: {
+            "@type": "QuantitativeValue",
+            minValue: LEAD_TIME_WEEKS.min * 7,
+            maxValue: LEAD_TIME_WEEKS.max * 7,
+            unitCode: "DAY",
+          },
+          transitTime: {
+            "@type": "QuantitativeValue",
+            minValue: TRANSIT_DAYS.min,
+            maxValue: TRANSIT_DAYS.max,
+            unitCode: "DAY",
+          },
+        },
+      },
     },
     // omitted entirely until there is a real average and somewhere on this
     // page a reader can check it — rating markup that a visitor cannot see
@@ -267,8 +301,11 @@ export default async function IceTinPage() {
                   {availabilityHeadline()}
                 </h2>
                 <p className="mt-3 max-w-[62ch] text-sm leading-relaxed text-fog">
-                  {dispatchSentence()} Machined in small batches so quality
-                  stays consistent.
+                  Tins are cut in batches rather than held in a warehouse, so
+                  an order joins the next run instead of leaving a shelf.
+                  That is {leadTimeLabel()} to dispatch and {transitLabel()}{" "}
+                  in transit, and it is why every unit is checked by the
+                  person who made it.
                 </p>
               </div>
             </div>
@@ -472,16 +509,14 @@ export default async function IceTinPage() {
               <p className="mx-auto mt-4 max-w-[46ch] text-sm leading-relaxed text-fog">
                 {onSale ? (
                   <>
+                    <span className="text-frost">{money(unitPrice)} CAD</span>{" "}
                     <span className="text-fog line-through decoration-fog/50">
                       {money(tin.price)}
                     </span>{" "}
-                    <span className="text-frost">
-                      {money(unitPrice)} CAD at launch pricing
-                    </span>{" "}
-                    — one tin, one ice pack in the box. In stock now.
+                    at launch — one tin, one ice pack in the box. {dispatchShort()}
                   </>
                 ) : (
-                  `${money(unitPrice)} CAD, one tin, one ice pack in the box. In stock now.`
+                  `${money(unitPrice)} CAD, one tin, one ice pack in the box. ${dispatchShort()}`
                 )}
               </p>
               <Link

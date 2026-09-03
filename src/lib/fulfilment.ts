@@ -51,3 +51,26 @@ export function dispatchSentence() {
 export function availabilityHeadline() {
   return SHIPS_FROM_STOCK ? "In stock and ready to ship." : "Made to order, in batches.";
 }
+
+/**
+ * The dispatch promise as a clause, for a sentence that is already carrying a
+ * price and cannot afford the full version.
+ */
+export function dispatchShort() {
+  return SHIPS_FROM_STOCK
+    ? `Dispatched in ${leadTimeLabel()}, then ${transitLabel()} in transit.`
+    : `Dispatched in ${leadTimeLabel()}, then ${transitLabel()} in transit.`;
+}
+
+/**
+ * The availability claim, in the few words a badge or an eyebrow has room for.
+ *
+ * Every one of those slots used to say "In stock" — the hero, the shop card,
+ * a live unit count over the buy box, and "In stock now" in the closing
+ * paragraph — while the same pages promised a 2–3 week lead time. A shopper
+ * met the fast promise four times and the true one once, which is the shape
+ * of a complaint rather than a sale.
+ */
+export function availabilityShort() {
+  return SHIPS_FROM_STOCK ? "In stock" : "Made to order";
+}

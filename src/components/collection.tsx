@@ -9,6 +9,7 @@ import {
   tinOnSale,
   money,
 } from "@/lib/catalog";
+import { availabilityShort } from "@/lib/fulfilment";
 import { AddButton } from "./add-button";
 import { QuickView } from "./quick-view";
 import { liveCatalog } from "@/lib/live-catalog";
@@ -61,7 +62,7 @@ export async function Collection() {
             {/* one badge on the photograph, not two: the sale pill that sat
                 opposite this said nothing the price below does not */}
             <span className="absolute top-6 left-6 rounded-full border border-white/15 bg-ink/70 px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] text-ice-300 uppercase backdrop-blur-md">
-              In stock
+              {availabilityShort()}
             </span>
           </Link>
 

@@ -24,10 +24,10 @@ export default function WorkshopPage() {
       </section>
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">How it's made</h2>
+        <h2 className="text-lg font-medium text-white-ice">How it is made</h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
           Each tin is machined in small batches and checked before it ships.
-          When a batch sells out, we make more.
+          When a batch is spoken for, the next one is cut.
         </p>
       </section>
 

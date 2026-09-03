@@ -24,7 +24,7 @@ import {
   money,
 } from "@/lib/catalog";
 import { BundleCard } from "../bundle-card";
-import { dispatchSentence } from "@/lib/fulfilment";
+import { availabilityShort, dispatchSentence } from "@/lib/fulfilment";
 import { GuaranteeLine } from "../guarantee";
 import { ReviewBadge } from "../review-badge";
 
@@ -157,12 +157,14 @@ export function TinBuyBox({
 
         {/* buy box */}
         <div>
-          {remaining !== null && (
-            <p className="flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-ice-700 uppercase">
-              <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
-              {remaining > 0 ? `${remaining} in stock` : "Out of stock"}
-            </p>
-          )}
+          {/* A live unit count over a made-to-order product reads as "yours
+              ships today", which is not what the lead time below promises.
+              The count is still worth having when it runs out — that is the
+              one case where it tells the shopper something they need. */}
+          <p className="flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-ice-700 uppercase">
+            <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
+            {remaining !== null && remaining <= 0 ? "Currently unavailable" : availabilityShort()}
+          </p>
 
           <h1 className="mt-3 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
             {product.name}

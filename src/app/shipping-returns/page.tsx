@@ -20,7 +20,7 @@ export default function ShippingReturnsPage() {
     <InfoPage
       eyebrow="Support"
       title="Shipping & returns"
-      intro="Everything ships from Vancouver, BC. Here's exactly how it moves, and what happens if something's wrong when it arrives."
+      intro="Every order ships from Vancouver, BC. This page sets out how it travels, and what happens if something is wrong when it arrives."
     >
       <section>
         <h2 className="text-lg font-medium text-white-ice">Shipping</h2>
@@ -55,9 +55,10 @@ export default function ShippingReturnsPage() {
           </div>
         </dl>
         <p className="mt-5 text-sm leading-relaxed text-fog">
-          A tracking number goes out by email the morning your order leaves. On
-          international orders, customs duties and import taxes (if any) are
-          set by your country, not by us, and aren't included at checkout.
+          A tracking number is emailed the morning an order leaves. On
+          international orders, customs duties and import taxes are set by the
+          destination country rather than by us, and are not included at
+          checkout.
         </p>
       </section>
 
@@ -73,12 +74,12 @@ export default function ShippingReturnsPage() {
           <a href="mailto:shop@icetins.com" className="text-ice-700 underline underline-offset-2">
             shop@icetins.com
           </a>{" "}
-          with your order number and we&rsquo;ll send a prepaid return label.
+          with your order number and a prepaid return label is sent back.
           You do not need the original packaging, and the tin does not need to
           be unused — carrying it is how you find out whether it works.
         </p>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          {GUARANTEE_EXCEPTION} If a pack&rsquo;s seal arrived compromised,
+          {GUARANTEE_EXCEPTION} If a pack&rsquo;s seal arrives compromised,
           that is a warranty replacement rather than a return.
         </p>
       </section>

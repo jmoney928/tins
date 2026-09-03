@@ -11,18 +11,18 @@ export default function CareersPage() {
     <InfoPage
       eyebrow="Company"
       title="Careers"
-      intro="No open roles right now — we're a small team machining one product."
+      intro="There are no open roles at present. Ice Tins is a small team making one product."
     >
       <section>
         <h2 className="text-lg font-medium text-white-ice">Speculative applications</h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          If that changes, it'll be for hands-on work — machining,
-          fulfilment, or customer support — before anything else. If that's
-          you and you'd rather not wait for a posting, send a short note to{" "}
+          When that changes it will be for hands-on work first — machining,
+          fulfilment or customer support. If that describes you and you would
+          rather not wait for a posting, send a short note to{" "}
           <a href="mailto:shop@icetins.com" className="text-ice-700 underline underline-offset-2">
             shop@icetins.com
           </a>
-          . We keep good ones on file.
+          . Applications are kept on file.
         </p>
       </section>
     </InfoPage>

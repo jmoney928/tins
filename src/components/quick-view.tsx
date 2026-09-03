@@ -12,6 +12,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { useCart } from "./cart/cart-context";
 import { ProductArt } from "./product-art";
+import { availabilityShort } from "@/lib/fulfilment";
 import { CATALOG, currentPrice, money } from "@/lib/catalog";
 
 /** Trigger + modal. Owns its own open state so it can sit anywhere. */
@@ -148,11 +149,11 @@ export function QuickView({
                 </div>
 
                 <div className="flex flex-col p-6 sm:p-8 md:pl-2">
-                  {product.remaining !== null && (
-                    <p className="font-mono text-[10px] tracking-[0.2em] text-ice-700 uppercase">
-                      {product.remaining} in stock
-                    </p>
-                  )}
+                  <p className="font-mono text-[10px] tracking-[0.2em] text-ice-700 uppercase">
+                    {product.remaining !== null && product.remaining <= 0
+                      ? "Currently unavailable"
+                      : availabilityShort()}
+                  </p>
                   <h2 className="mt-3 text-3xl leading-none tracking-tighter text-white-ice">
                     {product.name}
                   </h2>

@@ -12,26 +12,26 @@ export default function WarrantyPage() {
     <InfoPage
       eyebrow="Support"
       title="Warranty claim"
-      intro="The shell is covered for as long as you own it. Here's what that means and how to use it."
+      intro="The shell is covered for as long as you own it. This page sets out what that includes and how to make a claim."
     >
       <section>
-        <h2 className="text-lg font-medium text-white-ice">What's covered</h2>
+        <h2 className="text-lg font-medium text-white-ice">What is covered</h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
           A lifetime warranty on the aluminium shell against cracking or a
-          failed thread under normal use. If a floor won't seat, a thread
-          strips, or the shell cracks, we'll replace it — no receipt hunting,
-          your order email is enough.
+          failed thread under normal use. If a floor will not seat, a thread
+          strips, or the shell cracks, we replace it. Your order email is
+          sufficient — there is no receipt to produce.
         </p>
       </section>
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">What's not</h2>
+        <h2 className="text-lg font-medium text-white-ice">What is not covered</h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
           Cosmetic wear from normal carry — fine scuffing on the Cerakote
-          finish, a duller logo after months in a pocket — isn't a defect,
-          it's aluminium doing what aluminium does. Damage from drops, being
-          run over, or modification isn't covered either. The Chillcore ice
-          pack is a consumable and isn't covered under this warranty; a pack
+          finish, a duller logo after months in a pocket — is not a defect
+          but a finish behaving as aluminium does. Damage from drops, from
+          being run over, or from modification is not covered. The Chillcore
+          ice pack is a consumable and falls outside this warranty; a pack
           that arrives with a compromised seal is handled as a{" "}
           <Link href="/shipping-returns" className="text-ice-700 underline underline-offset-2">
             return
@@ -47,9 +47,9 @@ export default function WarrantyPage() {
           <a href="mailto:shop@icetins.com" className="text-ice-700 underline underline-offset-2">
             shop@icetins.com
           </a>{" "}
-          with your order number, a couple of photos of the issue, and a line
-          on what happened. Most claims get a straight yes or no within a
-          couple of days.
+          with your order number, two or three photographs of the fault, and
+          a line on what happened. Most claims are answered within two
+          business days.
         </p>
       </section>
     </InfoPage>

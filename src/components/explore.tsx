@@ -10,13 +10,15 @@ import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
  *
  * The card titles deliberately differ from the headings on the pages they
  * link to. Reusing a page's own H2 as its teaser puts the two URLs back in
- * competition for the same phrase, which is the thing being fixed.
+ * competition for the same phrase, which is the thing being fixed — and two
+ * of them also repeated the eyebrow sitting directly above them, so the
+ * reader met "cold system" and "field" twice in as many lines.
  */
 const TOPICS = [
   {
     href: "/cold-system",
     eyebrow: "The cold system",
-    title: "How the cold system works",
+    title: "Six hours, and how it is measured",
     body: "A perforated tray of twenty-five pouches over a slim frozen pack, sealed on two O-rings, holding fridge temperature for six hours at room ambient — and the testing behind that figure.",
   },
   {
@@ -28,7 +30,7 @@ const TOPICS = [
   {
     href: "/field-notes",
     eyebrow: "Field notes",
-    title: "Field testing",
+    title: "A season of working shifts",
     body: "Reports from five testers who carried the tin through a full season of working shifts, across five cities and four trades.",
   },
 ];
