@@ -10,7 +10,6 @@ import {
   money,
   moneyExact,
 } from "@/lib/catalog";
-import { availabilityShort } from "@/lib/fulfilment";
 import { AddButton } from "./add-button";
 import { QuickView } from "./quick-view";
 import { liveCatalog } from "@/lib/live-catalog";
@@ -62,11 +61,10 @@ export async function Collection() {
               sizes="(max-width: 1024px) 92vw, 46vw"
               className="h-full w-full object-cover transition-transform duration-700 ease-[var(--ease-glide)] group-hover:scale-[1.03]"
             />
-            {/* one badge on the photograph, not two: the sale pill that sat
-                opposite this said nothing the price below does not */}
-            <span className="absolute top-6 left-6 rounded-full border border-white/15 bg-ink/70 px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] text-ice-300 uppercase backdrop-blur-md">
-              {availabilityShort()}
-            </span>
+            {/* nothing stamped on the photograph. An availability pill sat
+                here, and a label floating on a product shot is the tell of a
+                template; the fact it carried is in the hero eyebrow above
+                and in the buy box, where a buyer reads it. */}
           </Link>
           </Reveal>
 
