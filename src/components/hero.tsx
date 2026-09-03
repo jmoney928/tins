@@ -29,17 +29,28 @@ export function Hero() {
   return (
     <section
       id="top"
-      /* overflow-x-clip contains the splatter below, which bleeds 288px past
-         the right edge. Every other section carrying one already clips; this
-         one did not, and on a phone that overflow widened the layout viewport
-         and pushed the nav's bag and menu buttons off the screen. */
-      className="relative mx-auto grid min-h-[100dvh] w-full max-w-7xl grid-cols-1 content-center gap-8 overflow-x-clip px-4 pt-28 pb-16 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:grid-rows-[auto_auto] lg:gap-x-8 lg:pt-24 lg:pb-0"
+      className="relative mx-auto grid min-h-[100dvh] w-full max-w-7xl grid-cols-1 content-center gap-8 px-4 pt-28 pb-16 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:grid-rows-[auto_auto] lg:gap-x-8 lg:pt-24 lg:pb-0"
     >
-      <Splatter
-        scope="hero-splat"
-        rotate={22}
-        className="pointer-events-none absolute -top-24 -right-72 h-[42rem] w-[42rem] opacity-[0.34] mix-blend-multiply"
-      />
+      {/*
+        The splatter bleeds off the right, and something has to bound it: left
+        loose it widened the layout viewport on a phone and pushed the nav's
+        bag and menu buttons off the screen.
+
+        Where it is bounded is the whole point. Clipping on this section put
+        the edge at the 1280px container, 80px short of the screen on a
+        1440px display, which drew a hard vertical line straight down the
+        artwork — a decoration that stops in mid-air reads as a bug, and it
+        was one. This layer spans the viewport instead, so the cut lands at
+        the screen edge, where every image on every website already ends and
+        nobody perceives an edge at all.
+      */}
+      <div className="pointer-events-none absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 overflow-x-clip">
+        <Splatter
+          scope="hero-splat"
+          rotate={22}
+          className="absolute -top-24 -right-40 h-[42rem] w-[42rem] opacity-[0.34] mix-blend-multiply"
+        />
+      </div>
 
       <div
         className="cascade relative lg:col-start-2 lg:row-start-1 lg:self-end lg:pl-12"
