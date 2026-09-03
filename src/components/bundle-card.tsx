@@ -128,15 +128,19 @@ export function BundleCard({
         </div>
       </div>
 
-      {/* the whole point of this component: the two totals, side by side */}
+      {/* The two totals, side by side — the whole point of this component.
+          The saving used to sit in a solid blue pill; it says the same thing
+          set as a label, and matches how every other price on the site is
+          now marked. Current price first, struck price second, the order
+          used in the hero, the shop card and the buy box. */}
       <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-ice-500/15 pt-4">
-        <span className="font-mono text-sm text-fog line-through decoration-fog/50">
-          {money(pair.list)}
-        </span>
         <span className="font-mono text-2xl tracking-tight text-white-ice">
           {money(pair.total)}
         </span>
-        <span className="rounded-full bg-ice-500 px-2.5 py-1 font-mono text-[10px] tracking-[0.14em] text-paper uppercase">
+        <span className="font-mono text-sm text-fog line-through decoration-fog/50">
+          {money(pair.list)}
+        </span>
+        <span className="font-mono text-[11px] tracking-[0.16em] text-ice-700 uppercase">
           Save {money(pair.saving)}
         </span>
       </div>

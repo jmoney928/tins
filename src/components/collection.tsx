@@ -30,17 +30,12 @@ export async function Collection() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         {/* centred, to break the left-head / right-body pattern used elsewhere */}
         <div className="mx-auto max-w-2xl text-center">
-          {onSale && (
-            <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-ice-500 px-3.5 py-1.5 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
-              Launch price {money(tinPrice)} — reg. {money(tinWas)}
-            </span>
-          )}
           <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
             The tin
           </p>
           {/* flat declarative on purpose — the two-tone headline runs in four
               other sections, and dropping it once is what keeps it working */}
-          <h2 className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
+          <h2 className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-balance text-white-ice sm:text-5xl">
             One can, and the packs that go in it.
           </h2>
           <p className="mx-auto mt-5 max-w-[46ch] text-sm leading-relaxed text-fog">
@@ -63,21 +58,18 @@ export async function Collection() {
               sizes="(max-width: 1024px) 92vw, 46vw"
               className="h-full w-full object-cover transition-transform duration-700 ease-[var(--ease-glide)] group-hover:scale-[1.03]"
             />
+            {/* one badge on the photograph, not two: the sale pill that sat
+                opposite this said nothing the price below does not */}
             <span className="absolute top-6 left-6 rounded-full border border-white/15 bg-ink/70 px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] text-ice-300 uppercase backdrop-blur-md">
               In stock
             </span>
-            {onSale && (
-              <span className="absolute top-6 right-6 rounded-full bg-ice-500 px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
-                Launch price
-              </span>
-            )}
           </Link>
 
           <div className="glass-edge flex flex-col rounded-[2rem] bg-paper/75 p-8 backdrop-blur-sm sm:p-10">
             <h3 className="text-2xl leading-tight tracking-tight text-white-ice">
               {tin.name}
             </h3>
-            <p className="mt-2 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase">
+            <p className="mt-2 text-sm leading-relaxed text-ice-700">
               {tin.tagline}
             </p>
             <p className="mt-4 max-w-[40ch] text-sm leading-relaxed text-fog">
@@ -98,16 +90,23 @@ export async function Collection() {
             </ul>
 
             <div className="mt-auto flex items-center justify-between gap-4 border-t border-frost/8 pt-8">
-              <span className="flex items-baseline gap-2.5">
+              <span>
                 {onSale && (
-                  <span className="font-mono text-base text-fog line-through decoration-fog/50">
-                    {money(tinWas)}
+                  <span className="block font-mono text-[10px] tracking-[0.22em] text-ice-700 uppercase">
+                    Launch price
                   </span>
                 )}
-                <span className="font-mono text-2xl tracking-tight text-white-ice">
-                  {money(tinPrice)}
+                <span className="mt-1 flex items-baseline gap-2.5">
+                  <span className="font-mono text-2xl tracking-tight text-white-ice">
+                    {money(tinPrice)}
+                  </span>
+                  {onSale && (
+                    <span className="font-mono text-base text-fog line-through decoration-fog/50">
+                      {money(tinWas)}
+                    </span>
+                  )}
+                  <span className="text-xs text-fog">{CURRENCY_LABEL}</span>
                 </span>
-                <span className="text-xs text-fog">{CURRENCY_LABEL}</span>
               </span>
               <Link
                 href="/products/ice-tin"
@@ -143,7 +142,7 @@ export async function Collection() {
             <h3 className="text-lg leading-tight tracking-tight text-white-ice">
               {core.name}
             </h3>
-            <p className="mt-1.5 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase">
+            <p className="mt-1.5 text-sm leading-relaxed text-ice-700">
               {core.tagline}
             </p>
             {/* the pair, totalled — the offer was previously stated as a

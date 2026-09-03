@@ -2,7 +2,6 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { CATALOG, tinOnSale, currentPrice, money } from "@/lib/catalog";
 import { GUARANTEE_DAYS } from "@/lib/guarantee";
 
 const BASE_WORDS = [
@@ -17,14 +16,10 @@ const BASE_WORDS = [
 
 /** Seamless single-direction band. Duplicated once, translated exactly -50%. */
 export const Ticker = memo(function Ticker() {
-  const onSale = tinOnSale();
-  const words = onSale
-    ? [
-        `Launch price ${money(currentPrice("ice-tin"))}, reg. ${money(CATALOG["ice-tin"].price)}`,
-        ...BASE_WORDS,
-      ]
-    : BASE_WORDS;
-  const row = [...words, ...words];
+  // The price used to lead this band. It is stated in the hero and again on
+  // the shop card, both in the type scale, and a third pass of it scrolling
+  // by turned a strip of product facts into an advertisement.
+  const row = [...BASE_WORDS, ...BASE_WORDS];
 
   return (
     <div className="relative overflow-hidden border-y py-5 hairline bg-abyss/30">

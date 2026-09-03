@@ -45,18 +45,10 @@ export function Hero() {
         className="cascade relative lg:col-start-2 lg:row-start-1 lg:self-end lg:pl-12"
         style={{ "--index": 0 } as React.CSSProperties}
       >
-        <div className="flex flex-wrap items-center gap-3">
-          {onSale && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-ice-500 px-3 py-1 font-mono text-[10px] tracking-[0.16em] text-paper uppercase">
-              Launch price {money(currentPrice("ice-tin"))} — reg.{" "}
-              {money(CATALOG["ice-tin"].price)}
-            </span>
-          )}
-          <span className="flex items-center gap-3 font-mono text-[11px] tracking-[0.28em] text-fog uppercase">
-            <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
-            In stock, ships worldwide
-          </span>
-        </div>
+        <span className="flex items-center gap-3 font-mono text-[11px] tracking-[0.28em] text-fog uppercase">
+          <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
+          In stock, ships worldwide
+        </span>
 
         <h1 className="mt-6 text-[3.25rem] leading-[0.88] font-medium tracking-tighter text-white-ice sm:text-7xl lg:text-[5.2rem]">
           Twenty-five pouches,
@@ -83,14 +75,42 @@ export function Hero() {
           conventional can.
         </p>
 
-        <div className="mt-9 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
+        {/*
+          The price, set as a price.
+
+          This used to be a solid blue pill above the headline reading "LAUNCH
+          PRICE $49.99 — REG. $79.99", and the same pill ran on the shop card
+          and the buy box. Three shouted badges for one number is how a
+          template announces a discount, not how a shop states what something
+          costs. The figures are unchanged; they now sit in the type scale,
+          above the button, where a buyer looks for them.
+        */}
+        <div className="mt-9">
+          {onSale && (
+            <p className="font-mono text-[11px] tracking-[0.24em] text-ice-700 uppercase">
+              Launch price
+            </p>
+          )}
+          <div className="mt-2 flex items-baseline gap-3">
+            <span className="font-mono text-3xl tracking-tight text-white-ice">
+              {money(currentPrice("ice-tin"))}
+            </span>
+            {onSale && (
+              <span className="font-mono text-base text-fog line-through decoration-fog/50">
+                {money(CATALOG["ice-tin"].price)}
+              </span>
+            )}
+            <span className="text-xs text-fog">CAD</span>
+          </div>
+        </div>
+
+        <div className="mt-6 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
           <Magnetic strength={0.4}>
             <Link
               href="/products/ice-tin"
               className="group flex items-center justify-center gap-3 rounded-full bg-ink px-7 py-4 text-sm font-medium text-paper transition-colors duration-300 ease-[var(--ease-glide)] hover:bg-ice-700 active:scale-[0.98]"
             >
               See the tin
-              <span className="font-mono text-xs opacity-65">{money(currentPrice("ice-tin"))}</span>
               <ArrowRightIcon
                 size={15}
                 weight="bold"

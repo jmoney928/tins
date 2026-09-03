@@ -10,7 +10,6 @@ import {
   PackageIcon,
   PlusIcon,
   ShieldCheckIcon,
-  SnowflakeIcon,
   TruckIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { useCart } from "../cart/cart-context";
@@ -158,13 +157,6 @@ export function TinBuyBox({
 
         {/* buy box */}
         <div>
-          {onSale && (
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-ice-500 px-4 py-2 font-mono text-[11px] tracking-[0.16em] text-paper uppercase">
-              <SnowflakeIcon size={13} weight="fill" />
-              Launch price {money(unitPrice)} — reg. {money(wasPrice ?? product.price)}
-            </div>
-          )}
-
           {remaining !== null && (
             <p className="flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-ice-700 uppercase">
               <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
@@ -191,18 +183,21 @@ export function TinBuyBox({
             ))}
           </ul>
 
-          {/* the deadline is stated once, at the top of this column — repeating
-              it over the price only made the offer look like it was pleading */}
           <div ref={ctaRef} className="mt-8 border-t border-frost/8 pt-7">
+            {onSale && (
+              <p className="mb-2 font-mono text-[11px] tracking-[0.22em] text-ice-700 uppercase">
+                Launch price
+              </p>
+            )}
             <div className="flex items-baseline gap-2.5">
+              <span className="font-mono text-3xl tracking-tight text-white-ice">
+                {money(unitPrice * qty)}
+              </span>
               {onSale && wasPrice && (
                 <span className="font-mono text-lg text-fog line-through decoration-fog/50">
                   {money(wasPrice * qty)}
                 </span>
               )}
-              <span className="font-mono text-3xl tracking-tight text-white-ice">
-                {money(unitPrice * qty)}
-              </span>
               <span className="text-xs text-fog">{CURRENCY_LABEL}</span>
             </div>
 
@@ -269,7 +264,7 @@ export function TinBuyBox({
               <TruckIcon size={13} weight="light" />
               {promoToday
                 ? "Free shipping today — already applied."
-                : `${money(SHIPPING_FLAT)} flat shipping on the tin on its own.`}
+                : `${money(SHIPPING_FLAT)} flat shipping when the tin ships on its own.`}
             </p>
             {/* the guarantee sits with the button, not on a policy page:
                 this is the moment the doubt actually occurs */}
