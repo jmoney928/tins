@@ -6,218 +6,233 @@ import { LegalMeta, Mail } from "@/components/legal";
 export const metadata: Metadata = {
   title: "Privacy policy",
   description:
-    "What Ice Tins Supply Co. collects, why, who processes it, how long it is kept, and how to have it removed.",
+    "How Ice Tins Supply Co. collects, uses, shares and protects personal information, and the choices available to you.",
   alternates: { canonical: "/privacy" },
 };
 
 /**
- * Written against what the code actually does rather than from a template.
- * Every processor named here appears in the codebase, and every cookie listed
- * is one the site genuinely sets — see lib/attribution.ts for the two of them
- * that are ours. If a processor is removed, this page has to change with it.
+ * Conventional structure and conventional language, deliberately.
+ *
+ * An earlier draft named each processor and each cookie individually. That
+ * reads well and is accurate on the day it is written, but it makes the page
+ * a dependency of the infrastructure: change an email provider and the policy
+ * is silently false, which is a worse position than a general one. Categories
+ * of recipient stay true across a vendor change.
+ *
+ * The one rule this file keeps from that draft: nothing here may describe
+ * something the site does not do. Boilerplate that mentions accounts,
+ * loyalty schemes or data sales would be exactly the sort of untrue statement
+ * a policy exists to avoid.
  */
 export default function PrivacyPage() {
   return (
     <InfoPage
       eyebrow="Legal"
       title="Privacy policy"
-      intro="What we collect, why we collect it, who else handles it, and how to have it removed. This describes the site as it actually works, not a category of site."
+      intro="This policy explains how Ice Tins Supply Co. collects, uses, shares and protects personal information when you visit this website or place an order, and the choices available to you."
     >
       <LegalMeta />
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">Who is responsible</h2>
+        <h2 className="text-lg font-medium text-white-ice">1. Overview</h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          Ice Tins Supply Co. (&ldquo;Ice Tins&rdquo;, &ldquo;we&rdquo;,
+          &ldquo;us&rdquo;) operates www.icetins.com and is the business
+          responsible for the personal information described in this policy.
+          We are located at 8105 North Fraser Way, Burnaby, British Columbia
+          V5J 5M8, Canada.
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          This policy applies to the website and to orders placed through it.
+          It does not apply to third-party websites we link to, which publish
+          their own policies.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          2. Information we collect
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          <span className="text-frost">Information you provide.</span> When you
+          place an order or contact us, we collect your name, email address,
+          shipping address, order details and any information contained in
+          your correspondence. Payment card details are collected and processed
+          by our payment provider and are not received or stored by us.
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          <span className="text-frost">Information collected automatically.</span>{" "}
+          When you visit the website we collect technical and usage
+          information, including IP address, browser and device type, pages
+          viewed, referring website and any campaign parameters contained in
+          the link you arrived through. Some of this is collected using cookies
+          and similar technologies, described in our{" "}
+          <Link href="/cookies" className="text-ice-700 underline underline-offset-2">
+            cookie policy
+          </Link>
+          .
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          We do not collect payment card numbers, government identification, or
+          any special category of personal information, and the website has no
+          user accounts.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          3. How we use information
+        </h2>
+        <ul className="mt-3 flex flex-col gap-2.5 text-sm leading-relaxed text-fog">
+          <li>To process, fulfil and deliver your order.</li>
+          <li>To send order confirmations, dispatch notices and service messages.</li>
+          <li>To respond to enquiries, warranty claims and returns.</li>
+          <li>To measure the performance of our advertising and website.</li>
+          <li>To detect and prevent fraud and misuse.</li>
+          <li>To comply with our legal, tax and accounting obligations.</li>
+        </ul>
+        <p className="mt-4 text-sm leading-relaxed text-fog">
+          Where the law requires a legal basis for processing, we rely on
+          performance of a contract for order fulfilment, our legitimate
+          interests for site security and advertising measurement, your consent
+          where consent is required, and compliance with a legal obligation for
+          record keeping.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          4. How we share information
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          We do not sell personal information. We share it only with service
+          providers who process it on our behalf and under contract, in the
+          following categories:
+        </p>
+        <ul className="mt-3 flex flex-col gap-2.5 text-sm leading-relaxed text-fog">
+          <li>E-commerce and payment providers, to take and record orders.</li>
+          <li>Shipping and logistics providers, to deliver them.</li>
+          <li>Email service providers, to send order and service messages.</li>
+          <li>
+            Hosting, infrastructure and security providers, to operate the
+            website.
+          </li>
+          <li>
+            Advertising and measurement partners, including Meta Platforms, to
+            report on advertising performance.
+          </li>
+        </ul>
+        <p className="mt-4 text-sm leading-relaxed text-fog">
+          We may also disclose information where required by law, to enforce
+          our terms, to protect our rights or the safety of others, or in
+          connection with a merger, acquisition or sale of assets.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          5. Cookies and similar technologies
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          We use cookies and similar technologies to operate the website, to
+          remember the contents of your bag, and to measure advertising. Our{" "}
+          <Link href="/cookies" className="text-ice-700 underline underline-offset-2">
+            cookie policy
+          </Link>{" "}
+          sets out the categories we use and how to refuse or remove them.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          6. International transfers
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          We are based in Canada and some of our service providers are located
+          in the United States and elsewhere. Personal information may
+          therefore be stored and processed outside your country of residence
+          and may be accessible to courts and authorities in those countries
+          under their laws. Where required, we put appropriate safeguards in
+          place for those transfers.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">7. Retention</h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          We keep personal information only for as long as necessary for the
+          purposes described in this policy. Order and transaction records are
+          retained for the period required by Canadian tax and business law.
+          Information collected for advertising measurement is retained for a
+          limited period and then expires. Correspondence is retained for as
+          long as needed to resolve the matter and to honour any applicable
+          warranty.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">8. Security</h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          We use appropriate technical and organisational measures to protect
+          personal information, including encryption in transit and restricted
+          access to systems that hold it. No method of transmission or storage
+          is completely secure, and we cannot guarantee absolute security.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          9. Your rights and choices
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          Subject to local law, you may request access to the personal
+          information we hold about you, request that it be corrected or
+          deleted, object to or restrict certain processing, request a portable
+          copy, and withdraw consent where we rely on it. You may also opt out
+          of marketing messages at any time using the unsubscribe link in any
+          such message.
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          To exercise a right, contact us at <Mail />. We will respond within
+          the period required by applicable law. We may need to verify your
+          identity, and we may retain information we are legally required to
+          keep.
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          If you are not satisfied with our response, you may complain to the
+          Office of the Privacy Commissioner of Canada or to the supervisory
+          authority in your country of residence.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          10. Children&rsquo;s privacy
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          The website is not directed at children, and we do not knowingly
+          collect personal information from children. If you believe a child
+          has provided us with personal information, contact us at <Mail /> and
+          we will delete it.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          11. Changes to this policy
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          We may update this policy from time to time. The date at the top of
+          this page shows when it was last revised, and any material change
+          will be brought to the attention of customers by email.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">12. Contact us</h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
           Ice Tins Supply Co., 8105 North Fraser Way, Burnaby, British
-          Columbia V5J 5M8, Canada, is responsible for the personal
-          information described here. Questions, requests and complaints all
-          go to <Mail />, which is read by a person rather than a queue.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-lg font-medium text-white-ice">What we collect</h2>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          Three groups, and nothing outside them.
-        </p>
-        <dl className="mt-5 flex flex-col gap-5 border-t border-frost/8 pt-5">
-          <div>
-            <dt className="font-mono text-[11px] tracking-[0.18em] text-ice-700 uppercase">
-              When you order
-            </dt>
-            <dd className="mt-2 text-sm leading-relaxed text-fog">
-              Your email address, name, shipping address, the items ordered and
-              the amount paid. Payment card details are entered on the payment
-              page and are handled by our payment processor; they never reach
-              our servers and we never see them.
-            </dd>
-          </div>
-          <div>
-            <dt className="font-mono text-[11px] tracking-[0.18em] text-ice-700 uppercase">
-              When you browse
-            </dt>
-            <dd className="mt-2 text-sm leading-relaxed text-fog">
-              Pages viewed, IP address, browser and device type, the referring
-              link, and any campaign parameters in the URL that brought you
-              here. This is used to measure which advertisements lead to sales
-              and for no other purpose. The{" "}
-              <Link href="/cookies" className="text-ice-700 underline underline-offset-2">
-                cookies page
-              </Link>{" "}
-              lists each identifier by name.
-            </dd>
-          </div>
-          <div>
-            <dt className="font-mono text-[11px] tracking-[0.18em] text-ice-700 uppercase">
-              When you contact us
-            </dt>
-            <dd className="mt-2 text-sm leading-relaxed text-fog">
-              Your email address and whatever you write to us, kept as long as
-              it takes to resolve the matter and to honour the warranty if the
-              message concerned one.
-            </dd>
-          </div>
-        </dl>
-        <p className="mt-5 text-sm leading-relaxed text-fog">
-          We do not ask for a date of birth, a phone number, or an account
-          password, because the shop has no accounts to log into.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-lg font-medium text-white-ice">Who else handles it</h2>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          We use a small number of service providers, each for one job. They
-          process your information on our instructions and are not permitted to
-          use it for their own purposes, except where a provider is separately
-          responsible for its own advertising data, as noted.
-        </p>
-        <ul className="mt-5 flex flex-col gap-3 border-t border-frost/8 pt-5">
-          {[
-            ["Shopify", "Checkout, payment processing and order records. Canada and the United States."],
-            ["Meta Platforms", "Advertising measurement. We send Meta a record of purchases so that advertising can be attributed, including a hashed form of your email address and IP address. Meta is separately responsible for what it does with advertising data. United States."],
-            ["Resend", "Sends order confirmations and, if a checkout is not completed, one reminder. United States."],
-            ["Vercel", "Hosts the site and keeps short-lived server logs, which include IP addresses. United States."],
-            ["Supabase", "Stores order records. United States."],
-          ].map(([who, what]) => (
-            <li key={who} className="flex flex-col gap-1 sm:flex-row sm:gap-6">
-              <span className="shrink-0 font-mono text-[11px] tracking-[0.14em] text-ice-700 uppercase sm:w-40">
-                {who}
-              </span>
-              <span className="text-sm leading-relaxed text-fog">{what}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-5 text-sm leading-relaxed text-fog">
-          We do not sell personal information, and we do not share it with
-          anyone beyond the providers above.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-lg font-medium text-white-ice">
-          Where your information goes
-        </h2>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          Several of the providers above are based in the United States, so
-          your information is stored and processed outside Canada and outside
-          the European Economic Area. It is therefore accessible to the courts
-          and authorities of those countries under their own laws. We use
-          providers who commit to appropriate safeguards for those transfers,
-          and we keep the number of them small for exactly this reason.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-lg font-medium text-white-ice">
-          Why we are allowed to hold it
-        </h2>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          Order information is held because it is necessary to perform the
-          contract you entered into when you bought something — we cannot ship
-          a tin without an address. Advertising measurement is held on the
-          basis of consent where consent is required, and on the basis of our
-          legitimate interest in knowing which advertisements work where it is
-          not. Where we rely on consent you may withdraw it at any time, and
-          the{" "}
-          <Link href="/cookies" className="text-ice-700 underline underline-offset-2">
-            cookies page
-          </Link>{" "}
-          explains how.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-lg font-medium text-white-ice">How long we keep it</h2>
-        <ul className="mt-3 flex flex-col gap-2.5 text-sm leading-relaxed text-fog">
-          <li>
-            Order records: seven years, because Canadian tax law requires
-            business records to be retained for that period.
-          </li>
-          <li>
-            Advertising identifiers: ninety days from your most recent visit,
-            after which they expire on their own.
-          </li>
-          <li>
-            An abandoned checkout: thirty days, after which it is deleted
-            whether or not the order was ever completed.
-          </li>
-          <li>Correspondence: as long as the matter is open, plus the warranty period if it concerned one.</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2 className="text-lg font-medium text-white-ice">Your rights</h2>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          Wherever you live, you may ask us for a copy of the personal
-          information we hold about you, ask us to correct it, or ask us to
-          delete it. If you are in the European Economic Area or the United
-          Kingdom you may additionally object to processing, ask us to restrict
-          it, and ask for your information in a portable form.
-        </p>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          Email <Mail /> and say what you want done. We will respond within
-          thirty days. We may need to keep order records that tax law requires
-          us to retain, and we will say so plainly rather than refusing
-          without a reason.
-        </p>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          If you are unhappy with how we have handled a request, you may
-          complain to the Office of the Privacy Commissioner of Canada, or to
-          the data protection authority in your own country if you are in the
-          European Economic Area or the United Kingdom.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-lg font-medium text-white-ice">Marketing email</h2>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          We send an order confirmation, and one reminder if a checkout is
-          started but not completed. There is no newsletter and no mailing
-          list. Every message carries an unsubscribe link, and unsubscribing
-          stops everything except the receipt for an order you have actually
-          placed.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-lg font-medium text-white-ice">Age</h2>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          This site sells empty machined containers and ice packs. It does not
-          sell, ship or supply nicotine or tobacco in any form. It is not
-          directed at children, and we do not knowingly collect information
-          from anyone under sixteen. If you believe a child has given us
-          personal information, write to <Mail /> and it will be deleted.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-lg font-medium text-white-ice">Changes</h2>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          If this policy changes, the date at the top of the page changes with
-          it. Material changes to how we use existing information will be sent
-          to anyone who has ordered from us, rather than left here to be
-          noticed.
+          Columbia V5J 5M8, Canada. Email <Mail />.
         </p>
       </section>
     </InfoPage>

@@ -2,175 +2,275 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { InfoPage } from "@/components/info-page";
 import { LegalMeta, Mail } from "@/components/legal";
-import { CURRENCY_LABEL, SHIPPING_FLAT, money } from "@/lib/catalog";
-import { leadTimeLabel, transitLabel } from "@/lib/fulfilment";
+import { CURRENCY_LABEL } from "@/lib/catalog";
 import { GUARANTEE_DAYS } from "@/lib/guarantee";
 
 export const metadata: Metadata = {
   title: "Terms of sale",
   description:
-    "The terms you buy under: what we sell, what it costs, when it arrives, how to send it back, and whose law governs the sale.",
+    "The terms and conditions that apply to purchases from Ice Tins Supply Co., including orders, pricing, delivery, returns, warranty and liability.",
   alternates: { canonical: "/terms" },
 };
 
 /**
- * Every number on this page is read from the same constants the shop charges
- * and displays, rather than typed out. Terms that quote a lead time or a
- * shipping rate the site has since changed are worse than no terms: they are
- * a written promise that contradicts the checkout.
+ * Conventional terms in conventional order.
+ *
+ * Delivery times, shipping rates and the guarantee detail are referenced by
+ * link rather than restated here. Terms that quote a figure the shop has
+ * since changed are a written promise contradicting the checkout, and that
+ * failure is not hypothetical on this site — the bundle price did exactly
+ * that. One statement of a number, on the page that owns it.
  */
 export default function TermsPage() {
   return (
     <InfoPage
       eyebrow="Legal"
       title="Terms of sale"
-      intro="The terms you buy under. They are short because the shop is simple: one product, one configuration, one place to buy it."
+      intro="These terms and conditions apply to all purchases from Ice Tins Supply Co. Please read them before placing an order."
     >
       <LegalMeta />
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">Who you are buying from</h2>
+        <h2 className="text-lg font-medium text-white-ice">
+          1. Agreement to these terms
+        </h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          Ice Tins Supply Co., 8105 North Fraser Way, Burnaby, British
-          Columbia V5J 5M8, Canada. Placing an order means you accept these
-          terms. If something here does not work for you, write to <Mail />{" "}
-          before you order rather than after.
+          These terms form a binding agreement between you and Ice Tins Supply
+          Co. (&ldquo;Ice Tins&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;), of
+          8105 North Fraser Way, Burnaby, British Columbia V5J 5M8, Canada. By
+          placing an order or using this website you agree to them. If you do
+          not agree, please do not place an order.
         </p>
       </section>
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">What we sell</h2>
+        <h2 className="text-lg font-medium text-white-ice">2. Eligibility</h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          A machined aluminium container and gel ice packs. Nothing else. Ice
-          Tins Supply Co. does not sell, ship or supply nicotine, tobacco or
-          any consumable product in any form, anywhere, and nothing on this
-          site should be read as an offer to do so. What you put in the tin is
-          your own business and your own responsibility, including compliance
-          with the law where you live.
-        </p>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          You must be old enough to enter a contract where you live in order
-          to buy from us.
+          You must be of legal age to form a binding contract in your
+          jurisdiction, and you must provide accurate and complete information
+          when placing an order. We may refuse or cancel any order at our
+          discretion.
         </p>
       </section>
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">Orders and acceptance</h2>
+        <h2 className="text-lg font-medium text-white-ice">
+          3. Products and descriptions
+        </h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          An order is an offer to buy. The contract forms when we send the
-          confirmation email, not when the payment clears. If we cannot fulfil
-          an order — a pricing error, an item we cannot make, an address we
-          cannot ship to — we will cancel it and refund you in full, and we
-          will tell you why.
+          We sell machined metal containers and gel ice packs. Ice Tins does
+          not sell, ship or supply nicotine, tobacco, or any consumable
+          product, in any form or in any territory. Nothing on this website
+          constitutes an offer to supply such products.
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          We take care to describe products accurately, but colours,
+          photography and finish may vary slightly, and specifications may be
+          improved without notice. Performance figures are stated for the
+          conditions described alongside them and are not guarantees for other
+          conditions.
         </p>
       </section>
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">Prices and payment</h2>
+        <h2 className="text-lg font-medium text-white-ice">
+          4. Orders and acceptance
+        </h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          All prices are in {CURRENCY_LABEL} and are shown before tax. Any
-          sales tax is calculated and displayed at checkout. Payment is taken
-          in full at checkout by our payment processor; we never receive or
-          store your card details.
-        </p>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          Prices can change, but never for an order already placed. Where a
-          price is shown alongside a higher one struck through, the struck
-          figure is our regular list price for the product.
+          Your order is an offer to purchase. A contract is formed only when we
+          send you an order confirmation. If we are unable to fulfil an order,
+          including where a product or price has been listed in error, we will
+          cancel it and refund any payment in full.
         </p>
       </section>
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">Delivery</h2>
+        <h2 className="text-lg font-medium text-white-ice">
+          5. Pricing and payment
+        </h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          Each tin is machined to order. The current lead time is{" "}
-          {leadTimeLabel()} to dispatch, then {transitLabel()} in transit.
-          Shipping is {money(SHIPPING_FLAT)} flat, and free on any order
-          containing both a tin and a Chillcore three-pack. These are
-          estimates in good faith, not guaranteed dates; a courier delay is
-          not something we can promise away.
+          Prices are stated in {CURRENCY_LABEL} and exclude applicable sales
+          taxes, which are calculated and displayed at checkout. Payment is
+          taken in full at the time of order by our payment provider. Prices,
+          promotions and product availability may change at any time, but never
+          for an order already accepted.
         </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          6. Shipping and delivery
+        </h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          Risk passes to you on delivery. On international orders, customs
-          duties and import taxes are set by the destination country, are
-          payable by you, and are not included at checkout. Full detail is on
-          the{" "}
+          Delivery estimates, shipping rates and dispatch times are set out on
+          our{" "}
           <Link
             href="/shipping-returns"
             className="text-ice-700 underline underline-offset-2"
           >
             shipping and returns
           </Link>{" "}
-          page.
+          page and on the product page at the time of purchase. All such times
+          are estimates given in good faith and are not guaranteed. Title and
+          risk pass to you on delivery.
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          You are responsible for any customs duties, import taxes and charges
+          imposed by the destination country. These are not included at
+          checkout and are not within our control.
         </p>
       </section>
 
       <section>
         <h2 className="text-lg font-medium text-white-ice">
-          Returns and the guarantee
+          7. Returns and refunds
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          The {GUARANTEE_DAYS}-day cold-or-refund guarantee is a contractual
-          promise, not a goodwill gesture: use the tin normally for{" "}
-          {GUARANTEE_DAYS} days and, if it does not hold pouches colder or does
-          not keep spent ones separated, send it back for a full refund with
-          return shipping paid. It does not need to be unused or in its
-          original packaging.
-        </p>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          Opened Chillcore packs are not returnable, because a gel pack that
-          has been frozen cannot be resold. A pack whose seal arrives
-          compromised is a warranty replacement rather than a return. Nothing
-          here affects your statutory rights.
+          Purchases are covered by our {GUARANTEE_DAYS}-day cold-or-refund
+          guarantee. The full conditions, including how to start a return and
+          the limited exceptions that apply, are set out on our{" "}
+          <Link
+            href="/shipping-returns"
+            className="text-ice-700 underline underline-offset-2"
+          >
+            shipping and returns
+          </Link>{" "}
+          page. Nothing in these terms affects your statutory rights as a
+          consumer.
         </p>
       </section>
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">Warranty</h2>
+        <h2 className="text-lg font-medium text-white-ice">8. Warranty</h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          The aluminium shell carries a lifetime warranty against cracking or
-          a failed thread under normal use, for as long as you own it. What is
-          and is not covered, and how to claim, is set out on the{" "}
+          Products are covered by the warranty described on our{" "}
           <Link href="/warranty" className="text-ice-700 underline underline-offset-2">
-            warranty page
-          </Link>
-          . The ice pack is a consumable and is not covered.
+            warranty
+          </Link>{" "}
+          page, which sets out what is covered, what is excluded and how to make
+          a claim. Consumable items are not covered by that warranty.
         </p>
       </section>
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">Liability</h2>
+        <h2 className="text-lg font-medium text-white-ice">9. Acceptable use</h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          We are responsible for loss that is a foreseeable result of our
-          breaking these terms or failing to use reasonable care. We are not
-          responsible for loss that was not foreseeable, or for business
-          losses. Our total liability for any order is limited to what you paid
-          for it. Nothing in these terms limits liability for death or personal
-          injury caused by negligence, for fraud, or for anything else that
-          cannot lawfully be limited.
+          You agree not to use this website for any unlawful purpose, to
+          interfere with its operation or security, to purchase for resale
+          without our written consent, or to access it by automated means
+          without permission. Products are sold for personal use, and it is
+          your responsibility to ensure that your use of them complies with the
+          law where you live.
         </p>
       </section>
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">Governing law</h2>
+        <h2 className="text-lg font-medium text-white-ice">
+          10. Intellectual property
+        </h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          These terms are governed by the laws of British Columbia and the
-          applicable laws of Canada, and the courts of British Columbia have
-          jurisdiction. If you buy as a consumer elsewhere, you keep the
-          protection of the mandatory consumer law of the country you live in.
+          All content on this website, including text, photography, designs,
+          product designs and trade marks, is owned by Ice Tins Supply Co. or
+          its licensors and is protected by intellectual property law. You may
+          not reproduce, distribute or create derivative works from it without
+          our written permission, except as permitted by law. Media use of the
+          assets published on our{" "}
+          <Link href="/press" className="text-ice-700 underline underline-offset-2">
+            press
+          </Link>{" "}
+          page is permitted on the terms stated there.
         </p>
       </section>
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">Changes</h2>
+        <h2 className="text-lg font-medium text-white-ice">11. Disclaimers</h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          These terms may change. The version that applies to your order is the
-          one published when you placed it, and the date at the top of this
-          page tells you which that was. Your{" "}
+          The website is provided on an &ldquo;as is&rdquo; and &ldquo;as
+          available&rdquo; basis. To the fullest extent permitted by law, we
+          disclaim all warranties not expressly stated in these terms,
+          including implied warranties of merchantability and fitness for a
+          particular purpose. We do not warrant that the website will be
+          uninterrupted or error free.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          12. Limitation of liability
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          To the fullest extent permitted by law, we are not liable for
+          indirect, incidental, special, consequential or punitive damages, or
+          for loss of profit, revenue, data or business, however caused. Our
+          total liability arising out of or in connection with any order is
+          limited to the amount you paid for that order.
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          Nothing in these terms excludes or limits liability for death or
+          personal injury caused by negligence, for fraud or fraudulent
+          misrepresentation, or for any other liability that cannot lawfully be
+          excluded or limited. Some jurisdictions do not permit certain
+          exclusions, in which case the limitations above apply only to the
+          extent permitted.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">13. Indemnity</h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          You agree to indemnify and hold harmless Ice Tins Supply Co. and its
+          officers, employees and agents against any claim, loss or expense
+          arising from your breach of these terms or your misuse of the website
+          or the products.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">14. Force majeure</h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          We are not liable for any delay or failure to perform caused by
+          events beyond our reasonable control, including supply failures,
+          carrier disruption, labour disputes, natural events and acts of
+          government.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          15. Governing law and disputes
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          These terms are governed by the laws of the Province of British
+          Columbia and the federal laws of Canada applicable in it, and the
+          courts of British Columbia have exclusive jurisdiction. If you
+          purchase as a consumer resident elsewhere, you retain the benefit of
+          any mandatory consumer protection law of your country of residence.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">16. General</h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          If any provision of these terms is held to be unenforceable, the
+          remainder continues in effect. Our failure to enforce a provision is
+          not a waiver of it. These terms, together with our{" "}
           <Link href="/privacy" className="text-ice-700 underline underline-offset-2">
             privacy policy
           </Link>{" "}
-          rights are separate and are not affected by changes here.
+          and the pages referenced above, constitute the entire agreement
+          between us in relation to your purchase.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          17. Changes and contact
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          We may revise these terms at any time. The version that applies to
+          your purchase is the one published when your order was accepted, and
+          the date at the top of this page shows when this version was issued.
+          Questions about these terms should be sent to <Mail />.
         </p>
       </section>
     </InfoPage>

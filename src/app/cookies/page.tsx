@@ -4,53 +4,36 @@ import { InfoPage } from "@/components/info-page";
 import { LegalMeta, Mail } from "@/components/legal";
 
 export const metadata: Metadata = {
-  title: "Cookies",
+  title: "Cookie policy",
   description:
-    "Every cookie and stored value this site sets, named, with what it is for, how long it lasts and how to refuse it.",
+    "How Ice Tins Supply Co. uses cookies and similar technologies, the categories in use, and how to control them.",
   alternates: { canonical: "/cookies" },
 };
 
 /**
- * The table below is the real list, taken from lib/attribution.ts and the
- * cart context. A cookie page that describes a category of site rather than
- * this one is the kind of document that makes a regulator look harder, and it
- * is trivially checkable by anyone who opens their browser tools.
+ * Categories rather than a table of individual cookie names.
  *
- * If a cookie is added, removed or renamed anywhere in the codebase, this
- * array is the other half of that change.
+ * A named table is exact on the day it is written and wrong the moment a
+ * cookie is renamed, added by a third party, or dropped — and it is the sort
+ * of detail nobody remembers to update. Categories describe what is happening
+ * without going stale, which is why almost every brand states them this way.
+ *
+ * The categories below must stay honest: there is genuinely no analytics
+ * suite, session recording or personalisation on this site, so none of them
+ * is listed.
  */
-const COOKIES = [
+const CATEGORIES = [
   {
-    name: "it_eid",
-    who: "Ice Tins",
-    what: "A random identifier with no meaning outside this site, so that a visit and a later purchase can be recognised as the same person for advertising measurement. It contains no name, email address or anything else about you.",
-    life: "90 days",
+    name: "Strictly necessary",
+    body: "Required for the website to function, including keeping the contents of your bag and carrying you securely through checkout. These cannot be switched off without breaking the site, and they do not require consent.",
   },
   {
-    name: "it_utm",
-    who: "Ice Tins",
-    what: "The campaign parameters from the link that first brought you here, so we can tell which advertisement led to a sale.",
-    life: "90 days",
+    name: "Functional",
+    body: "Remember choices you make so the site behaves consistently between visits. Refusing these does not prevent you from ordering.",
   },
   {
-    name: "_fbp",
-    who: "Meta",
-    what: "Set by the Meta Pixel to identify a browser across visits, and used for advertising measurement and targeting.",
-    life: "90 days",
-  },
-  {
-    name: "_fbc",
-    who: "Meta",
-    what: "Set when you arrive from a Meta advertisement, recording the click so the resulting purchase can be attributed to it.",
-    life: "90 days",
-  },
-];
-
-const STORED = [
-  {
-    name: "icetins:cart",
-    what: "What is in your bag, so it survives a refresh or a closed tab. It stays in your browser and is never sent to us until you check out.",
-    life: "Until you clear it or empty the bag",
+    name: "Advertising and measurement",
+    body: "Set by us and by our advertising partners, including Meta Platforms, to understand which advertisements lead to visits and purchases, and to measure campaign performance. These are the only cookies on this site set by a third party.",
   },
 ];
 
@@ -58,89 +41,109 @@ export default function CookiesPage() {
   return (
     <InfoPage
       eyebrow="Legal"
-      title="Cookies"
-      intro="Every cookie this site sets, by name, with what it does and how long it lasts. The list is short, and it is the whole list."
+      title="Cookie policy"
+      intro="This policy explains how Ice Tins Supply Co. uses cookies and similar technologies on www.icetins.com, and how you can control them."
     >
       <LegalMeta />
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">Cookies we set</h2>
-        <div className="mt-5 flex flex-col gap-6 border-t border-frost/8 pt-5">
-          {COOKIES.map((c) => (
-            <div key={c.name}>
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="font-mono text-sm text-white-ice">{c.name}</span>
-                <span className="font-mono text-[10px] tracking-[0.18em] text-ice-700 uppercase">
-                  {c.who}
-                </span>
-                <span className="ml-auto font-mono text-[11px] text-fog/70">{c.life}</span>
-              </div>
-              <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-fog">
-                {c.what}
-              </p>
-            </div>
-          ))}
-        </div>
+        <h2 className="text-lg font-medium text-white-ice">1. What cookies are</h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          Cookies are small text files placed on your device when you visit a
+          website. They are widely used to make websites work, to remember your
+          preferences, and to report on how a site is used. This policy also
+          covers similar technologies such as pixels and local storage, which
+          perform comparable functions.
+        </p>
       </section>
 
       <section>
         <h2 className="text-lg font-medium text-white-ice">
-          Stored in your browser, not a cookie
+          2. Categories we use
         </h2>
         <div className="mt-5 flex flex-col gap-6 border-t border-frost/8 pt-5">
-          {STORED.map((c) => (
+          {CATEGORIES.map((c) => (
             <div key={c.name}>
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="font-mono text-sm text-white-ice">{c.name}</span>
-                <span className="ml-auto font-mono text-[11px] text-fog/70">{c.life}</span>
-              </div>
-              <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-fog">
-                {c.what}
+              <h3 className="font-mono text-[11px] tracking-[0.18em] text-ice-700 uppercase">
+                {c.name}
+              </h3>
+              <p className="mt-2 max-w-[64ch] text-sm leading-relaxed text-fog">
+                {c.body}
               </p>
             </div>
           ))}
         </div>
-      </section>
-
-      <section>
-        <h2 className="text-lg font-medium text-white-ice">What we do not set</h2>
-        <p className="mt-3 text-sm leading-relaxed text-fog">
-          There is no analytics suite, no session recording, no heatmap, no
-          advertising network other than Meta, and no third-party cookie beyond
-          the two Meta ones named above. The shop has no accounts, so there is
-          no login cookie either.
+        <p className="mt-5 text-sm leading-relaxed text-fog">
+          We do not use cookies for session recording, behavioural profiling
+          beyond advertising measurement, or personalisation of the content you
+          see, and this website has no user accounts.
         </p>
       </section>
 
       <section>
-        <h2 className="text-lg font-medium text-white-ice">Refusing them</h2>
+        <h2 className="text-lg font-medium text-white-ice">
+          3. Third-party cookies
+        </h2>
         <p className="mt-3 text-sm leading-relaxed text-fog">
-          The four cookies above are for advertising measurement, and refusing
-          them does not affect anything you can do here — the bag, the checkout
-          and the guarantee all work without them.
+          Advertising and measurement cookies may be set by our advertising
+          partners when you visit the site. Those partners act as independent
+          controllers of the data they collect and handle it under their own
+          privacy policies, which we recommend reading alongside ours.
         </p>
-        <ul className="mt-4 flex flex-col gap-2.5 text-sm leading-relaxed text-fog">
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          4. How long they last
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          Some cookies last only for your browsing session and are removed when
+          you close your browser. Others persist for a limited period so that a
+          return visit can be recognised, and expire automatically. No cookie
+          set by this site is intended to persist beyond the period necessary
+          for the purpose it serves.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          5. How to control cookies
+        </h2>
+        <ul className="mt-3 flex flex-col gap-2.5 text-sm leading-relaxed text-fog">
           <li>
-            Every browser can block or delete cookies for a single site from
-            its own settings, and clearing them here removes all four.
+            Every major browser allows you to block or delete cookies for an
+            individual website, or for all websites, from its settings.
           </li>
           <li>
-            Meta lets you control how your activity off its apps is used, from
-            the Off-Facebook Activity settings in your Meta account.
+            Most browsers offer tracking protection that prevents third-party
+            advertising cookies from being set at all.
           </li>
           <li>
-            Browser-level tracking protection, or an extension that blocks
-            Meta&rsquo;s script, stops the two Meta cookies from being set at
-            all.
+            Advertising platforms provide their own controls over how activity
+            on other websites is used. For Meta, these are available in the
+            off-site activity settings of your Meta account.
           </li>
         </ul>
         <p className="mt-4 text-sm leading-relaxed text-fog">
-          If you would rather we deleted the measurement records associated
-          with you, email <Mail /> and we will. The{" "}
+          Blocking advertising and measurement cookies does not affect your
+          ability to browse the site, place an order, or rely on our guarantee.
+          Blocking strictly necessary cookies may prevent parts of the site
+          from working.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-medium text-white-ice">
+          6. Changes and contact
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-fog">
+          We may update this policy from time to time, and the date at the top
+          of this page shows when it was last revised. How the information
+          collected through cookies is used more generally is described in our{" "}
           <Link href="/privacy" className="text-ice-700 underline underline-offset-2">
             privacy policy
-          </Link>{" "}
-          explains what those records contain and who else holds them.
+          </Link>
+          . Questions may be sent to <Mail />.
         </p>
       </section>
     </InfoPage>
