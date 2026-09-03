@@ -23,6 +23,7 @@ import {
   tinOnSale,
   currentPrice,
   money,
+  moneyExact,
 } from "@/lib/catalog";
 import {
   LEAD_TIME_WEEKS,
@@ -459,8 +460,9 @@ export default async function IceTinPage() {
                 One pack ships in every tin. A three-pack keeps a frozen
                 spare available at all times —{" "}
                 <span className="text-frost">
-                  ordered with a tin, the two come to {money(bundlePair().total)}{" "}
-                  delivered instead of {money(bundlePair().list)}.
+                  ordered with a tin they add {money(bundlePair().step)}, which is{" "}
+                  {moneyExact(bundlePair().total)} delivered against{" "}
+                  {moneyExact(bundlePair().alone)} for the tin on its own.
                 </span>
               </p>
             </div>

@@ -8,6 +8,7 @@ import {
   currentPrice,
   tinOnSale,
   money,
+  moneyExact,
 } from "@/lib/catalog";
 import { availabilityShort } from "@/lib/fulfilment";
 import { AddButton } from "./add-button";
@@ -149,8 +150,9 @@ export async function Collection() {
             {/* the pair, totalled — the offer was previously stated as a
                 deduction the reader had to apply to a price on another card */}
             <p className="mt-2.5 text-sm leading-relaxed text-frost">
-              Ordered with a tin, the two come to {money(bundlePair().total)}{" "}
-              delivered instead of {money(bundlePair().list)}.
+              Ordered with a tin they add {money(bundlePair().step)}:{" "}
+              {moneyExact(bundlePair().total)} delivered, against{" "}
+              {moneyExact(bundlePair().alone)} for the tin on its own.
             </p>
 
             {/* two columns, so four short points fill the row the photo sets

@@ -4,33 +4,34 @@ import { useEffect, useRef, useState } from "react";
 import { CheckIcon, PlusIcon } from "@phosphor-icons/react/dist/ssr";
 import { useCart } from "./cart/cart-context";
 import { ProductArt } from "./product-art";
-import { BUNDLE_SAVING, CATALOG, bundlePair, money } from "@/lib/catalog";
+import { BUNDLE_SAVING, CATALOG, bundlePair, money, moneyExact } from "@/lib/catalog";
 
 type State = "idle" | "adding" | "added";
 
 /**
- * The tin-and-pack offer, made legible and actionable in one block.
+ * The tin-and-pack offer, stated the way a shopper would repeat it.
  *
- * Before this, the offer was spread across three surfaces as prose — "$9.99
- * off and free shipping" under a CTA, a sentence on the shop card, a line in
- * the bag — and never once totalled. A shopper had to hold four numbers in
- * their head to work out that the pair costs $59.99 rather than $77.98. Most
- * will not, so most never saw an offer at all.
+ * The offer was true, and fully explained, and still close to unusable. It
+ * was written as a mechanism — a $49.99 tin, a $19.99 pack, $9.99 off, and
+ * shipping waived over $55 — which is four figures and two rules, and asks a
+ * shopper to do the sum before they can tell whether it is worth taking.
+ * Nobody does that sum. Most met no offer at all.
  *
- * Two rules it follows:
+ * Set against the only alternative they have, all of it collapses into one
+ * comparison: the tin on its own is $57.99 delivered, the tin with three
+ * packs is $59.99 delivered. Two totals, and the packs cost two dollars. The
+ * mechanism is still here, once, underneath — as the reason the number is
+ * what it is rather than as the thing to be worked out.
  *
- *   It states the total, not just the deduction. "Save $9.99" is a discount;
- *   "$77.98 → $59.99" is a decision a buyer can make without arithmetic.
- *
- *   It never claims the offer is applied when it is not. Once the pack is in
- *   the bag it stops selling and confirms, because a panel still asking for
- *   something the shopper has already done reads as broken.
+ * Both totals rather than the difference alone, deliberately. Two dollars is
+ * only the step for a single tin: a second tin already clears the free
+ * shipping threshold, so the pack costs its usual ten from there. Printing
+ * both figures scopes the claim to the case it is true for, instead of
+ * leaving a headline that quietly stops applying.
  *
  * Prices come from the local catalogue rather than the live Shopify figures
- * the product page is handed, which is the same source the bag itself totals
- * from — so this card and the bag can never disagree with each other. If the
- * two ever diverge from Shopify, both are wrong together and the checkout
- * response is what corrects them.
+ * the product page is handed, which is the same source the bag totals from —
+ * so this card and the bag can never disagree with each other.
  */
 export function BundleCard({
   /** "page" carries the full frame; "drawer" is the flatter version for the bag */
@@ -48,28 +49,12 @@ export function BundleCard({
   useEffect(() => () => timers.current.forEach(window.clearTimeout), []);
 
   // The offer renders on the server in its selling state and only changes for
-  // the minority who already hold both halves. Waiting for the bag to be read
-  // before drawing anything would keep the most valuable block on the page out
-  // of the initial HTML, so it would pop in after hydration and be invisible
-  // to anything that does not run JavaScript.
+  // the minority who already hold both halves, so it sits in the initial HTML
+  // rather than appearing after hydration.
   const hasPack = cart.ready && cart.lines.some((l) => l.id === "chillcore-3");
   const hasTin = cart.ready && cart.lines.some((l) => l.id === "ice-tin");
 
   const pair = bundlePair();
-
-  /**
-   * What the pack actually costs this shopper, right now.
-   *
-   * A bag holding one tin is $57.99 with shipping; the pair is $59.99
-   * delivered. So the three-pack — $19.99 on its own — is two dollars from
-   * here, and that is a far stronger sentence than "save $9.99". Only shown
-   * when the bag is exactly one tin, because that is the only arrangement
-   * where the difference is this clean and this true.
-   */
-  const soleTin =
-    cart.lines.length === 1 && cart.lines[0]?.id === "ice-tin" && cart.lines[0].qty === 1;
-  const step = pair.total - cart.total;
-  const showStep = soleTin && step > 0;
 
   const add = () => {
     if (state !== "idle") return;
@@ -81,7 +66,7 @@ export function BundleCard({
     );
   };
 
-  // both halves present: confirm the saving, stop selling it
+  // both halves present: confirm what it cost, stop selling it
   if (hasPack && hasTin) {
     return (
       <div
@@ -89,9 +74,9 @@ export function BundleCard({
       >
         <CheckIcon size={15} weight="bold" className="mt-0.5 shrink-0 text-ice-700" />
         <p className="text-sm leading-relaxed text-ice-700">
-          <span className="font-medium">Pair applied.</span>{" "}
-          {money(BUNDLE_SAVING)} off and free shipping — {money(pair.saving)} less
-          than buying the two separately.
+          <span className="font-medium">Packs added.</span> Shipping is free and{" "}
+          {money(BUNDLE_SAVING)} is off, so the three-pack added {money(pair.step)}{" "}
+          to this order.
         </p>
       </div>
     );
@@ -116,10 +101,10 @@ export function BundleCard({
 
         <div className="min-w-0 flex-1">
           <p className="font-mono text-[10px] tracking-[0.2em] text-ice-700 uppercase">
-            Buy the pair
+            Add to your order
           </p>
           <p className="mt-1.5 text-[15px] leading-tight font-medium text-white-ice">
-            The Ice Tin + {pack.name}
+            Three spare ice packs for {money(pair.step)}
           </p>
           <p className="mt-1.5 text-xs leading-relaxed text-frost">
             One pack ships inside the tin. A three-pack means one is always
@@ -128,33 +113,29 @@ export function BundleCard({
         </div>
       </div>
 
-      {/* The two totals, side by side — the whole point of this component.
-          The saving used to sit in a solid blue pill; it says the same thing
-          set as a label, and matches how every other price on the site is
-          now marked. Current price first, struck price second, the order
-          used in the hero, the shop card and the buy box. */}
-      <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-ice-500/15 pt-4">
-        <span className="font-mono text-2xl tracking-tight text-white-ice">
-          {money(pair.total)}
-        </span>
-        <span className="font-mono text-sm text-fog line-through decoration-fog/50">
-          {money(pair.list)}
-        </span>
-        <span className="font-mono text-[11px] tracking-[0.16em] text-ice-700 uppercase">
-          Save {money(pair.saving)}
-        </span>
-      </div>
+      {/* the offer itself: two totals, both delivered, nothing to work out */}
+      <dl className="mt-4 border-t border-ice-500/15 pt-3">
+        <div className="flex items-baseline justify-between gap-4 py-1">
+          <dt className="text-sm text-fog">The tin on its own</dt>
+          <dd className="shrink-0 font-mono text-sm text-fog">
+            {moneyExact(pair.alone)} delivered
+          </dd>
+        </div>
+        <div className="mt-1 flex items-baseline justify-between gap-4 border-t border-ice-500/10 pt-2">
+          <dt className="text-sm font-medium text-white-ice">
+            The tin and three packs
+          </dt>
+          <dd className="shrink-0 font-mono text-lg text-white-ice">
+            {moneyExact(pair.total)} delivered
+          </dd>
+        </div>
+      </dl>
 
-      <p className="mt-2 text-xs text-fog">
-        {money(pair.tin)} tin + {money(pair.pack)} pack, less {money(BUNDLE_SAVING)}, and
-        shipping is free on the pair.
+      {/* the mechanism, once, as the reason rather than the puzzle */}
+      <p className="mt-2.5 text-xs leading-relaxed text-fog">
+        Ordered together the pair ships free and {money(BUNDLE_SAVING)} comes
+        off, which is how a {money(pair.pack)} three-pack adds {money(pair.step)}.
       </p>
-
-      {showStep && (
-        <p className="mt-2 text-xs font-medium text-ice-700">
-          {money(step)} more than your bag as it stands, for a {money(pair.pack)} pack.
-        </p>
-      )}
 
       <button
         onClick={add}
@@ -171,12 +152,14 @@ export function BundleCard({
         ) : state === "added" ? (
           <>
             <CheckIcon size={14} weight="bold" />
-            Pack added
+            Packs added
           </>
         ) : (
           <>
             <PlusIcon size={14} weight="bold" />
-            {hasTin ? `Add the pack — ${money(pair.total)} for both` : "Add the pack"}
+            {hasTin
+              ? `Add the packs — ${moneyExact(pair.total)} delivered`
+              : "Add the three-pack"}
           </>
         )}
       </button>

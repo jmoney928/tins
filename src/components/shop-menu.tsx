@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
-import { CATALOG, bundlePair, currentPrice, money } from "@/lib/catalog";
+import { CATALOG, bundlePair, currentPrice, money, moneyExact } from "@/lib/catalog";
 
 /**
  * The panel that drops under "Shop".
@@ -105,9 +105,11 @@ export function ShopMenu({ open, onClose }: { open: boolean; onClose: () => void
                 thing worth putting in it */}
             <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-frost/8 pt-6">
               <p className="text-sm text-fog">
-                Tin and pack together:{" "}
-                <span className="text-white-ice">{money(bundlePair().total)} delivered</span>,
-                against {money(bundlePair().list)} apart.
+                {moneyExact(bundlePair().alone)} delivered for the tin, or{" "}
+                <span className="text-white-ice">
+                  {moneyExact(bundlePair().total)} with three spare ice packs
+                </span>
+                .
               </p>
               <Link
                 href="/products/ice-tin"

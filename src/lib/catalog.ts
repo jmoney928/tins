@@ -277,5 +277,23 @@ export function bundlePair(now?: Date) {
   const pack = currentPrice("chillcore-3", now);
   const list = tin + pack + SHIPPING_FLAT;
   const total = tin + pack - BUNDLE_SAVING;
-  return { tin, pack, list, total, saving: list - total };
+
+  /**
+   * `alone` and `step` are the two numbers a shopper can actually use.
+   *
+   * The offer was being explained as a mechanism — a $49.99 tin, a $19.99
+   * pack, $9.99 off, shipping waived — which is four figures and two rules,
+   * and nobody standing in a shop does that arithmetic. Set against the only
+   * alternative they have, it collapses into one sentence: a tin on its own
+   * is $57.99 delivered, the tin with three packs is $59.99 delivered, so the
+   * packs cost two dollars.
+   *
+   * `step` is a property of the prices, not of anyone's basket, so it is
+   * equally true on a product page with an empty bag. It is only this small
+   * for a single tin — a second tin already ships free, so the pack costs the
+   * usual $10 from there — which is why the card states both totals rather
+   * than the difference on its own.
+   */
+  const alone = tin + SHIPPING_FLAT;
+  return { tin, pack, list, total, alone, step: total - alone, saving: list - total };
 }

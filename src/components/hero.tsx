@@ -137,7 +137,7 @@ export function Hero() {
           </li>
           <li className="flex items-center gap-2">
             <TruckIcon size={14} weight="light" className="text-ice-500" />
-            Free shipping on a tin and a pack — {money(bundlePair().total)} for both
+            Three spare ice packs for {money(bundlePair().step)} with a tin
           </li>
           <li className="flex items-center gap-2">
             <ShieldCheckIcon size={14} weight="light" className="text-ice-500" />
