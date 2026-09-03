@@ -13,6 +13,11 @@ import { Splatter } from "./splatter";
  * The numbers are not restated in the prose. Each already sits in 36px type
  * to the left of its own sentence, and repeating it there cost the row its
  * first clause without telling the reader anything.
+ *
+ * All three are measurements of the same daily cycle, which is what earns
+ * them a section headed "Tested before release". A row counting prototypes
+ * was a fact about the workshop rather than about the tin, and it is the one
+ * number here a buyer could not do anything with.
  */
 const FACTS = [
   {
@@ -26,13 +31,14 @@ const FACTS = [
     body: "The same can in the same room, with nothing in the ice tray. Aluminium on its own holds fridge temperature for an hour — the other five come from the frozen pack.",
   },
   {
-    n: "31",
-    k: "Prototypes before this",
-    // The old version read as a census — thirty-one units, then nine, four
-    // and one accounted for — which leaves seventeen unexplained for any
-    // reader who adds up. Specifics that do not reconcile invite exactly the
-    // scrutiny they fail. These are the outcomes worth naming, not a tally.
-    body: "Machined and carried through the same conditions before the shell was signed off. Nine leaked at the seam, four cracked a thread, and one has been on continuous cold test since the first batch.",
+    // Was a prototype count. How many test units preceded this one is a fact
+    // about us, not about the tin, and it sat in a section of measurements a
+    // buyer can act on. Recharge time is the third number in the daily cycle
+    // the other two rows describe: how long it holds, what the metal does
+    // alone, and how long before it is ready again.
+    n: "90 min",
+    k: "Freezer to ready",
+    body: "From room temperature to fully set, laid flat in a standard freezer drawer. Leaving it in longer does no harm, so a spare can simply live there.",
   },
 ];
 
