@@ -96,7 +96,7 @@ const NOTES = CARRIERS.slice(0, 3);
 function buildFaqs(promoToday: boolean) {
   return [
     {
-      q: "What's inside The Ice Tin?",
+      q: "What is inside The Ice Tin?",
       a: "Three floors in the footprint of a standard can: an empty top floor for spent pouches, a middle floor that holds 25 fresh pouches, and a slim Chillcore ice pack in the base.",
     },
     {
@@ -137,7 +137,7 @@ function buildFaqs(promoToday: boolean) {
       a: `Count ${leadTimeLabel()} for your tin to be made and dispatched, then ${transitLabel()} for the courier. A tracking number is emailed the morning it leaves the workshop. The wait is stated here, on the shop page and at checkout rather than after the payment.`,
     },
     {
-      q: "What if I don't like it?",
+      q: "What if it is not for me?",
       a: `${GUARANTEE_MEDIUM} There is no requirement that it be unused or in its original packaging. ${GUARANTEE_EXCEPTION}`,
     },
     {
