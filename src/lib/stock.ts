@@ -9,11 +9,14 @@ import { db, dbConfig } from "./db";
  * restart and is per-instance, so it must never be what production uses.
  */
 
+/**
+ * Local-development fallback only. The catalogue no longer carries per-product
+ * counts — Shopify is the only thing that can refuse a sale — so every product
+ * is unlimited here, and the Shopify path in the checkout route never reaches
+ * this file at all.
+ */
 const fallback = new Map<string, number>(
-  Object.values(CATALOG).map((p) => [
-    p.id,
-    p.remaining ?? Number.POSITIVE_INFINITY,
-  ]),
+  Object.values(CATALOG).map((p) => [p.id, Number.POSITIVE_INFINITY]),
 );
 
 export type StockRead =

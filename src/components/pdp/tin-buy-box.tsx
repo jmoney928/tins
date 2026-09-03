@@ -43,11 +43,9 @@ type State = "idle" | "adding" | "added";
   * prices.
   */
 export function TinBuyBox({
-  remaining,
   price,
   compareAt,
 }: {
-  remaining: number | null;
   price?: number;
   compareAt?: number | null;
 }) {
@@ -157,13 +155,14 @@ export function TinBuyBox({
 
         {/* buy box */}
         <div>
-          {/* A live unit count over a made-to-order product reads as "yours
-              ships today", which is not what the lead time below promises.
-              The count is still worth having when it runs out — that is the
-              one case where it tells the shopper something they need. */}
+          {/* No unit count. A number over a made-to-order product reads as
+              "yours ships today", which is not what the lead time below
+              promises, and Shopify is the only thing that can refuse a sale
+              anyway — a figure rendered here is a second answer to a question
+              the checkout has already settled. */}
           <p className="flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-ice-700 uppercase">
             <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
-            {remaining !== null && remaining <= 0 ? "Currently unavailable" : availabilityShort()}
+            {availabilityShort()}
           </p>
 
           <h1 className="mt-3 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">

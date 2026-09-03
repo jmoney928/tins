@@ -150,9 +150,7 @@ export function QuickView({
 
                 <div className="flex flex-col p-6 sm:p-8 md:pl-2">
                   <p className="font-mono text-[10px] tracking-[0.2em] text-ice-700 uppercase">
-                    {product.remaining !== null && product.remaining <= 0
-                      ? "Currently unavailable"
-                      : availabilityShort()}
+                    {availabilityShort()}
                   </p>
                   <h2 className="mt-3 text-3xl leading-none tracking-tighter text-white-ice">
                     {product.name}

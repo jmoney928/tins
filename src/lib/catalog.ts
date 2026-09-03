@@ -15,8 +15,6 @@ export type Product = {
   blurb: string;
   points: string[];
   specs: { k: string; v: string }[];
-  /** null when unlimited; otherwise the current stock count */
-  remaining: number | null;
 };
 
 export const CATALOG: Record<string, Product> = {
@@ -71,7 +69,6 @@ export const CATALOG: Record<string, Product> = {
       { k: "Cold hold", v: "6 hours" },
       { k: "Shell", v: "6061-T6 aluminium" },
     ],
-    remaining: 142,
   },
   "chillcore-3": {
     id: "chillcore-3",
@@ -100,7 +97,6 @@ export const CATALOG: Record<string, Product> = {
       { k: "Weight", v: "18 g each" },
       { k: "Fill", v: "Food-safe gel" },
     ],
-    remaining: null,
   },
 };
 

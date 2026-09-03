@@ -39,7 +39,6 @@ import { aggregateRatingJsonLd } from "@/lib/social-proof";
 import { Guarantee } from "@/components/guarantee";
 import { SPECS, STEPS } from "@/lib/products";
 import { CARRIERS } from "@/lib/testers";
-import { remaining } from "@/lib/stock";
 import { liveCatalog } from "@/lib/live-catalog";
 import { ORG_NAME, SITE_URL, absoluteUrl } from "@/lib/seo";
 
@@ -158,16 +157,11 @@ function buildFaqs(promoToday: boolean) {
 export default async function IceTinPage() {
   const tin = CATALOG["ice-tin"];
   const core = CATALOG["chillcore-3"];
-  // Shopify is the authority for price and stock once it can answer;
-  // Supabase and the local catalogue remain the fallback while the
-  // migration is in progress, so an outage degrades rather than breaks.
+  // Shopify is the authority for price once it can answer; the local
+  // catalogue remains the fallback, so an outage degrades rather than breaks.
   const live = await liveCatalog();
   const liveTin = live?.["ice-tin"];
 
-  const stock = await remaining("ice-tin");
-  const left =
-    liveTin?.stock ??
-    (stock.ok && Number.isFinite(stock.remaining) ? stock.remaining : (tin.remaining ?? null));
   const promoToday = freeShippingToday();
   const onSale = tinOnSale();
   const unitPrice = liveTin?.price ?? currentPrice("ice-tin");
@@ -186,8 +180,7 @@ export default async function IceTinPage() {
       url: PDP_URL,
       priceCurrency: "CAD",
       price: (unitPrice / 100).toFixed(2),
-      availability:
-        left === null || left > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      availability: "https://schema.org/InStock",
       itemCondition: "https://schema.org/NewCondition",
       seller: { "@type": "Organization", name: ORG_NAME },
       /**
@@ -268,7 +261,6 @@ export default async function IceTinPage() {
         {/* buy box */}
         <section id="top" className="mx-auto max-w-7xl px-4 sm:px-6 scroll-mt-24">
           <TinBuyBox
-            remaining={left}
             price={liveTin?.price}
             compareAt={liveTin ? liveTin.compareAt : undefined}
           />
