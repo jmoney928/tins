@@ -1,5 +1,19 @@
 import { Splatter } from "./splatter";
 
+/**
+ * Three rows, each stating one measurement and the conditions behind it.
+ *
+ * The middle row is the control, and it is the most persuasive line in the
+ * section: it is the only place the site proves the six hours comes from the
+ * frozen pack rather than from the metal. It used to bury that under a label
+ * reading "no core" — a word the site never defines, for an object it calls a
+ * Chillcore pack in every other sentence — and a body that named the same
+ * thing a third way, as "the tray empty".
+ *
+ * The numbers are not restated in the prose. Each already sits in 36px type
+ * to the left of its own sentence, and repeating it there cost the row its
+ * first clause without telling the reader anything.
+ */
 const FACTS = [
   {
     n: "6 hours",
@@ -8,13 +22,17 @@ const FACTS = [
   },
   {
     n: "1 hour",
-    k: "Cold hold, no core",
-    body: "The same can measured with the tray empty. The aluminium alone accounts for one hour; the ice pack provides the remaining five.",
+    k: "Cold hold, empty tray",
+    body: "The same can in the same room, with nothing in the ice tray. Aluminium on its own holds fridge temperature for an hour — the other five come from the frozen pack.",
   },
   {
     n: "31",
     k: "Prototypes before this",
-    body: "Thirty-one machined test units were produced from spring onwards. Nine leaked, four cracked a thread, and one remains on long-term cold test. The unit sold today is the thirty-second revision.",
+    // The old version read as a census — thirty-one units, then nine, four
+    // and one accounted for — which leaves seventeen unexplained for any
+    // reader who adds up. Specifics that do not reconcile invite exactly the
+    // scrutiny they fail. These are the outcomes worth naming, not a tally.
+    body: "Machined and carried through the same conditions before the shell was signed off. Nine leaked at the seam, four cracked a thread, and one has been on continuous cold test since the first batch.",
   },
 ];
 
