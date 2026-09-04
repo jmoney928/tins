@@ -22,7 +22,7 @@ export const CARRIERS = [
     city: "Chicago",
     tint: "from-[#2e9dc8] to-[#12475f] text-white",
     quote:
-      "August behind a bar with no air. In a normal can the last few pouches of a double are warm and taste like nothing — a warm pouch is a warm beer, you will have it but you will not enjoy it. With this they are the same at midnight as at four. It sits less flat in an apron pocket than the old one did, which I have got used to.",
+      "I work doubles behind a bar in August with no air conditioning. With a normal can, the last few pouches of the night are warm and taste flat. With this one, the pouch I take at midnight is as cold as the one I took at four. It is bulkier than a plastic can and sits a little awkwardly in an apron pocket, but I got used to that within a week.",
   },
   {
     name: "Kasper Lindqvist",
