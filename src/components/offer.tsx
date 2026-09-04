@@ -9,6 +9,8 @@ import {
   moneyExact,
 } from "@/lib/catalog";
 import { AddPairButton } from "./add-pair-button";
+import { ProductArt } from "./product-art";
+import { CATALOG } from "@/lib/catalog";
 import { Reveal } from "./reveal";
 
 /**
@@ -26,6 +28,15 @@ import { Reveal } from "./reveal";
 export function Offer() {
   if (freeShippingToday()) return null;
   const pair = bundlePair();
+  const tin = CATALOG["ice-tin"];
+  const pack = CATALOG["chillcore-3"];
+
+  // what each column buys, as a picture before it is a sum
+  const Shot = ({ product }: { product: typeof tin }) => (
+    <div className="h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-ink sm:h-28 sm:w-28">
+      <ProductArt product={product} sizes="112px" className="h-full w-full" />
+    </div>
+  );
 
   const Row = ({
     k,
@@ -62,7 +73,8 @@ export function Offer() {
 
         <div className="mt-12 grid grid-cols-1 gap-5 lg:grid-cols-2">
           <Reveal className="glass-edge flex flex-col rounded-[2rem] bg-paper/75 p-7 backdrop-blur-sm sm:p-8">
-            <p className="font-mono text-[11px] tracking-[0.2em] text-fog uppercase">
+            <Shot product={tin} />
+            <p className="mt-6 font-mono text-[11px] tracking-[0.2em] text-fog uppercase">
               The tin on its own
             </p>
             <dl className="mt-5 divide-y divide-frost/8 border-t border-frost/8">
@@ -94,7 +106,12 @@ export function Offer() {
             delay={110}
             className="relative flex flex-col rounded-[2rem] border border-ice-500/30 bg-ice-100/60 p-7 sm:p-8"
           >
-            <p className="font-mono text-[11px] tracking-[0.2em] text-ice-700 uppercase">
+            <div className="flex items-center gap-3">
+              <Shot product={tin} />
+              <span className="font-mono text-xl text-ice-700">+</span>
+              <Shot product={pack} />
+            </div>
+            <p className="mt-6 font-mono text-[11px] tracking-[0.2em] text-ice-700 uppercase">
               The tin and three spare packs
             </p>
             <dl className="mt-5 divide-y divide-ice-500/12 border-t border-ice-500/15">
