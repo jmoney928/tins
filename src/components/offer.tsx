@@ -31,10 +31,15 @@ export function Offer() {
   const tin = CATALOG["ice-tin"];
   const pack = CATALOG["chillcore-3"];
 
-  // what each column buys, as a picture before it is a sum
-  const Shot = ({ product }: { product: typeof tin }) => (
-    <div className="h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-ink sm:h-28 sm:w-28">
-      <ProductArt product={product} sizes="112px" className="h-full w-full" />
+  // what each column buys, in the same photo panel the shop cards use:
+  // a dark rounded plate beside the card, not a thumbnail inside it
+  const Panel = ({ product, className = "" }: { product: typeof tin; className?: string }) => (
+    <div className={`relative min-h-0 overflow-hidden rounded-[2rem] bg-ink ${className}`}>
+      <ProductArt
+        product={product}
+        sizes="(max-width: 640px) 92vw, 14rem"
+        className="absolute inset-0 h-full w-full"
+      />
     </div>
   );
 
@@ -72,9 +77,10 @@ export function Offer() {
         </Reveal>
 
         <div className="mt-12 grid grid-cols-1 gap-5 lg:grid-cols-2">
-          <Reveal className="glass-edge flex flex-col rounded-[2rem] bg-paper/75 p-7 backdrop-blur-sm sm:p-8">
-            <Shot product={tin} />
-            <p className="mt-6 font-mono text-[11px] tracking-[0.2em] text-fog uppercase">
+          <Reveal className="grid grid-cols-1 gap-5 sm:grid-cols-[minmax(0,14rem)_1fr]">
+          <Panel product={tin} className="aspect-[4/3] sm:aspect-auto" />
+          <div className="glass-edge flex flex-col rounded-[2rem] bg-paper/75 p-7 backdrop-blur-sm sm:p-8">
+            <p className="font-mono text-[11px] tracking-[0.2em] text-fog uppercase">
               The tin on its own
             </p>
             <dl className="mt-5 divide-y divide-frost/8 border-t border-frost/8">
@@ -100,18 +106,17 @@ export function Offer() {
               />
             </Link>
             </div>
+          </div>
           </Reveal>
 
-          <Reveal
-            delay={110}
-            className="relative flex flex-col rounded-[2rem] border border-ice-500/30 bg-ice-100/60 p-7 sm:p-8"
-          >
-            <div className="flex items-center gap-3">
-              <Shot product={tin} />
-              <span className="font-mono text-xl text-ice-700">+</span>
-              <Shot product={pack} />
-            </div>
-            <p className="mt-6 font-mono text-[11px] tracking-[0.2em] text-ice-700 uppercase">
+          <Reveal delay={110} className="grid grid-cols-1 gap-5 sm:grid-cols-[minmax(0,14rem)_1fr]">
+          {/* the pair: both products on one plate, stacked */}
+          <div className="grid aspect-[4/3] grid-cols-2 gap-5 sm:aspect-auto sm:grid-cols-1 sm:grid-rows-2">
+            <Panel product={tin} />
+            <Panel product={pack} />
+          </div>
+          <div className="relative flex flex-col rounded-[2rem] border border-ice-500/30 bg-ice-100/60 p-7 sm:p-8">
+            <p className="font-mono text-[11px] tracking-[0.2em] text-ice-700 uppercase">
               The tin and three spare packs
             </p>
             <dl className="mt-5 divide-y divide-ice-500/12 border-t border-ice-500/15">
@@ -134,6 +139,7 @@ export function Offer() {
             <div className="mt-7">
               <AddPairButton label={`Add both — ${moneyExact(pair.total)} delivered`} />
             </div>
+          </div>
           </Reveal>
         </div>
       </div>
