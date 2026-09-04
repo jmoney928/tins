@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {
-  ArrowUpRightIcon,
   ArrowRightIcon,
   ShieldCheckIcon,
   TruckIcon,
@@ -12,6 +11,7 @@ import { Splatter } from "./splatter";
 import { CATALOG, bundlePair, currentPrice, money, tinOnSale } from "@/lib/catalog";
 import { GUARANTEE_SHORT } from "@/lib/guarantee";
 import { ReviewBadge } from "./review-badge";
+import { AddButton } from "./add-button";
 
 const PROOF = [
   ["3 floors", "spent, fresh, ice"],
@@ -115,28 +115,34 @@ export function Hero() {
           </div>
         </div>
 
+        {/*
+          The bag, from the hero. One product, one price, one button: a
+          visitor who arrives ready should not have to visit a second page
+          to act. The drawer that opens carries the pack offer, so the
+          shortest route to checkout still passes the upsell. The product
+          page remains one click away for the reader who wants the gallery
+          and the detail first.
+        */}
         <div className="mt-6 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
           <Magnetic strength={0.4}>
-            <Link
-              href="/products/ice-tin"
-              className="group flex items-center justify-center gap-3 rounded-full bg-ink px-7 py-4 text-sm font-medium text-paper transition-colors duration-300 ease-[var(--ease-glide)] hover:bg-ice-700 active:scale-[0.98]"
-            >
-              See the tin
-              <ArrowRightIcon
-                size={15}
-                weight="bold"
-                className="transition-transform duration-300 ease-[var(--ease-glide)] group-hover:translate-x-1"
-              />
-            </Link>
+            <AddButton
+              productId="ice-tin"
+              label={`Add to bag — ${money(currentPrice("ice-tin"))}`}
+              className="w-full px-7 py-4 sm:w-auto"
+            />
           </Magnetic>
 
-          <a
-            href="/cold-system"
-            className="flex items-center justify-center gap-2 rounded-full border border-frost/8 px-7 py-4 text-sm text-frost transition-all duration-300 ease-[var(--ease-glide)] hover:border-ice-500/40 hover:bg-slate-deep/40 active:scale-[0.98]"
+          <Link
+            href="/products/ice-tin"
+            className="group flex items-center justify-center gap-2 rounded-full border border-frost/8 px-7 py-4 text-sm text-frost transition-all duration-300 ease-[var(--ease-glide)] hover:border-ice-500/40 hover:bg-slate-deep/40 active:scale-[0.98]"
           >
-            How the cold works
-            <ArrowUpRightIcon size={15} weight="bold" />
-          </a>
+            See the tin
+            <ArrowRightIcon
+              size={15}
+              weight="bold"
+              className="transition-transform duration-300 ease-[var(--ease-glide)] group-hover:translate-x-1"
+            />
+          </Link>
         </div>
 
         {/* Trust strip. ReviewBadge shows stars only when a real average is

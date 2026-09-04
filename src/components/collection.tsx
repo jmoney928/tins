@@ -2,22 +2,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon, CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import {
-  bundlePair,
   CATALOG,
   CURRENCY_LABEL,
   currentPrice,
   tinOnSale,
   money,
-  moneyExact,
 } from "@/lib/catalog";
 import { AddButton } from "./add-button";
-import { QuickView } from "./quick-view";
 import { liveCatalog } from "@/lib/live-catalog";
 import { Reveal } from "./reveal";
 
 export async function Collection() {
   const tin = CATALOG["ice-tin"];
-  const core = CATALOG["chillcore-3"];
   const onSale = tinOnSale();
 
   // priced from Shopify where it can answer, from the local catalogue where
@@ -25,7 +21,6 @@ export async function Collection() {
   const live = await liveCatalog();
   const tinPrice = live?.["ice-tin"]?.price ?? currentPrice("ice-tin");
   const tinWas = live?.["ice-tin"]?.compareAt ?? tin.price;
-  const corePrice = live?.["chillcore-3"]?.price ?? core.price;
 
   return (
     <section id="collection" className="relative overflow-hidden py-20 sm:py-28">
@@ -38,7 +33,7 @@ export async function Collection() {
           {/* flat declarative on purpose — the two-tone headline runs in four
               other sections, and dropping it once is what keeps it working */}
           <h2 className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-balance text-white-ice sm:text-5xl">
-            One can, and the packs that go in it.
+            One can, made properly.
           </h2>
           <p className="mx-auto mt-5 max-w-[46ch] text-sm leading-relaxed text-fog">
             A single configuration, made properly, with no variants to
@@ -93,7 +88,7 @@ export async function Collection() {
               ))}
             </ul>
 
-            <div className="mt-auto flex items-center justify-between gap-4 border-t border-frost/8 pt-8">
+            <div className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-frost/8 pt-8">
               <span>
                 {onSale && (
                   <span className="block font-mono text-[10px] tracking-[0.22em] text-ice-700 uppercase">
@@ -112,83 +107,25 @@ export async function Collection() {
                   <span className="text-xs text-fog">{CURRENCY_LABEL}</span>
                 </span>
               </span>
-              <Link
-                href="/products/ice-tin"
-                className="group flex items-center gap-2.5 rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-colors duration-300 ease-[var(--ease-glide)] hover:bg-ice-700 active:scale-[0.98]"
-              >
-                See the tin
-                <ArrowRightIcon
-                  size={14}
-                  weight="bold"
-                  className="transition-transform duration-300 ease-[var(--ease-glide)] group-hover:translate-x-1"
-                />
-              </Link>
-            </div>
-          </div>
-          </Reveal>
-        </div>
-
-        {/* The refill borrows the tin's framing — same gutter, same radius, a
-            full-bleed photo panel beside a glass card — but at roughly half the
-            height, so it reads as the same family without rivalling the tin. */}
-        <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-[13rem_1fr] lg:grid-cols-[16rem_1fr]">
-          <Reveal className="grid">
-          <div className="relative overflow-hidden rounded-[2rem] bg-ink">
-            <Image
-              src={core.image!}
-              alt="Three Chillcore ice packs stacked, matte black with the engraved emblem"
-              width={1000}
-              height={1000}
-              sizes="(max-width: 640px) 92vw, 16rem"
-              className="h-full w-full object-cover"
-            />
-          </div>
-          </Reveal>
-
-          <Reveal delay={110} className="grid">
-          <div className="glass-edge flex flex-col rounded-[2rem] bg-paper/75 p-6 backdrop-blur-sm sm:p-7">
-            <h3 className="text-lg leading-tight tracking-tight text-white-ice">
-              {core.name}
-            </h3>
-            <p className="mt-1.5 text-sm leading-relaxed text-ice-700">
-              {core.tagline}
-            </p>
-            {/* the pair, totalled — the offer was previously stated as a
-                deduction the reader had to apply to a price on another card */}
-            <p className="mt-2.5 text-sm leading-relaxed text-frost">
-              Ordered with a tin they add {money(bundlePair().step)}:{" "}
-              {moneyExact(bundlePair().total)} delivered, against{" "}
-              {moneyExact(bundlePair().alone)} for the tin on its own.
-            </p>
-
-            {/* two columns, so four short points fill the row the photo sets
-                rather than leaving the card half empty */}
-            <ul className="mt-5 grid gap-x-8 gap-y-2.5 border-t border-frost/8 pt-5 sm:grid-cols-2">
-              {core.points.map((p) => (
-                <li key={p} className="flex items-start gap-3 text-sm text-frost">
-                  <CheckIcon
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/products/ice-tin"
+                  className="group flex items-center gap-2 rounded-full border border-frost/12 px-5 py-3 text-sm text-frost transition-all duration-300 ease-[var(--ease-glide)] hover:border-ice-500/50 hover:bg-slate-deep/40 active:scale-[0.98]"
+                >
+                  Details
+                  <ArrowRightIcon
                     size={14}
                     weight="bold"
-                    className="mt-1 shrink-0 text-ice-500"
+                    className="transition-transform duration-300 ease-[var(--ease-glide)] group-hover:translate-x-1"
                   />
-                  {p}
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-auto flex items-center justify-between gap-5 border-t border-frost/8 pt-5">
-              <span className="font-mono text-lg tracking-tight text-white-ice">
-                {money(corePrice)}
-                <span className="ml-2 text-xs text-fog">{CURRENCY_LABEL}</span>
-              </span>
-              <div className="flex items-center gap-3">
-                <QuickView productId="chillcore-3" className="hidden sm:flex" />
-                <AddButton productId="chillcore-3" label="Add pack" />
+                </Link>
+                <AddButton productId="ice-tin" label="Add to bag" className="px-6 py-3" />
               </div>
             </div>
           </div>
           </Reveal>
         </div>
+
       </div>
     </section>
   );

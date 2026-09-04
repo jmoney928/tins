@@ -16,6 +16,8 @@ import { SiteFooter } from "@/components/site-footer";
 import { ViewContent } from "@/components/view-content";
 import { Reveal } from "@/components/reveal";
 import { Offer } from "@/components/offer";
+import { FieldNotes } from "@/components/field-notes";
+import { FinalCta } from "@/components/final-cta";
 import {
   bundlePair,
   CATALOG,
@@ -40,7 +42,6 @@ import { GUARANTEE_BODY, GUARANTEE_EXCEPTION, GUARANTEE_MEDIUM } from "@/lib/gua
 import { aggregateRatingJsonLd } from "@/lib/social-proof";
 import { Guarantee } from "@/components/guarantee";
 import { SPECS, STEPS } from "@/lib/products";
-import { CARRIERS } from "@/lib/testers";
 import { liveCatalog } from "@/lib/live-catalog";
 import { ORG_NAME, SITE_URL, absoluteUrl } from "@/lib/seo";
 
@@ -83,8 +84,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 // live stock, checked on every request — a scarcity claim that goes stale is a lie
 export const dynamic = "force-dynamic";
-
-const NOTES = CARRIERS.slice(0, 3);
 
 /**
  * Answers real questions the rest of the page already makes — nothing here
@@ -375,47 +374,7 @@ export default async function IceTinPage() {
         </section>
 
         {/* field notes — real testers, named, no star ratings */}
-        <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
-          <Reveal>
-            <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
-              Field notes
-            </p>
-            <h2 className="mt-4 max-w-[22ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
-              Tested before you get one.
-            </h2>
-          </Reveal>
-
-          <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-3">
-            {NOTES.map((c, i) => (
-              <Reveal
-                as="figure"
-                key={c.name}
-                delay={i * 100}
-                className="glass-edge flex flex-col justify-between rounded-[1.75rem] bg-paper/75 p-6 backdrop-blur-sm sm:p-7"
-              >
-                <blockquote className="text-base leading-snug tracking-tight text-frost">
-                  &ldquo;{c.quote}&rdquo;
-                </blockquote>
-                <figcaption className="mt-7 flex items-center gap-3 border-t border-frost/8 pt-5">
-                  <span
-                    className={`grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br ${c.tint} font-mono text-[11px]`}
-                  >
-                    {c.name
-                      .split(" ")
-                      .map((p) => p[0])
-                      .join("")}
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm text-white-ice">{c.name}</span>
-                    <span className="block font-mono text-[11px] text-fog">
-                      {c.role} — {c.city}
-                    </span>
-                  </span>
-                </figcaption>
-              </Reveal>
-            ))}
-          </div>
-        </section>
+        <FieldNotes title="Tested before you get one." />
 
         {/* objections, answered before they're asked */}
         <section className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
@@ -509,40 +468,7 @@ export default async function IceTinPage() {
         </section>
 
         {/* final push */}
-        <section className="mx-auto mt-16 max-w-7xl px-4 pb-8 sm:mt-24 sm:px-6">
-          <Reveal className="glass-edge relative overflow-hidden rounded-[2.5rem] bg-abyss/80 px-6 py-14 text-center backdrop-blur-md sm:px-14 sm:py-16">
-            <div className="pointer-events-none absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(46,157,200,0.22),transparent_65%)] blur-3xl" />
-            <div className="relative">
-              <h2 className="mx-auto max-w-[24ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
-                Order the Ice Tin.
-              </h2>
-              <p className="mx-auto mt-4 max-w-[46ch] text-sm leading-relaxed text-fog">
-                {onSale ? (
-                  <>
-                    <span className="text-frost">{money(unitPrice)} CAD</span>{" "}
-                    <span className="text-fog line-through decoration-fog/50">
-                      {money(tin.price)}
-                    </span>{" "}
-                    at launch — one tin, one ice pack in the box. {dispatchShort()}
-                  </>
-                ) : (
-                  `${money(unitPrice)} CAD, one tin, one ice pack in the box. ${dispatchShort()}`
-                )}
-              </p>
-              <Link
-                href="#top"
-                className="group mt-8 inline-flex items-center justify-center gap-3 rounded-full bg-ink px-8 py-4 text-sm font-medium text-paper transition-colors duration-300 ease-[var(--ease-glide)] hover:bg-ice-700 active:scale-[0.98]"
-              >
-                Get the tin
-                <ArrowRightIcon
-                  size={15}
-                  weight="bold"
-                  className="transition-transform duration-300 ease-[var(--ease-glide)] group-hover:translate-x-1"
-                />
-              </Link>
-            </div>
-          </Reveal>
-        </section>
+        <FinalCta price={unitPrice} compareAt={onSale ? tin.price : null} action="top" />
       </main>
 
       <SiteFooter />
