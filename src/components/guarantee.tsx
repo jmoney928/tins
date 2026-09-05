@@ -16,7 +16,7 @@ import { Reveal } from "./reveal";
  * promise, in smaller type — a nervous reader should meet the confidence
  * first and the footnote second.
  */
-export function Guarantee() {
+export function Guarantee({ heading: H = "h2" }: { heading?: "h1" | "h2" }) {
   return (
     <section id="guarantee" className="relative overflow-hidden py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -30,9 +30,9 @@ export function Guarantee() {
               <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
                 The cold-or-refund guarantee
               </p>
-              <h2 className="mt-4 max-w-[20ch] text-3xl leading-[0.98] font-medium tracking-tighter text-white-ice sm:text-4xl">
+              <H className="mt-4 max-w-[20ch] text-3xl leading-[0.98] font-medium tracking-tighter text-white-ice sm:text-4xl">
                 {GUARANTEE_TITLE}
-              </h2>
+              </H>
               <p className="mt-5 max-w-[62ch] text-sm leading-relaxed text-fog">
                 {GUARANTEE_BODY}
               </p>

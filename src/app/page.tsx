@@ -11,7 +11,10 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
 import { Ticker } from "@/components/ticker";
 import { Why } from "@/components/why";
+import { JsonLd } from "@/components/json-ld";
 import { CATALOG, currentPrice, tinOnSale } from "@/lib/catalog";
+import { faqJsonLd, homeFaqs } from "@/lib/faq";
+import { productJsonLd } from "@/lib/product-jsonld";
 
 // the hero and shop card show live sale/shipping-promo pricing, which
 // depends on today's date — must not be frozen at build time
@@ -41,6 +44,10 @@ export default function Home() {
 
   return (
     <>
+      {/* the page sells the tin directly now, so it carries the product
+          entity too — same @id as the product page, one product, two URLs */}
+      <JsonLd id="home-product-json-ld" data={productJsonLd(price)} />
+      <JsonLd id="home-faq-json-ld" data={faqJsonLd(homeFaqs())} />
       <FrostField />
       <SiteNav />
 

@@ -26,7 +26,7 @@ const LAYERS = [
   },
 ];
 
-export function Anatomy() {
+export function Anatomy({ heading: H = "h2" }: { heading?: "h1" | "h2" }) {
   return (
     <section id="anatomy" className="relative overflow-hidden py-20 sm:py-28">
       <Flecks
@@ -40,10 +40,10 @@ export function Anatomy() {
           <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
             Anatomy
           </p>
-          <h2 className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
+          <H className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
             Every floor
             <span className="text-fog"> has a function.</span>
-          </h2>
+          </H>
 
           {/* multiply drops the render's white ground into the page and leaves
               its blue wash reading as part of the ambient field */}

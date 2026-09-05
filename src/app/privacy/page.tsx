@@ -27,6 +27,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <InfoPage
+      path="/privacy"
       eyebrow="Legal"
       title="Privacy policy"
       intro="This policy explains how Ice Tins Supply Co. collects, uses, shares and protects personal information when you visit this website or place an order, and the choices available to you."

@@ -4,7 +4,8 @@ import { FrostField } from "@/components/frost-field";
 
 export const metadata: Metadata = {
   title: "Checkout",
-  robots: { index: false },
+  robots: { index: false, follow: false },
+  alternates: { canonical: "/checkout" },
 };
 
 export default function CheckoutPage() {

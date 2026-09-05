@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import { InfoPage } from "@/components/info-page";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Careers",
-  alternates: { canonical: "/careers" },
-};
+  description: "No open roles at present. Ice Tins is a small Vancouver team making one product. Speculative applications for machining, fulfilment and support are kept on file.",
+  path: "/careers",
+});
 
 export default function CareersPage() {
   return (
     <InfoPage
+      path="/careers"
       eyebrow="Company"
       title="Careers"
       intro="There are no open roles at present. Ice Tins is a small team making one product."

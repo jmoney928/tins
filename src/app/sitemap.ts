@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { SITE_URL } from "@/lib/seo";
+import { CONTENT_UPDATED, LEGAL_UPDATED_ISO, SITE_URL } from "@/lib/seo";
 
 /**
  * Topic pages, split out of the homepage anchors so each can rank for what
@@ -27,7 +27,11 @@ const INFO_PAGES = [
 const LEGAL_PAGES = ["privacy", "terms", "cookies"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  // the two selling pages render live pricing per request; everything else
+  // moves only when its content does
   const now = new Date();
+  const content = new Date(CONTENT_UPDATED);
+  const legal = new Date(LEGAL_UPDATED_ISO);
   return [
     { url: `${SITE_URL}/`, lastModified: now, changeFrequency: "weekly", priority: 1 },
     {
@@ -38,19 +42,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     ...TOPIC_PAGES.map((slug) => ({
       url: `${SITE_URL}/${slug}`,
-      lastModified: now,
+      lastModified: content,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),
     ...INFO_PAGES.map((slug) => ({
       url: `${SITE_URL}/${slug}`,
-      lastModified: now,
+      lastModified: content,
       changeFrequency: "monthly" as const,
       priority: 0.3,
     })),
     ...LEGAL_PAGES.map((slug) => ({
       url: `${SITE_URL}/${slug}`,
-      lastModified: now,
+      lastModified: legal,
       changeFrequency: "yearly" as const,
       priority: 0.1,
     })),

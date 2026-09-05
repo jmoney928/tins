@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <InfoPage
+      path="/terms"
       eyebrow="Legal"
       title="Terms of sale"
       intro="These terms and conditions apply to all purchases from Ice Tins Supply Co. Please read them before placing an order."

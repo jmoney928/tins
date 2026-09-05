@@ -80,10 +80,10 @@ export function Hero() {
         style={{ "--index": 2 } as React.CSSProperties}
       >
         <p className="max-w-[50ch] text-base leading-relaxed text-fog">
-          A slim frozen pack sits in the base, under a perforated tray that
-          puts the pouches in direct contact with the cold. Every floor seals
-          on its own O-ring. Standard 68 mm diameter, one floor deeper than a
-          conventional can.
+          The Ice Tin is a machined aluminium snus tin with a slim frozen
+          pack in the base, under a perforated tray that puts the pouches in
+          direct contact with the cold. Every floor seals on its own O-ring.
+          Standard 68 mm diameter, one floor deeper than a conventional can.
         </p>
 
         {/*

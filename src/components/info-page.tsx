@@ -1,6 +1,8 @@
 import { FrostField } from "./frost-field";
 import { ProductNav } from "./pdp/product-nav";
 import { SiteFooter } from "./site-footer";
+import { JsonLd } from "./json-ld";
+import { breadcrumbJsonLd } from "@/lib/seo";
 
 /**
  * Shared shell for footer utility pages — shipping, warranty, careers, etc.
@@ -11,15 +13,24 @@ export function InfoPage({
   eyebrow,
   title,
   intro,
+  path,
   children,
 }: {
   eyebrow: string;
   title: React.ReactNode;
   intro?: string;
+  /** with a string title, emits a BreadcrumbList for the page */
+  path?: string;
   children: React.ReactNode;
 }) {
   return (
     <>
+      {path && typeof title === "string" && (
+        <JsonLd
+          id="breadcrumb-json-ld"
+          data={breadcrumbJsonLd([{ name: title, path }])}
+        />
+      )}
       <FrostField />
       <ProductNav />
 

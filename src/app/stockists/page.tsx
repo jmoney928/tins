@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { InfoPage } from "@/components/info-page";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Stockists",
-  alternates: { canonical: "/stockists" },
-};
+  description: "Ice Tins sells online only, direct from Vancouver, BC. No retailer is authorised to carry the tin. Wholesale enquiries by email.",
+  path: "/stockists",
+});
 
 export default function StockistsPage() {
   return (
     <InfoPage
+      path="/stockists"
       eyebrow="Company"
       title="Stockists"
       intro="Ice Tins sells online only. There is no shop to visit and no stockist list to search."

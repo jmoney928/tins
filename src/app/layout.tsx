@@ -6,7 +6,16 @@ import { Attribution } from "@/components/attribution";
 import { CartProvider } from "@/components/cart/cart-context";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { SiteMotion } from "@/components/motion-config";
-import { ORG_NAME, SITE_URL } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
+import {
+  CONTACT_EMAIL,
+  OG_DEFAULT,
+  ORG_ID,
+  ORG_NAME,
+  SITE_URL,
+  WEBSITE_ID,
+  absoluteUrl,
+} from "@/lib/seo";
 
 const META_PIXEL_ID = "4563845340565065";
 
@@ -18,12 +27,27 @@ const META_PIXEL_ID = "4563845340565065";
 const ORG_JSON_LD = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "@id": `${SITE_URL}/#organization`,
+  "@id": ORG_ID,
   name: ORG_NAME,
+  alternateName: "Ice Tins",
   url: SITE_URL,
-  logo: `${SITE_URL}/logo-emblem-512.png`,
+  logo: {
+    "@type": "ImageObject",
+    url: `${SITE_URL}/logo-emblem-512.png`,
+    width: 512,
+    height: 512,
+  },
+  image: absoluteUrl(OG_DEFAULT.url),
   description:
-    "Machined aluminium snus tin cases with a built-in ice pack tray, made in Vancouver, BC.",
+    "Maker of The Ice Tin, a machined aluminium snus tin with a built-in ice pack tray that holds 25 pouches at fridge temperature for six hours. Made in Vancouver, BC; ships worldwide.",
+  email: CONTACT_EMAIL,
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: CONTACT_EMAIL,
+    contactType: "customer service",
+    availableLanguage: "en",
+  },
+  areaServed: "Worldwide",
   address: {
     "@type": "PostalAddress",
     streetAddress: "8105 North Fraser Way",
@@ -32,6 +56,16 @@ const ORG_JSON_LD = {
     postalCode: "V5J 5M8",
     addressCountry: "CA",
   },
+};
+
+const WEBSITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": WEBSITE_ID,
+  url: SITE_URL,
+  name: ORG_NAME,
+  inLanguage: "en",
+  publisher: { "@id": ORG_ID },
 };
 
 const geistSans = Geist({
@@ -47,32 +81,37 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Ice Tins Supply Co. — Machined snus tin cases",
+    default: "Ice Tins Supply Co. — Cooled snus tin with a built-in ice pack",
     template: "%s — Ice Tins",
   },
   description:
-    "A three-floor snus can holding 25 fresh pouches: spent on top, fresh in the middle, a slim ice pack underneath. Machined 6061-T6, stays cold for 6 hours. $79.99 CAD.",
+    "The Ice Tin is a machined aluminium snus tin with a slim ice pack in the base. Holds 25 pouches at fridge temperature for six hours. Made in Vancouver, BC.",
   keywords: [
+    "snus tin",
     "snus can",
-    "snus tin case",
-    "cooled snus can",
-    "three compartment snus can",
-    "pouch case",
+    "cooled snus tin",
+    "snus tin with ice pack",
+    "metal snus can",
+    "nicotine pouch case",
+    "pouch tin",
   ],
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Ice Tins Supply Co. — Cold to the last pouch",
+    title: "Ice Tins Supply Co. — Cooled snus tin with a built-in ice pack",
     description:
-      "25 pouches across three floors, in the footprint of a standard can, with a slim ice pack in the base. Stays cold for 6 hours. $79.99 CAD.",
+      "A machined aluminium snus tin with a slim ice pack in the base. 25 pouches at fridge temperature for six hours.",
     url: SITE_URL,
-    siteName: "Ice Tins Supply Co.",
+    siteName: ORG_NAME,
+    locale: "en_CA",
     type: "website",
+    images: [{ ...OG_DEFAULT, url: absoluteUrl(OG_DEFAULT.url) }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ice Tins Supply Co. — Cold to the last pouch",
+    title: "Ice Tins Supply Co. — Cooled snus tin with a built-in ice pack",
     description:
-      "A three-floor machined snus can with a slim ice pack in the base. $79.99 CAD.",
+      "A machined aluminium snus tin with a slim ice pack in the base. 25 pouches at fridge temperature for six hours.",
+    images: [absoluteUrl(OG_DEFAULT.url)],
   },
 };
 
@@ -88,14 +127,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
       <body className="min-h-dvh">
-        {/* plain <script>, not next/script — Script defaults to afterInteractive,
-            which injects client-side after hydration and is invisible to any
-            crawler that reads the server response rather than executing JS */}
-        <script
-          id="org-json-ld"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSON_LD) }}
-        />
+        <JsonLd id="org-json-ld" data={ORG_JSON_LD} />
+        <JsonLd id="website-json-ld" data={WEBSITE_JSON_LD} />
         <Script id="meta-pixel" strategy="afterInteractive">
           {`!function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){n.callMethod?

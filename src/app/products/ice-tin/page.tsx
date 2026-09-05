@@ -18,6 +18,7 @@ import { Reveal } from "@/components/reveal";
 import { Offer } from "@/components/offer";
 import { FieldNotes } from "@/components/field-notes";
 import { FinalCta } from "@/components/final-cta";
+import { JsonLd } from "@/components/json-ld";
 import {
   bundlePair,
   CATALOG,
@@ -29,131 +30,38 @@ import {
   money,
   moneyExact,
 } from "@/lib/catalog";
-import {
-  LEAD_TIME_WEEKS,
-  TRANSIT_DAYS,
-  availabilityHeadline,
-  dispatchSentence,
-  dispatchShort,
-  leadTimeLabel,
-  transitLabel,
-} from "@/lib/fulfilment";
-import { GUARANTEE_BODY, GUARANTEE_EXCEPTION, GUARANTEE_MEDIUM } from "@/lib/guarantee";
-import { aggregateRatingJsonLd } from "@/lib/social-proof";
+import { availabilityHeadline, leadTimeLabel, transitLabel } from "@/lib/fulfilment";
 import { Guarantee } from "@/components/guarantee";
 import { SPECS, STEPS } from "@/lib/products";
 import { liveCatalog } from "@/lib/live-catalog";
-import { ORG_NAME, SITE_URL, absoluteUrl } from "@/lib/seo";
+import { PACK_LABEL, faqJsonLd, productFaqs } from "@/lib/faq";
+import { packJsonLd, productJsonLd } from "@/lib/product-jsonld";
+import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
-const PDP_URL = absoluteUrl("/products/ice-tin");
-
-/** Named once so the shipping rule reads the same wherever it appears. */
-const PACK_LABEL = "Chillcore pack";
-
-// the description below quotes the live price, so metadata is generated
-// per request rather than frozen at build time — this page is already
-// force-dynamic for the same reason (live stock)
+// the description quotes the live price, so metadata is generated per
+// request rather than frozen at build time — this page is already
+// force-dynamic for the same reason
 export async function generateMetadata(): Promise<Metadata> {
   const priceLine = tinOnSale()
-    ? `Launch price ${money(currentPrice("ice-tin"))} CAD (regular ${money(CATALOG["ice-tin"].price)}).`
+    ? `Launch price ${money(currentPrice("ice-tin"))} CAD, regularly ${money(CATALOG["ice-tin"].price)}.`
     : `${money(currentPrice("ice-tin"))} CAD, made to order in Vancouver.`;
 
-  return {
-    title: "The Ice Tin",
-    description: `A three-floor snus can holding 25 fresh pouches: spent on top, fresh in the middle, a slim ice pack underneath. Machined 6061-T6, stays cold for 6 hours. ${priceLine}`,
-    alternates: { canonical: "/products/ice-tin" },
-    openGraph: {
-      title: "The Ice Tin — Cold to the last pouch",
-      description:
-        "25 pouches across three floors, with a slim ice pack in the base. Stays cold for 6 hours. Machined to order in Vancouver, shipped worldwide.",
-      url: PDP_URL,
-      type: "website",
-      images: [
-        { url: absoluteUrl("/side-product.jpg"), width: 1100, height: 1100, alt: "The Ice Tin" },
-      ],
+  return pageMetadata({
+    title: "The Ice Tin: cooled snus tin, cold for six hours",
+    ogTitle: "The Ice Tin — a snus tin with an ice pack in the base",
+    description: `A machined aluminium snus tin with an ice pack in the base. 25 pouches at fridge temperature for six hours. ${priceLine}`,
+    path: "/products/ice-tin",
+    image: {
+      url: "/side-product.jpg",
+      width: 1100,
+      height: 1100,
+      alt: "The Ice Tin, matte black machined aluminium, showing the lid and three stacked floors",
     },
-    twitter: {
-      card: "summary_large_image",
-      title: "The Ice Tin — Cold to the last pouch",
-      description:
-        "25 pouches across three floors, with a slim ice pack in the base. Stays cold for 6 hours.",
-      images: [absoluteUrl("/side-product.jpg")],
-    },
-  };
+  });
 }
 
-// live stock, checked on every request — a scarcity claim that goes stale is a lie
+// live pricing, checked on every request
 export const dynamic = "force-dynamic";
-
-/**
- * Answers real questions the rest of the page already makes — nothing here
- * says anything the blurb, specs, or objections section doesn't. The
- * FAQPage JSON-LD below is generated from this same array, so the
- * structured data can never drift from what a visitor actually reads. It's
- * a function of the shipping promo (not a module-level constant) so the
- * shipping answer stays accurate on the date the promo expires — this page
- * is force-dynamic, so it re-evaluates on every request.
- */
-function buildFaqs(promoToday: boolean) {
-  return [
-    {
-      q: "What is inside The Ice Tin?",
-      a: "Three floors in the footprint of a standard can: an empty top floor for spent pouches, a middle floor that holds 25 fresh pouches, and a slim Chillcore ice pack in the base.",
-    },
-    {
-      q: "How long does it keep pouches cold?",
-      a: "Six hours at room temperature with the lid sealed on its two O-rings.",
-    },
-    {
-      q: "Does the ice pack come with it?",
-      a: "Yes. One Chillcore pack ships inside every tin. Three-packs are sold separately for customers who want a frozen spare available at all times.",
-    },
-    {
-      q: "What is the tin made from?",
-      a: "Cerakote-finished 6061-T6 aluminium, bead-blasted matte black, 68 mm across and 41 mm tall.",
-    },
-    {
-      q: "Where does it ship from, and how fast?",
-      a: promoToday
-        ? `Everything leaves Vancouver, BC. ${dispatchShort()} Shipping is free today on every order.`
-        : `Everything leaves Vancouver, BC. ${dispatchShort()} Shipping is ${money(SHIPPING_FLAT)} flat, and free on any order holding both a tin and a ${PACK_LABEL}.`,
-    },
-    {
-      q: "Is there nicotine or tobacco inside?",
-      a: "No. Ice Tins Supply Co. sells empty machined cans and ice packs only, and does not sell, ship or supply nicotine or tobacco in any form.",
-    },
-    {
-      q: "What does the warranty cover?",
-      a: "A lifetime warranty on the shell against cracking or a failed thread.",
-    },
-    {
-      // the skeptic's question, answered head-on rather than avoided — the
-      // doubt is the objection, so meeting it is worth more than restating
-      // the benefit
-      q: "Do pouches really go stale otherwise?",
-      a: "Yes, in the way a beer goes stale warm: still usable, no longer the thing you paid for. Warmth dries a pouch out and flattens its flavour as the moisture is lost. Held at fridge temperature, a pouch taken at hour six is materially the same as one taken at hour one. Our test conditions are a frozen pack, a closed lid and a 22°C room, which holds for six hours; the same can with an empty tray holds approximately one.",
-    },
-    {
-      q: "When will it actually arrive?",
-      a: `Count ${leadTimeLabel()} for your tin to be made and dispatched, then ${transitLabel()} for the courier. A tracking number is emailed the morning it leaves the workshop. The wait is stated here, on the shop page and at checkout rather than after the payment.`,
-    },
-    {
-      q: "What if it is not for me?",
-      a: `${GUARANTEE_MEDIUM} There is no requirement that it be unused or in its original packaging. ${GUARANTEE_EXCEPTION}`,
-    },
-    {
-      q: "Can I replace the O-rings or the ice pack?",
-      a: "Yes. Chillcore packs are sold in three-packs and seat directly into the base. The two silicone O-rings are standard sizes and fit by hand; contact shop@icetins.com and replacements will be sent at no charge for as long as you own the tin.",
-    },
-    {
-      // the price is the objection at this end of the market, so it is
-      // answered here too — this array feeds the FAQPage JSON-LD, which is
-      // where answer engines read it
-      q: `Why is it ${money(currentPrice("ice-tin"))}?`,
-      a: "The tin is machined from solid 6061-T6 in small batches rather than pressed from sheet, the threads and O-rings are specified to keep sealing for six hours after a year of daily use, and the shell is covered for life. The price reflects a working cold system rather than a lid on a container.",
-    },
-  ];
-}
 
 export default async function IceTinPage() {
   const tin = CATALOG["ice-tin"];
@@ -166,94 +74,18 @@ export default async function IceTinPage() {
   const promoToday = freeShippingToday();
   const onSale = tinOnSale();
   const unitPrice = liveTin?.price ?? currentPrice("ice-tin");
-  const FAQS = buildFaqs(promoToday);
-
-  const productJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: tin.name,
-    description: tin.blurb,
-    sku: tin.id,
-    image: tin.gallery.map((g) => absoluteUrl(g)),
-    brand: { "@type": "Brand", name: ORG_NAME },
-    offers: {
-      "@type": "Offer",
-      url: PDP_URL,
-      priceCurrency: "CAD",
-      price: (unitPrice / 100).toFixed(2),
-      availability: "https://schema.org/InStock",
-      itemCondition: "https://schema.org/NewCondition",
-      seller: { "@type": "Organization", name: ORG_NAME },
-      /**
-       * InStock is correct — the tin can be bought today — but on its own it
-       * tells Google the same thing a warehoused product would, and this one
-       * takes a fortnight to make. handlingTime is where that belongs, so the
-       * machine-readable promise matches the one on the page rather than
-       * quietly contradicting it in a shopping result.
-       */
-      shippingDetails: {
-        "@type": "OfferShippingDetails",
-        shippingDestination: { "@type": "DefinedRegion", addressCountry: "CA" },
-        deliveryTime: {
-          "@type": "ShippingDeliveryTime",
-          handlingTime: {
-            "@type": "QuantitativeValue",
-            minValue: LEAD_TIME_WEEKS.min * 7,
-            maxValue: LEAD_TIME_WEEKS.max * 7,
-            unitCode: "DAY",
-          },
-          transitTime: {
-            "@type": "QuantitativeValue",
-            minValue: TRANSIT_DAYS.min,
-            maxValue: TRANSIT_DAYS.max,
-            unitCode: "DAY",
-          },
-        },
-      },
-    },
-    // omitted entirely until there is a real average and somewhere on this
-    // page a reader can check it — rating markup that a visitor cannot see
-    // is what earns a manual penalty, not rich results
-    aggregateRating: aggregateRatingJsonLd(),
-  };
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: tin.name, item: PDP_URL },
-    ],
-  };
-
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQS.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
+  const packPrice = live?.["chillcore-3"]?.price ?? core.price;
+  const FAQS = productFaqs(promoToday);
 
   return (
     <>
-      {/* plain <script>, not next/script — see layout.tsx for why */}
-      <script
-        id="product-json-ld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
-      />
-      <script
+      <JsonLd id="product-json-ld" data={productJsonLd(unitPrice)} />
+      <JsonLd id="pack-json-ld" data={packJsonLd(packPrice)} />
+      <JsonLd
         id="breadcrumb-json-ld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        data={breadcrumbJsonLd([{ name: tin.name, path: "/products/ice-tin" }])}
       />
-      <script
-        id="faq-json-ld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
+      <JsonLd id="faq-json-ld" data={faqJsonLd(FAQS)} />
       <ViewContent productId={tin.id} />
       <FrostField />
       <ProductNav />

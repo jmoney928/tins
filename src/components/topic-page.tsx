@@ -5,6 +5,8 @@ import { ProductNav } from "./pdp/product-nav";
 import { SiteFooter } from "./site-footer";
 import { currentPrice, money } from "@/lib/catalog";
 import { Reveal } from "./reveal";
+import { JsonLd } from "./json-ld";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
 /**
  * Shell for the topic pages that used to be homepage anchors.
@@ -17,9 +19,36 @@ import { Reveal } from "./reveal";
  * point at these pages, and a page linking to itself in its own header is
  * noise.
  */
-export function TopicPage({ children }: { children: React.ReactNode }) {
+export function TopicPage({
+  title,
+  path,
+  description,
+  image,
+  article = true,
+  children,
+}: {
+  /** the page's own name, for the breadcrumb and the Article headline */
+  title: string;
+  path: string;
+  description: string;
+  /** the share image, also used as the Article image */
+  image: string;
+  /** false for policy pages, which are not articles */
+  article?: boolean;
+  children: React.ReactNode;
+}) {
   return (
     <>
+      <JsonLd
+        id="breadcrumb-json-ld"
+        data={breadcrumbJsonLd([{ name: title, path }])}
+      />
+      {article && (
+        <JsonLd
+          id="article-json-ld"
+          data={articleJsonLd({ headline: title, description, path, image })}
+        />
+      )}
       <FrostField />
       <ProductNav />
 

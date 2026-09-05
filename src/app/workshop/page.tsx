@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 import { InfoPage } from "@/components/info-page";
+import { pageMetadata } from "@/lib/seo";
 import { SPECS } from "@/lib/products";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "The workshop",
-  alternates: { canonical: "/workshop" },
-};
+  description: "Ice Tins Supply Co. designs and machines one aluminium snus tin with a built-in ice pack tray, in small batches in Vancouver, BC. What we make and how.",
+  path: "/workshop",
+});
 
 export default function WorkshopPage() {
   return (
     <InfoPage
+      path="/workshop"
       eyebrow="Company"
       title="The workshop"
       intro="Ice Tins Supply Co. designs and sells a machined aluminium tin with a built-in ice pack tray, based in Vancouver, BC."

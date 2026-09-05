@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import { InfoPage } from "@/components/info-page";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Ice pack care",
-  alternates: { canonical: "/ice-pack-care" },
-};
+  description: "How to freeze, clean and store the Chillcore gel ice pack so it lasts for years: lay it flat, 90 minutes to set, wipe clean, never puncture or microwave it.",
+  path: "/ice-pack-care",
+});
 
 export default function IcePackCarePage() {
   return (
     <InfoPage
+      path="/ice-pack-care"
       eyebrow="Support"
       title="Ice pack care"
       intro="The Chillcore pack is sealed and food-safe, but it remains a gel pack. A few rules keep it working for years rather than months."

@@ -1,27 +1,32 @@
 import type { Metadata } from "next";
 import { Anatomy } from "@/components/anatomy";
 import { TopicPage } from "@/components/topic-page";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "How the tin is built",
-  description:
-    "Cerakote over 6061-T6 aluminium, bead-blasted matte black, 68 mm across and 41 mm tall. Three floors at 8, 20 and 13 mm, sealed to IPX6 on two silicone O-rings.",
-  alternates: { canonical: "/build" },
-  openGraph: {
-    title: "How the Ice Tin is built",
-    description:
-      "Machined 6061-T6 aluminium, Cerakote matte black, sealed on two O-rings. Every floor does a job.",
-    url: "/build",
-    type: "article",
+const TITLE = "How the Ice Tin is built: 6061-T6, sealed to IPX6";
+const DESCRIPTION =
+  "Cerakote over bead-blasted 6061-T6 aluminium, 68 mm across and 41 mm tall, three floors at 8, 20 and 13 mm, sealed to IPX6 on two silicone O-rings.";
+const IMAGE = "/xray-section.png";
+
+export const metadata: Metadata = pageMetadata({
+  title: TITLE,
+  description: DESCRIPTION,
+  path: "/build",
+  type: "article",
+  image: {
+    url: IMAGE,
+    width: 1500,
+    height: 1055,
+    alt: "Cross-section drawing of the Ice Tin showing the three floors and the ice tray",
   },
-};
+});
 
 export const dynamic = "force-dynamic";
 
 export default function BuildPage() {
   return (
-    <TopicPage>
-      <Anatomy />
+    <TopicPage title={TITLE} path="/build" description={DESCRIPTION} image={IMAGE}>
+      <Anatomy heading="h1" />
     </TopicPage>
   );
 }

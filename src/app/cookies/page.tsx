@@ -40,6 +40,7 @@ const CATEGORIES = [
 export default function CookiesPage() {
   return (
     <InfoPage
+      path="/cookies"
       eyebrow="Legal"
       title="Cookie policy"
       intro="This policy explains how Ice Tins Supply Co. uses cookies and similar technologies on www.icetins.com, and how you can control them."

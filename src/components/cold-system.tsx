@@ -11,7 +11,7 @@ import { Reveal } from "./reveal";
  * than tokenised: the palette is semantic for a light page, so inverting it
  * here would mean fighting the tokens instead of using them.
  */
-export function ColdSystem() {
+export function ColdSystem({ heading: H = "h2" }: { heading?: "h1" | "h2" }) {
   return (
     <section
       id="cold"
@@ -40,10 +40,10 @@ export function ColdSystem() {
         <p className="font-mono text-[11px] tracking-[0.28em] text-ice-300 uppercase">
           The cold system
         </p>
-        <h2 className="mt-4 max-w-[18ch] text-4xl leading-[0.95] font-medium tracking-tighter text-white sm:text-5xl lg:text-[3.4rem]">
+        <H className="mt-4 max-w-[18ch] text-4xl leading-[0.95] font-medium tracking-tighter text-white sm:text-5xl lg:text-[3.4rem]">
           One floor
           <span className="text-ice-300/75"> is a freezer.</span>
-        </h2>
+        </H>
         <p className="mt-6 max-w-[58ch] text-base leading-relaxed text-ice-100/75">
           The can is divided into three floors — 8 mm for spent pouches,
           20 mm for fresh, 13 mm for the ice pack — while retaining a standard

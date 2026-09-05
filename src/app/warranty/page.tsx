@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { InfoPage } from "@/components/info-page";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Warranty claim",
-  alternates: { canonical: "/warranty" },
-};
+  description: "Lifetime warranty on the Ice Tin shell against cracking or a failed thread. What is covered, what is not, and how to file a claim by email.",
+  path: "/warranty",
+});
 
 export default function WarrantyPage() {
   return (
     <InfoPage
+      path="/warranty"
       eyebrow="Support"
       title="Warranty claim"
       intro="The shell is covered for as long as you own it. This page sets out what that includes and how to make a claim."

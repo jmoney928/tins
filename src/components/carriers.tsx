@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { CARRIERS } from "@/lib/testers";
 
-export function Carriers() {
+export function Carriers({ heading: H = "h2" }: { heading?: "h1" | "h2" }) {
   const rail = useRef<HTMLDivElement>(null);
 
   const nudge = (dir: 1 | -1) =>
@@ -18,9 +18,9 @@ export function Carriers() {
           <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
             Field testers
           </p>
-          <h2 className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
+          <H className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
             Field notes from testers.
-          </h2>
+          </H>
         </div>
         <div className="hidden gap-2 sm:flex">
           <button

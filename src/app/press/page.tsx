@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { InfoPage } from "@/components/info-page";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Press kit",
-  alternates: { canonical: "/press" },
-};
+  description: "Press kit for Ice Tins Supply Co.: boilerplate, logo files and a product shot of the Ice Tin, the machined snus tin with a built-in ice pack tray.",
+  path: "/press",
+});
 
 const ASSETS = [
   { src: "/logo-emblem-512.png", label: "Emblem, full", size: "512×512" },
@@ -16,6 +18,7 @@ const ASSETS = [
 export default function PressPage() {
   return (
     <InfoPage
+      path="/press"
       eyebrow="Company"
       title="Press kit"
       intro="Logo files, a product shot, and the boilerplate — for anyone writing about the tin."

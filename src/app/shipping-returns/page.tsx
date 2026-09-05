@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { InfoPage } from "@/components/info-page";
+import { pageMetadata } from "@/lib/seo";
 import { SHIPPING_FLAT, freeShippingToday, money } from "@/lib/catalog";
 import { SHIPS_FROM_STOCK, leadTimeLabel, transitLabel } from "@/lib/fulfilment";
-import { GUARANTEE_BODY, GUARANTEE_EXCEPTION } from "@/lib/guarantee";
+import { GUARANTEE_BODY, GUARANTEE_DAYS, GUARANTEE_EXCEPTION } from "@/lib/guarantee";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Shipping & returns",
-  alternates: { canonical: "/shipping-returns" },
-};
+  description: `Ships from Vancouver, BC: ${leadTimeLabel()} to dispatch, ${transitLabel()} in transit, ${money(SHIPPING_FLAT)} flat, free with a tin and a pack. ${GUARANTEE_DAYS}-day cold-or-refund returns.`,
+  path: "/shipping-returns",
+});
 
 // the rate below depends on freeShippingToday(), which must be checked
 // against the current date rather than baked in at build time
@@ -18,6 +20,7 @@ export default function ShippingReturnsPage() {
 
   return (
     <InfoPage
+      path="/shipping-returns"
       eyebrow="Support"
       title="Shipping & returns"
       intro="Every order ships from Vancouver, BC. This page sets out how it travels, and what happens if something is wrong when it arrives."
