@@ -56,7 +56,7 @@ export const ProductStage = memo(function ProductStage({
         className="relative w-[64%] sm:w-[86%] lg:w-full"
       >
         <Image
-          src="/three-layer.png"
+          src="/tin-exploded.png"
           alt="The Ice Tins can separated into its three pieces: engraved lid, pouch chamber with a perforated floor, and the ice pack tray"
           width={1400}
           height={1400}
