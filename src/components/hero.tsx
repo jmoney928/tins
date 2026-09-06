@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRightIcon,
@@ -7,7 +8,6 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { ProductStage } from "./product-stage";
 import { Magnetic } from "./magnetic";
-import { Splatter } from "./splatter";
 import { CATALOG, bundlePair, currentPrice, money, tinOnSale } from "@/lib/catalog";
 import { GUARANTEE_SHORT } from "@/lib/guarantee";
 import { ReviewBadge } from "./review-badge";
@@ -20,161 +20,153 @@ const PROOF = [
 ];
 
 /**
- * Three grid children rather than two columns of prose: on mobile the object
- * lands between the headline and the body copy instead of below the fold.
+ * The first screen is the inside of an ice cave.
+ *
+ * The photograph is mirrored so its bright opening sits behind the tin on
+ * the left and the dark wall carries the type on the right. Two overlays do
+ * the rest: a left-running darkening so the text column never depends on
+ * the photograph's own contrast, and a fade to paper along the bottom so
+ * the page below continues white without a seam.
+ *
+ * Three grid children rather than two columns of prose: on mobile the
+ * object lands between the headline and the body copy instead of below the
+ * fold.
  */
 export function Hero() {
   const onSale = tinOnSale();
 
   return (
-    <section
-      id="top"
-      className="relative mx-auto grid min-h-[100dvh] w-full max-w-7xl grid-cols-1 content-center gap-8 px-4 pt-28 pb-16 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:grid-rows-[auto_auto] lg:gap-x-8 lg:pt-24 lg:pb-0"
-    >
-      {/*
-        The splatter bleeds off the right, and something has to bound it: left
-        loose it widened the layout viewport on a phone and pushed the nav's
-        bag and menu buttons off the screen.
-
-        Where it is bounded is the whole point. Clipping on this section put
-        the edge at the 1280px container, 80px short of the screen on a
-        1440px display, which drew a hard vertical line straight down the
-        artwork — a decoration that stops in mid-air reads as a bug, and it
-        was one. This layer spans the viewport instead, so the cut lands at
-        the screen edge, where every image on every website already ends and
-        nobody perceives an edge at all.
-      */}
-      <div className="pointer-events-none absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 overflow-x-clip">
-        <Splatter
-          scope="hero-splat"
-          rotate={22}
-          className="absolute -top-24 -right-40 h-[42rem] w-[42rem] opacity-[0.34] mix-blend-multiply"
+    <div id="top" className="relative isolate bg-[#07111f] text-ice-100">
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <Image
+          src="/ice-cave.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          quality={78}
+          className="object-cover object-[38%_center] lg:object-center"
         />
+        {/* legibility for the type column, and the seam into the white page */}
+        <div className="absolute inset-0 bg-gradient-to-l from-[#07111f]/75 via-[#07111f]/25 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#07111f]/60 to-transparent lg:h-40" />
+        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-b from-transparent via-paper/60 to-paper" />
       </div>
 
-      <div
-        className="cascade relative lg:col-start-2 lg:row-start-1 lg:self-end lg:pl-12"
-        style={{ "--index": 0 } as React.CSSProperties}
-      >
-        <span className="flex items-center gap-3 font-mono text-[11px] tracking-[0.28em] text-fog uppercase">
-          <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
-          Made to order, ships worldwide
-        </span>
+      <section className="relative mx-auto grid min-h-[100dvh] w-full max-w-7xl grid-cols-1 content-center gap-8 px-4 pt-28 pb-36 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:grid-rows-[auto_auto] lg:gap-x-8 lg:pt-24 lg:pb-40">
+        <div
+          className="cascade relative lg:col-start-2 lg:row-start-1 lg:self-end lg:pl-12"
+          style={{ "--index": 0 } as React.CSSProperties}
+        >
+          <span className="flex items-center gap-3 font-mono text-[11px] tracking-[0.28em] text-ice-300 uppercase">
+            <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-300" />
+            Made to order, ships worldwide
+          </span>
 
-        <h1 className="mt-6 text-[3.25rem] leading-[0.88] font-medium tracking-tighter text-white-ice sm:text-7xl lg:text-[5.2rem]">
-          Twenty-five pouches,
-          <br />
-          <span className="text-fog">fridge-cold for six hours.</span>
-        </h1>
-      </div>
+          {/* what it is and what it does, in one line; the figures move to
+              the sentence below, where they support rather than lead */}
+          <h1 className="mt-6 text-[3.25rem] leading-[0.88] font-medium tracking-tighter text-balance text-white sm:text-7xl lg:text-[5.2rem]">
+            The snus tin with a freezer in the base.
+          </h1>
+        </div>
 
-      <div
-        className="cascade lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:-ml-4 lg:self-center"
-        style={{ "--index": 1 } as React.CSSProperties}
-      >
-        <ProductStage />
-      </div>
+        <div
+          className="cascade lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:-ml-4 lg:self-center"
+          style={{ "--index": 1 } as React.CSSProperties}
+        >
+          <ProductStage onDark />
+        </div>
 
-      <div
-        className="cascade lg:col-start-2 lg:row-start-2 lg:pl-12"
-        style={{ "--index": 2 } as React.CSSProperties}
-      >
-        <p className="max-w-[50ch] text-base leading-relaxed text-fog">
-          The Ice Tin is a machined aluminium snus tin with a slim frozen
-          pack in the base, under a perforated tray that puts the pouches in
-          direct contact with the cold. Every floor seals on its own O-ring.
-          Standard 68 mm diameter, one floor deeper than a conventional can.
-        </p>
+        <div
+          className="cascade lg:col-start-2 lg:row-start-2 lg:pl-12"
+          style={{ "--index": 2 } as React.CSSProperties}
+        >
+          <p className="max-w-[50ch] text-base leading-relaxed text-ice-100/80">
+            Twenty-five pouches held at fridge temperature for six hours. A
+            slim frozen pack sits under a perforated tray, every floor seals
+            on its own O-ring, and the shell is machined from solid
+            aluminium in Vancouver.
+          </p>
 
-        {/*
-          The price, set as a price.
-
-          This used to be a solid blue pill above the headline reading "LAUNCH
-          PRICE $49.99 — REG. $79.99", and the same pill ran on the shop card
-          and the buy box. Three shouted badges for one number is how a
-          template announces a discount, not how a shop states what something
-          costs. The figures are unchanged; they now sit in the type scale,
-          above the button, where a buyer looks for them.
-        */}
-        <div className="mt-9">
-          {onSale && (
-            <p className="font-mono text-[11px] tracking-[0.24em] text-ice-700 uppercase">
-              Launch price
-            </p>
-          )}
-          <div className="mt-2 flex items-baseline gap-3">
-            <span className="font-mono text-3xl tracking-tight text-white-ice">
-              {money(currentPrice("ice-tin"))}
-            </span>
+          <div className="mt-9">
             {onSale && (
-              <span className="font-mono text-base text-fog line-through decoration-fog/50">
-                {money(CATALOG["ice-tin"].price)}
-              </span>
+              <p className="font-mono text-[11px] tracking-[0.24em] text-ice-300 uppercase">
+                Launch price
+              </p>
             )}
-            <span className="text-xs text-fog">CAD</span>
-          </div>
-        </div>
-
-        {/*
-          The bag, from the hero. One product, one price, one button: a
-          visitor who arrives ready should not have to visit a second page
-          to act. The drawer that opens carries the pack offer, so the
-          shortest route to checkout still passes the upsell. The product
-          page remains one click away for the reader who wants the gallery
-          and the detail first.
-        */}
-        <div className="mt-6 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
-          <Magnetic strength={0.4}>
-            <AddButton
-              productId="ice-tin"
-              label={`Add to bag — ${money(currentPrice("ice-tin"))}`}
-              className="w-full px-7 py-4 sm:w-auto"
-            />
-          </Magnetic>
-
-          <Link
-            href="/products/ice-tin"
-            className="group flex items-center justify-center gap-2 rounded-full border border-frost/8 px-7 py-4 text-sm text-frost transition-all duration-300 ease-[var(--ease-glide)] hover:border-ice-500/40 hover:bg-slate-deep/40 active:scale-[0.98]"
-          >
-            See the tin
-            <ArrowRightIcon
-              size={15}
-              weight="bold"
-              className="transition-transform duration-300 ease-[var(--ease-glide)] group-hover:translate-x-1"
-            />
-          </Link>
-        </div>
-
-        {/* Trust strip. ReviewBadge shows stars only when a real average is
-            set, and the rating markup stays off until the reviews are
-            readable on the page — see lib/social-proof.ts. */}
-        <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-fog">
-          <li>
-            <ReviewBadge />
-          </li>
-          <li className="flex items-center gap-2">
-            <TruckIcon size={14} weight="light" className="text-ice-500" />
-            Three spare ice packs for {money(bundlePair().step)} with a tin
-          </li>
-          <li className="flex items-center gap-2">
-            <ShieldCheckIcon size={14} weight="light" className="text-ice-500" />
-            {GUARANTEE_SHORT}
-          </li>
-          <li className="flex items-center gap-2">
-            <WrenchIcon size={14} weight="light" className="text-ice-500" />
-            Lifetime shell warranty
-          </li>
-        </ul>
-
-        <dl className="mt-10 grid grid-cols-3 gap-6 border-t border-frost/8 pt-7">
-          {PROOF.map(([n, label]) => (
-            <div key={n}>
-              <dt className="font-mono text-lg text-white-ice">{n}</dt>
-              <dd className="mt-1 text-xs leading-snug text-fog">{label}</dd>
+            <div className="mt-2 flex items-baseline gap-3">
+              <span className="font-mono text-3xl tracking-tight text-white">
+                {money(currentPrice("ice-tin"))}
+              </span>
+              {onSale && (
+                <span className="font-mono text-base text-ice-100/60 line-through decoration-ice-100/40">
+                  {money(CATALOG["ice-tin"].price)}
+                </span>
+              )}
+              <span className="text-xs text-ice-100/60">CAD</span>
             </div>
-          ))}
-        </dl>
-      </div>
-    </section>
+          </div>
+
+          {/*
+            The bag, from the hero. One product, one price, one button: a
+            visitor who arrives ready should not have to visit a second page
+            to act. The drawer that opens carries the pack offer, so the
+            shortest route to checkout still passes the upsell.
+          */}
+          <div className="mt-6 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
+            <Magnetic strength={0.4}>
+              <AddButton
+                productId="ice-tin"
+                tone="paper"
+                label={`Add to bag — ${money(currentPrice("ice-tin"))}`}
+                className="w-full px-7 py-4 sm:w-auto"
+              />
+            </Magnetic>
+
+            <Link
+              href="/products/ice-tin"
+              className="group flex items-center justify-center gap-2 rounded-full border border-white/20 px-7 py-4 text-sm text-ice-100 transition-all duration-300 ease-[var(--ease-glide)] hover:border-white/40 hover:bg-white/10 active:scale-[0.98]"
+            >
+              See the tin
+              <ArrowRightIcon
+                size={15}
+                weight="bold"
+                className="transition-transform duration-300 ease-[var(--ease-glide)] group-hover:translate-x-1"
+              />
+            </Link>
+          </div>
+
+          {/* Trust strip. ReviewBadge shows stars only when a real average is
+              set, and the rating markup stays off until the reviews are
+              readable on the page — see lib/social-proof.ts. */}
+          <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-ice-100/75">
+            <li>
+              <ReviewBadge tone="paper" />
+            </li>
+            <li className="flex items-center gap-2">
+              <TruckIcon size={14} weight="light" className="text-ice-300" />
+              Three spare ice packs for {money(bundlePair().step)} with a tin
+            </li>
+            <li className="flex items-center gap-2">
+              <ShieldCheckIcon size={14} weight="light" className="text-ice-300" />
+              {GUARANTEE_SHORT}
+            </li>
+            <li className="flex items-center gap-2">
+              <WrenchIcon size={14} weight="light" className="text-ice-300" />
+              Lifetime shell warranty
+            </li>
+          </ul>
+
+          <dl className="mt-10 grid grid-cols-3 gap-6 border-t border-white/12 pt-7">
+            {PROOF.map(([n, label]) => (
+              <div key={n}>
+                <dt className="font-mono text-lg text-white">{n}</dt>
+                <dd className="mt-1 text-xs leading-snug text-ice-100/70">{label}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+    </div>
   );
 }

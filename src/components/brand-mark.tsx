@@ -11,12 +11,15 @@ export function BrandMark({
   /** the full badge's ring text turns to mush under ~44px — use the reticle */
   compact = size < 44,
   className = "",
+  light = false,
 }: {
   size?: number;
   wordmark?: boolean;
   tagline?: boolean;
   compact?: boolean;
   className?: string;
+  /** wordmark in ice-white, for a dark ground */
+  light?: boolean;
 }) {
   return (
     <span className={`flex items-center gap-3 ${className}`}>
@@ -31,7 +34,11 @@ export function BrandMark({
       />
       {wordmark && (
         <span className="flex flex-col leading-none">
-          <span className="font-mono text-sm tracking-[0.24em] text-white-ice uppercase">
+          <span
+            className={`font-mono text-sm tracking-[0.24em] uppercase transition-colors duration-500 ${
+              light ? "text-ice-100" : "text-white-ice"
+            }`}
+          >
             Ice Tins
           </span>
           {tagline && (

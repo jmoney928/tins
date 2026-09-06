@@ -11,7 +11,16 @@ import {
  * them. Until then it shows the count alone — which is a true claim, and a
  * plain one reads as more credible than five gold stars nobody can check.
  */
-export function ReviewBadge({ className = "" }: { className?: string }) {
+export function ReviewBadge({
+  className = "",
+  tone = "ink",
+}: {
+  className?: string;
+  /** "paper" on a dark ground */
+  tone?: "ink" | "paper";
+}) {
+  const text = tone === "paper" ? "text-ice-100/75 hover:text-white" : "text-fog hover:text-frost";
+  const empty = tone === "paper" ? "text-ice-100/30" : "text-fog/40";
   const label = ratingLabel();
   const filled = REVIEW_RATING === null ? 0 : Math.round(REVIEW_RATING);
 
@@ -24,7 +33,7 @@ export function ReviewBadge({ className = "" }: { className?: string }) {
               key={i}
               size={13}
               weight={i <= filled ? "fill" : "regular"}
-              className={i <= filled ? "text-ice-500" : "text-fog/40"}
+              className={i <= filled ? (tone === "paper" ? "text-ice-300" : "text-ice-500") : empty}
             />
           ))}
         </span>
@@ -37,7 +46,7 @@ export function ReviewBadge({ className = "" }: { className?: string }) {
     return (
       <a
         href={REVIEW_SOURCE_URL}
-        className={`flex items-center gap-2 text-xs text-fog transition-colors hover:text-frost ${className}`}
+        className={`flex items-center gap-2 text-xs transition-colors ${text} ${className}`}
       >
         {body}
       </a>
@@ -45,6 +54,6 @@ export function ReviewBadge({ className = "" }: { className?: string }) {
   }
 
   return (
-    <span className={`flex items-center gap-2 text-xs text-fog ${className}`}>{body}</span>
+    <span className={`flex items-center gap-2 text-xs ${text} ${className}`}>{body}</span>
   );
 }

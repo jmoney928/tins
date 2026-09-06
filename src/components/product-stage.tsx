@@ -12,7 +12,12 @@ const SPRING = { stiffness: 80, damping: 18, mass: 0.6 };
  * tilted in 3D reads as a mistake, so the pointer nudges it instead.
  * Isolated leaf; the float loop never re-renders the page.
  */
-export const ProductStage = memo(function ProductStage() {
+export const ProductStage = memo(function ProductStage({
+  onDark = false,
+}: {
+  /** drops the multiply splatter, which only muddies a dark ground */
+  onDark?: boolean;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const px = useMotionValue(0);
   const py = useMotionValue(0);
@@ -36,11 +41,13 @@ export const ProductStage = memo(function ProductStage() {
         py.set(0);
       }}
     >
-      <Splatter
-        scope="hero-product"
-        rotate={-22}
-        className="pointer-events-none absolute inset-[-14%] opacity-[0.38] mix-blend-multiply"
-      />
+      {!onDark && (
+        <Splatter
+          scope="hero-product"
+          rotate={-22}
+          className="pointer-events-none absolute inset-[-14%] opacity-[0.38] mix-blend-multiply"
+        />
+      )}
 
       <motion.div
         style={{ x, y }}

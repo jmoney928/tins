@@ -16,13 +16,21 @@ const LINKS = [
   { label: "Guarantee", href: "/guarantee" },
 ];
 
-export function SiteNav() {
+/**
+ * `tone="dark"` is for a page whose first screen is dark: the transparent
+ * header uses light text over it and returns to ink the moment it condenses
+ * onto its frosted glass.
+ */
+export function SiteNav({ tone = "light" }: { tone?: "light" | "dark" }) {
   const [condensed, setCondensed] = useState(false);
   const [open, setOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (v) => setCondensed(v > 40));
+
+  // light chrome only while the transparent header floats over a dark hero
+  const onDark = tone === "dark" && !condensed;
 
   /**
    * Closing is delayed by a beat so the cursor can cross the gap between the
@@ -69,7 +77,7 @@ export function SiteNav() {
             aria-label="Ice Tins Supply Co., home"
             className="-my-2 flex min-h-11 items-center py-2"
           >
-            <BrandMark size={30} />
+            <BrandMark size={30} light={onDark} />
           </a>
 
           <ul className="ml-auto hidden items-center gap-8 md:flex">
@@ -86,7 +94,9 @@ export function SiteNav() {
                     {...(isShop
                       ? { "aria-haspopup": true, "aria-expanded": shopOpen }
                       : {})}
-                    className="group relative text-sm text-fog transition-colors duration-300 hover:text-frost"
+                    className={`group relative text-sm transition-colors duration-300 ${
+                      onDark ? "text-ice-100/85 hover:text-white" : "text-fog hover:text-frost"
+                    }`}
                   >
                     {l.label}
                     <span
@@ -101,12 +111,16 @@ export function SiteNav() {
           </ul>
 
           <div className="ml-auto flex items-center gap-3 md:ml-0">
-            <BagButton />
+            <BagButton tone={onDark ? "paper" : "ink"} />
 
             <Magnetic className="hidden sm:block">
               <a
                 href="/products/ice-tin"
-                className="block rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-paper transition-colors duration-300 hover:bg-ice-700 active:scale-[0.98]"
+                className={`block rounded-full px-5 py-2.5 text-sm font-medium transition-colors duration-500 active:scale-[0.98] ${
+                  onDark
+                    ? "bg-ice-100 text-ink hover:bg-white"
+                    : "bg-ink text-paper hover:bg-ice-700"
+                }`}
               >
                 See the tin
               </a>
@@ -115,7 +129,9 @@ export function SiteNav() {
             <button
               onClick={() => setOpen(true)}
               aria-label="Open menu"
-              className="hairline grid size-11 place-items-center rounded-full border text-frost md:hidden"
+              className={`grid size-11 place-items-center rounded-full border transition-colors duration-500 md:hidden ${
+                onDark ? "border-white/20 text-ice-100" : "hairline text-frost"
+              }`}
             >
               <ListIcon size={17} weight="light" />
             </button>

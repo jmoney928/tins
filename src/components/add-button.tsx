@@ -12,12 +12,15 @@ export function AddButton({
   label = "Add",
   openBag = true,
   className = "px-5 py-2.5",
+  tone = "ink",
 }: {
   productId: string;
   label?: string;
   openBag?: boolean;
   /** padding and width, so the hero can set a larger button than a card */
   className?: string;
+  /** "paper" for a button sitting on a dark ground */
+  tone?: "ink" | "paper";
 }) {
   const cart = useCart();
   const [state, setState] = useState<State>("idle");
@@ -44,7 +47,9 @@ export function AddButton({
       className={`flex min-h-11 items-center justify-center gap-2 rounded-full text-sm font-medium transition-all duration-300 ease-[var(--ease-glide)] active:scale-[0.97] ${className} ${
         state === "added"
           ? "bg-ice-500 text-paper"
-          : "bg-ink text-paper hover:bg-ice-700"
+          : tone === "paper"
+            ? "bg-ice-100 text-ink hover:bg-white"
+            : "bg-ink text-paper hover:bg-ice-700"
       }`}
     >
       {state === "adding" ? (

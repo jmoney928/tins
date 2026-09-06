@@ -49,7 +49,7 @@ export default function Home() {
       <JsonLd id="home-product-json-ld" data={productJsonLd(price)} />
       <JsonLd id="home-faq-json-ld" data={faqJsonLd(homeFaqs())} />
       <FrostField />
-      <SiteNav />
+      <SiteNav tone="dark" />
 
       <main>
         <Hero />

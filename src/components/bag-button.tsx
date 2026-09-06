@@ -14,7 +14,14 @@ import { useCart } from "./cart/cart-context";
  * count goes up, and does neither on load, when a stored bag is merely being
  * read back.
  */
-export function BagButton({ className = "" }: { className?: string }) {
+export function BagButton({
+  className = "",
+  tone = "ink",
+}: {
+  className?: string;
+  /** "paper" while the button sits over a dark ground */
+  tone?: "ink" | "paper";
+}) {
   const cart = useCart();
   const [scope, animate] = useAnimate<HTMLButtonElement>();
   const prev = useRef<number | null>(null);
@@ -36,7 +43,11 @@ export function BagButton({ className = "" }: { className?: string }) {
       ref={scope}
       onClick={cart.openDrawer}
       aria-label={cart.count ? `Bag, ${cart.count} items` : "Bag, empty"}
-      className={`hairline relative grid size-11 place-items-center rounded-full border text-fog transition-colors duration-300 hover:text-frost ${className}`}
+      className={`relative grid size-11 place-items-center rounded-full border transition-colors duration-500 ${
+        tone === "paper"
+          ? "border-white/20 text-ice-100 hover:text-white"
+          : "hairline text-fog hover:text-frost"
+      } ${className}`}
     >
       <HandbagIcon size={17} weight="light" />
       <AnimatePresence>
