@@ -13,12 +13,13 @@ import { motion } from "framer-motion";
  * Free shipping is the tin and the pack together.
  */
 const BASE_WORDS = [
-  "One tin, one refill pack",
-  "Twenty-five fresh, fifteen spent",
-  "Cold for 6 hours",
-  "6061-T6, sealed to IPX6",
-  "Machined in Vancouver, BC",
-  "Freezer to ready in 90 min",
+  "Cold from the first pouch to the last",
+  "Freeze it overnight, carry it all day",
+  "Twenty-five pouches",
+  "Six hours cold",
+  "Solid aluminium, made in Vancouver",
+  "Thirty days to change your mind",
+  "Lifetime warranty on the shell",
 ];
 
 /** Seamless single-direction band. Duplicated once, translated exactly -50%. */

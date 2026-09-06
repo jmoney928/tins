@@ -51,14 +51,14 @@ export const CATALOG: Record<string, Product> = {
       "The Ice Tin surrounded by a burst of powdered ice and cold vapour",
     ],
     blurb:
-      "Three compartments in the footprint of a standard can. Twenty-five fresh pouches sit on a perforated tray above a slim ice pack, which holds fridge temperature for six hours. The upper floor takes the spent ones; every floor closes on its own O-ring.",
+      "A can the size of the one in your pocket now, with a slim ice pack underneath and room for twenty-five pouches above it. Screw it shut and it holds fridge temperature for six hours, so the last pouch of the day is as cold as the first.",
     // benefit first, engineering second — the order a buyer cares about
     points: [
-      "Twenty-five held at fridge temperature for 6 hours",
-      "Three floors: spent, fresh, ice pack",
-      "Perforated floor for direct cold transfer",
-      "Two silicone O-rings, IPX6",
-      "One Chillcore pack in the box",
+      "Twenty-five pouches, cold for six hours",
+      "One ice pack in the box, frozen in ninety minutes",
+      "Screws shut on a rubber seal, rain and sweat stay out",
+      "Solid aluminium, matte black",
+      "A separate floor for the spent ones",
       "Lifetime warranty on the shell",
     ],
     specs: [

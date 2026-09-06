@@ -57,7 +57,7 @@ export default function Home() {
         <Why />
         <Collection />
         <Offer />
-        <FieldNotes title="What the testers reported." />
+        <FieldNotes title="Carried every day, for a season." />
         <Guarantee />
         <HomeFaq />
         <FinalCta price={price} compareAt={compareAt} action="add" />

@@ -80,7 +80,7 @@ export function homeFaqs(): Faq[] {
   return [
     {
       q: "Does it really stay cold all day?",
-      a: "Six hours at fridge temperature in a 22°C room with a frozen pack and the lid closed, which is a full shift. The same tin with the tray empty holds for about an hour, so the cold is the pack, not the metal.",
+      a: "Six hours at fridge temperature with a frozen pack inside and the lid shut, which is a full shift. Freeze the pack overnight and it is ready every morning; a spare pack in the freezer means there is never a wait.",
     },
     {
       q: "How long until it arrives?",

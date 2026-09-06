@@ -12,16 +12,16 @@ import { Reveal } from "./reveal";
  */
 const PROBLEMS = [
   {
-    k: "Warm by midday",
-    body: "A pocket sits at body temperature. By early afternoon the moisture has left the pouch and the flavour has gone flat, so the last five are never the ones paid for. The tin holds fridge temperature for six hours; the pouch taken at six is the pouch taken at one.",
+    k: "Warm by lunch",
+    body: "A pocket is warm. By lunch the pouch you reach for has gone soft and flat, and the last five of the day are never as good as the first. In the tin, every one of them is the first.",
   },
   {
-    k: "Nothing actually seals",
-    body: "A snap lid keeps pouches in; it does not keep air out or a wet pocket out. Every floor here closes onto its own silicone O-ring, sealed to IPX6. That seal is what makes six hours possible, because cold that leaks is cold that is gone by ten.",
+    k: "It stays shut",
+    body: "A snap lid pops open in a bag and lets the air in. This one screws closed on a rubber seal, so the cold stays in and the rain, sweat and pocket lint stay out.",
   },
   {
-    k: "The can gives up",
-    body: "Plastic lids crack, cardboard swells, and a can is replaced every few weeks without anyone thinking of it as a cost. This one is machined from solid aluminium and the shell is warranted for life.",
+    k: "It lasts",
+    body: "Plastic cracks and cardboard swells, and most people replace a can every few weeks without noticing they are paying for it. This one is cut from a solid block of aluminium and covered for as long as you own it.",
   },
 ];
 
@@ -38,11 +38,10 @@ export function Why() {
             <span className="text-fog"> It is better cold.</span>
           </h2>
           <p className="mt-6 max-w-[48ch] text-base leading-relaxed text-fog">
-            Nobody chooses a warm beer, and nobody would choose a warm pouch
-            either. The difference is that a beer is cold when it is handed
-            over and a pouch is carried around all day in a pocket, so warm is
-            simply what a pouch has been. The tin is the fridge that goes in
-            the pocket with it.
+            Nobody orders a warm beer. Nobody would choose a warm pouch
+            either, but a pouch spends the day in a pocket, so warm is simply
+            what it has always been. This is the tin that changes that: a
+            small fridge that goes in the pocket with them.
           </p>
         </Reveal>
 

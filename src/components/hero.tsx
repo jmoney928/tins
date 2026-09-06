@@ -14,9 +14,9 @@ import { ReviewBadge } from "./review-badge";
 import { AddButton } from "./add-button";
 
 const PROOF = [
-  ["3 floors", "spent, fresh, ice"],
-  ["25", "pouches, fresh"],
-  ["6 hours", "cold, sealed"],
+  ["6 hours", "cold, from the first pouch to the last"],
+  ["25", "pouches in the tin"],
+  ["90 min", "to freeze the pack"],
 ];
 
 /**
@@ -71,7 +71,7 @@ export function Hero() {
         >
           <span className="flex items-center gap-3 font-mono text-[11px] tracking-[0.28em] text-ice-300 uppercase">
             <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-300" />
-            Made to order, ships worldwide
+            Made in Vancouver. Ships worldwide.
           </span>
 
           {/* what it is and what it does, in one line; the figures move to
@@ -93,10 +93,10 @@ export function Hero() {
           style={{ "--index": 2 } as React.CSSProperties}
         >
           <p className="max-w-[50ch] text-base leading-relaxed text-ice-100/80">
-            Twenty-five pouches held at fridge temperature for six hours. A
-            slim frozen pack sits under a perforated tray, every floor seals
-            on its own O-ring, and the shell is machined from solid
-            aluminium in Vancouver.
+            A solid aluminium tin with a slim ice pack underneath the
+            pouches. Freeze the pack overnight, drop it in, and the last
+            pouch of the day is as cold as the first. Twenty-five of them,
+            fridge-cold for six hours.
           </p>
 
           <div className="mt-9">
