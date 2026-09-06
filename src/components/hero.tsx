@@ -13,6 +13,13 @@ import { GUARANTEE_SHORT } from "@/lib/guarantee";
 import { ReviewBadge } from "./review-badge";
 import { AddButton } from "./add-button";
 
+/** Top to bottom, as the photograph shows them. */
+const FLOORS = [
+  ["1", "Top: your spent pouches", "Done with one? It goes in here, away from the fresh ones."],
+  ["2", "Middle: your fresh pouches", "Twenty-five of them, sitting right on top of the cold."],
+  ["3", "Bottom: the ice pack", "Freeze it overnight. It keeps everything above it cold for six hours."],
+];
+
 const PROOF = [
   ["6 hours", "cold, from the first pouch to the last"],
   ["25", "pouches in the tin"],
@@ -58,9 +65,10 @@ export function Hero() {
           className="hidden object-cover object-center sm:block"
         />
         {/* legibility for the type column, and the seam into the white page */}
-        <div className="absolute inset-0 hidden bg-gradient-to-l from-[#07111f]/75 via-[#07111f]/25 to-transparent lg:block" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#07111f]/70 via-[#07111f]/35 to-[#07111f]/55 lg:hidden" />
-        <div className="absolute inset-x-0 top-0 hidden h-40 bg-gradient-to-b from-[#07111f]/60 to-transparent lg:block" />
+        <div className="absolute inset-0 bg-[#07111f]/30" />
+        <div className="absolute inset-0 hidden bg-gradient-to-l from-[#07111f]/80 via-[#07111f]/40 to-transparent lg:block" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#07111f]/75 via-[#07111f]/45 to-[#07111f]/70 lg:hidden" />
+        <div className="absolute inset-x-0 top-0 hidden h-40 bg-gradient-to-b from-[#07111f]/65 to-transparent lg:block" />
         <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-b from-transparent via-paper/60 to-paper" />
       </div>
 
@@ -76,8 +84,11 @@ export function Hero() {
 
           {/* what it is and what it does, in one line; the figures move to
               the sentence below, where they support rather than lead */}
-          <h1 className="mt-6 text-[3.25rem] leading-[0.88] font-medium tracking-tighter text-balance text-white sm:text-7xl lg:text-[5.2rem]">
-            The snus tin with a freezer in the base.
+          <h1 className="mt-6 text-[3.25rem] leading-[0.9] font-medium tracking-tighter text-balance text-white sm:text-7xl lg:text-[5.2rem]">
+            Keep your snus{" "}
+            <span className="bg-gradient-to-b from-white via-ice-300 to-ice-500 bg-clip-text font-semibold tracking-tight text-transparent uppercase">
+              ice cold
+            </span>
           </h1>
         </div>
 
@@ -86,6 +97,27 @@ export function Hero() {
           style={{ "--index": 1 } as React.CSSProperties}
         >
           <ProductStage onDark />
+
+          {/* the three floors, top to bottom, in the order the photograph
+              shows them — the floating labels said what each part was
+              called and not what it did */}
+          <ol className="mx-auto mt-2 flex max-w-[460px] flex-col gap-3 sm:mt-4">
+            {FLOORS.map(([n, title, body]) => (
+              <li key={n} className="flex items-start gap-4">
+                <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full bg-ice-300 font-mono text-xs font-medium text-ink">
+                  {n}
+                </span>
+                <span>
+                  <span className="block text-base leading-tight font-medium text-white">
+                    {title}
+                  </span>
+                  <span className="mt-0.5 block text-sm leading-snug text-ice-100/75">
+                    {body}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ol>
         </div>
 
         <div
@@ -93,10 +125,10 @@ export function Hero() {
           style={{ "--index": 2 } as React.CSSProperties}
         >
           <p className="max-w-[50ch] text-base leading-relaxed text-ice-100/80">
-            A solid aluminium tin with a slim ice pack underneath the
-            pouches. Freeze the pack overnight, drop it in, and the last
-            pouch of the day is as cold as the first, six hours after you
-            left the house.
+            The Ice Tin is a solid aluminium snus tin with a slim ice pack
+            underneath the pouches. Freeze the pack overnight, drop it in,
+            and the last pouch of the day is as cold as the first, six hours
+            after you left the house.
           </p>
 
           <div className="mt-9">
