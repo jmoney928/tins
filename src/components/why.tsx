@@ -20,8 +20,8 @@ const PROBLEMS = [
     body: "A snap lid pops open in a bag and lets the air in. This one screws closed on a rubber seal, so the cold stays in and the rain, sweat and pocket lint stay out.",
   },
   {
-    k: "It lasts",
-    body: "Plastic cracks and cardboard swells, and most people replace a can every few weeks without noticing they are paying for it. This one is cut from a solid block of aluminium and covered for as long as you own it.",
+    k: "It is yours",
+    body: "The can your pouches come in is packaging. It pops open in a bag, cracks in a back pocket and goes in the bin with the last pouch. This one is cut from a solid block of aluminium, covered for as long as you own it, and the pouches move into it.",
   },
 ];
 
