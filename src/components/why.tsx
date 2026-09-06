@@ -12,16 +12,16 @@ import { Reveal } from "./reveal";
  */
 const PROBLEMS = [
   {
-    k: "Warm by lunch",
-    body: "A pocket is warm. By lunch the pouch you reach for has gone soft and flat, and the last five of the day are never as good as the first. In the tin, every one of them is the first.",
+    k: "Cold all day",
+    body: "In your pocket, snus is warm by lunch. In the tin, the last pouch at dinner is as cold as the first one in the morning.",
   },
   {
     k: "It stays shut",
-    body: "A snap lid pops open in a bag and lets the air in. This one screws closed on a rubber seal, so the cold stays in and the rain, sweat and pocket lint stay out.",
+    body: "It screws closed. No rain, no sweat, no pocket fluff gets in, and the cold does not get out.",
   },
   {
-    k: "It is yours",
-    body: "The can your pouches come in is packaging. It pops open in a bag, cracks in a back pocket and goes in the bin with the last pouch. This one is cut from a solid block of aluminium and covered for as long as you own it.",
+    k: "It is yours for good",
+    body: "The can your snus comes in is packaging. This one is solid aluminium, and if the shell ever fails we replace it.",
   },
 ];
 
@@ -31,17 +31,15 @@ export function Why() {
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
         <Reveal>
           <p className="font-mono text-[11px] tracking-[0.28em] text-ice-500 uppercase">
-            Why it exists
+            Why cold
           </p>
           <h2 className="mt-4 text-4xl leading-[0.95] font-medium tracking-tighter text-balance text-white-ice sm:text-5xl">
-            A pouch is like a beer.
-            <span className="text-fog"> It is better cold.</span>
+            Warm snus is not good snus.
           </h2>
           <p className="mt-6 max-w-[48ch] text-base leading-relaxed text-fog">
-            Nobody orders a warm beer. Nobody would choose a warm pouch
-            either, but a pouch spends the day in a pocket, so warm is simply
-            what it has always been. This is the tin that changes that: a
-            small fridge that goes in the pocket with them.
+            A warm beer is still a beer, but nobody wants one. Snus is the
+            same. It tastes better cold and it lasts longer cold. This tin
+            is a small fridge that goes in your pocket with it.
           </p>
         </Reveal>
 

@@ -1,4 +1,8 @@
+import { Anywhere } from "@/components/anywhere";
 import { Collection } from "@/components/collection";
+import { CtaBar } from "@/components/cta-bar";
+import { HowItWorks } from "@/components/how-it-works";
+import { WhatItIs } from "@/components/what-it-is";
 import { Explore } from "@/components/explore";
 import { FieldNotes } from "@/components/field-notes";
 import { FinalCta } from "@/components/final-cta";
@@ -54,11 +58,23 @@ export default function Home() {
       <main>
         <Hero />
         <Ticker />
+        {/* show it, sell it, explain one thing, sell it again — a way to
+            buy under every idea, so the reader who is convinced at that
+            point never scrolls to find one */}
+        <WhatItIs />
+        <CtaBar />
+        <HowItWorks />
+        <CtaBar note="One ice pack comes in the box." />
         <Why />
+        <CtaBar />
+        <Anywhere />
+        <CtaBar note="Same size as a normal can." />
         <Collection />
         <Offer />
-        <FieldNotes title="Carried every day, for a season." />
+        <FieldNotes title="People who carry one." />
+        <CtaBar />
         <Guarantee />
+        <CtaBar note="Try it for 30 days. Send it back if it is not cold." />
         <HomeFaq />
         <FinalCta price={price} compareAt={compareAt} action="add" />
         <Explore />
