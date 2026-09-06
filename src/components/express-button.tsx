@@ -48,7 +48,7 @@ export function ExpressButton({
       </button>
       <p className="mt-2.5 flex items-center justify-center gap-1.5 text-center text-xs text-fog">
         <LockSimpleIcon size={12} weight="fill" className="shrink-0" />
-        Apple Pay, Shop Pay or card on the next screen
+        Apple Pay, Google Pay, Shop Pay or card next
       </p>
     </div>
   );

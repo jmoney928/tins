@@ -87,7 +87,7 @@ export function CheckoutClient() {
             Taking you to checkout.
           </p>
           <p className="max-w-[34ch] text-sm leading-relaxed text-fog">
-            Apple Pay, Shop Pay or card on the next screen.
+            Apple Pay, Google Pay, Shop Pay or card next.
           </p>
         </div>
       </Shell>
