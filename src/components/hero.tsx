@@ -87,37 +87,42 @@ export function Hero() {
           </h1>
         </div>
 
-        <div
-          className="cascade lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:self-center"
-          style={{ "--index": 1 } as React.CSSProperties}
-        >
-          <ProductStage onDark />
-        </div>
+        {/* on a phone the floors and the tin share a row, text left and tin
+            right; from lg the wrapper dissolves and each takes its own
+            cell in the outer grid */}
+        <div className="grid grid-cols-[minmax(0,1fr)_11rem] items-center gap-2 sm:grid-cols-[minmax(0,1fr)_16rem] sm:gap-6 lg:contents">
+          {/* the three floors, top to bottom, in the order the photograph
+              beside them shows them — the floating labels said what each
+              part was called and not what it did */}
+          <div
+            className="cascade lg:col-start-1 lg:row-start-2 lg:pr-8"
+            style={{ "--index": 1 } as React.CSSProperties}
+          >
+            <ol className="flex max-w-[460px] flex-col gap-3">
+              {FLOORS.map(([n, title, body]) => (
+                <li key={n} className="flex items-start gap-3 lg:gap-4">
+                  <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-ice-300 font-mono text-[11px] font-medium text-ink lg:size-7 lg:text-xs">
+                    {n}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-sm leading-tight font-medium text-white lg:text-base">
+                      {title}
+                    </span>
+                    <span className="mt-0.5 block text-xs leading-snug text-ice-100/75 lg:text-sm">
+                      {body}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
 
-        {/* the three floors, top to bottom, in the order the photograph
-            beside them shows them — the floating labels said what each
-            part was called and not what it did */}
-        <div
-          className="cascade lg:col-start-1 lg:row-start-2 lg:pr-8"
-          style={{ "--index": 1 } as React.CSSProperties}
-        >
-          <ol className="flex max-w-[460px] flex-col gap-3">
-            {FLOORS.map(([n, title, body]) => (
-              <li key={n} className="flex items-start gap-4">
-                <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full bg-ice-300 font-mono text-xs font-medium text-ink">
-                  {n}
-                </span>
-                <span>
-                  <span className="block text-base leading-tight font-medium text-white">
-                    {title}
-                  </span>
-                  <span className="mt-0.5 block text-sm leading-snug text-ice-100/75">
-                    {body}
-                  </span>
-                </span>
-              </li>
-            ))}
-          </ol>
+          <div
+            className="cascade lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:self-center"
+            style={{ "--index": 1 } as React.CSSProperties}
+          >
+            <ProductStage onDark />
+          </div>
         </div>
 
         <div

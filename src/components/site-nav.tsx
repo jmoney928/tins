@@ -80,7 +80,7 @@ export function SiteNav({ tone = "light" }: { tone?: "light" | "dark" }) {
             <BrandMark size={30} light={onDark} />
           </a>
 
-          <ul className="ml-auto hidden items-center gap-8 md:flex">
+          <ul className="ml-auto hidden items-center gap-8 lg:flex">
             {LINKS.map((l) => {
               const isShop = l.href === "/products/ice-tin";
               return (
@@ -110,7 +110,7 @@ export function SiteNav({ tone = "light" }: { tone?: "light" | "dark" }) {
             })}
           </ul>
 
-          <div className="ml-auto flex items-center gap-3 md:ml-0">
+          <div className="ml-auto flex items-center gap-3 lg:ml-0">
             <BagButton tone={onDark ? "paper" : "ink"} />
 
             <Magnetic className="hidden sm:block">
@@ -129,7 +129,7 @@ export function SiteNav({ tone = "light" }: { tone?: "light" | "dark" }) {
             <button
               onClick={() => setOpen(true)}
               aria-label="Open menu"
-              className={`grid size-11 place-items-center rounded-full border transition-colors duration-500 md:hidden ${
+              className={`grid size-11 place-items-center rounded-full border transition-colors duration-500 lg:hidden ${
                 onDark ? "border-white/20 text-ice-100" : "hairline text-frost"
               }`}
             >
@@ -148,7 +148,7 @@ export function SiteNav({ tone = "light" }: { tone?: "light" | "dark" }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 bg-paper/95 backdrop-blur-2xl md:hidden"
+            className="fixed inset-0 z-50 bg-paper/95 backdrop-blur-2xl lg:hidden"
           >
             <div className="flex items-center justify-between px-6 py-7">
               <BrandMark size={30} />

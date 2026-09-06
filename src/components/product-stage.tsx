@@ -53,7 +53,7 @@ export const ProductStage = memo(function ProductStage({
         style={{ x, y }}
         animate={{ translateY: [0, -9, 0] }}
         transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-        className="relative w-[64%] sm:w-[86%] lg:w-full"
+        className="relative w-full"
       >
         <Image
           src="/tin-exploded.png"
