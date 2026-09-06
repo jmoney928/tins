@@ -38,18 +38,29 @@ export function Hero() {
   return (
     <div id="top" className="relative isolate bg-[#07111f] text-ice-100">
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        {/* a portrait crop for phones: the landscape frame cropped to a
+            phone shows streaks of ice rather than a cave, so the phone gets
+            the opening itself, cut tall */}
+        <Image
+          src="/ice-cave-mobile.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[center_30%] sm:hidden"
+        />
         <Image
           src="/ice-cave.jpg"
           alt=""
           fill
           priority
           sizes="100vw"
-          quality={78}
-          className="object-cover object-[38%_center] lg:object-center"
+          className="hidden object-cover object-center sm:block"
         />
         {/* legibility for the type column, and the seam into the white page */}
-        <div className="absolute inset-0 bg-gradient-to-l from-[#07111f]/75 via-[#07111f]/25 to-transparent" />
-        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#07111f]/60 to-transparent lg:h-40" />
+        <div className="absolute inset-0 hidden bg-gradient-to-l from-[#07111f]/75 via-[#07111f]/25 to-transparent lg:block" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#07111f]/70 via-[#07111f]/35 to-[#07111f]/55 lg:hidden" />
+        <div className="absolute inset-x-0 top-0 hidden h-40 bg-gradient-to-b from-[#07111f]/60 to-transparent lg:block" />
         <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-b from-transparent via-paper/60 to-paper" />
       </div>
 

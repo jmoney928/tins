@@ -53,7 +53,7 @@ export const ProductStage = memo(function ProductStage({
         style={{ x, y }}
         animate={{ translateY: [0, -9, 0] }}
         transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-        className="relative w-[82%] sm:w-[86%] lg:w-full"
+        className="relative w-[64%] sm:w-[86%] lg:w-full"
       >
         <Image
           src="/three-layer.png"
@@ -66,13 +66,13 @@ export const ProductStage = memo(function ProductStage({
         />
       </motion.div>
 
-      <div className="glass-edge absolute top-[9%] right-0 rotate-2 rounded-full bg-paper/85 px-3.5 py-1.5 font-mono text-[10px] tracking-[0.18em] text-ice-700 uppercase backdrop-blur-md">
+      <div className="glass-edge absolute top-[9%] right-0 hidden rotate-2 sm:block rounded-full bg-paper/85 px-3.5 py-1.5 font-mono text-[10px] tracking-[0.18em] text-ice-700 uppercase backdrop-blur-md">
         Lid
       </div>
-      <div className="glass-edge absolute top-[45%] left-0 -rotate-2 rounded-full bg-paper/85 px-3.5 py-1.5 font-mono text-[10px] tracking-[0.18em] text-ice-700 uppercase backdrop-blur-md">
+      <div className="glass-edge absolute top-[45%] left-0 hidden -rotate-2 sm:block rounded-full bg-paper/85 px-3.5 py-1.5 font-mono text-[10px] tracking-[0.18em] text-ice-700 uppercase backdrop-blur-md">
         Pouches
       </div>
-      <div className="glass-edge absolute right-1 bottom-[10%] flex rotate-1 items-center gap-2 rounded-full bg-paper/85 px-3.5 py-1.5 font-mono text-[10px] tracking-[0.18em] text-frost uppercase backdrop-blur-md">
+      <div className="glass-edge absolute right-1 bottom-[10%] hidden rotate-1 sm:flex items-center gap-2 rounded-full bg-paper/85 px-3.5 py-1.5 font-mono text-[10px] tracking-[0.18em] text-frost uppercase backdrop-blur-md">
         <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
         Ice tray
       </div>
