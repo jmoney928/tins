@@ -10,14 +10,14 @@ export function WhatItIs() {
   return (
     <section className="py-20 sm:py-24">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16">
-        <Reveal className="overflow-hidden rounded-[2rem] bg-abyss">
+        <Reveal className="overflow-hidden rounded-[2rem] bg-white">
           <Image
             src="/three-layer-gallery.jpg"
             alt="The Ice Tin taken apart: the lid, the pouch floor, and the ice pack tray"
             width={1400}
             height={1400}
             sizes="(max-width: 1024px) 92vw, 46vw"
-            className="aspect-[4/3] w-full object-cover lg:aspect-square"
+            className="aspect-square w-full object-cover"
           />
         </Reveal>
 

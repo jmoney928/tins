@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Reveal } from "./reveal";
 
-const STEPS = [
+const STEPS: { n: string; title: string; body: string; src: string; alt: string; contain?: boolean }[] = [
   {
     n: "1",
     title: "Freeze the ice pack",
@@ -15,6 +15,8 @@ const STEPS = [
     body: "The ice pack sits in the base. Your snus goes on the floor above it.",
     src: "/three-layer-gallery.jpg",
     alt: "The Ice Tin taken apart, showing the ice pack tray at the bottom",
+    // the whole exploded tin has to be visible, so this one is not cropped
+    contain: true,
   },
   {
     n: "3",
@@ -42,14 +44,14 @@ export function HowItWorks() {
         <ol className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-3">
           {STEPS.map((s, i) => (
             <Reveal as="li" key={s.n} delay={i * 100} className="flex flex-col">
-              <div className="overflow-hidden rounded-[1.75rem] bg-ink">
+              <div className={`overflow-hidden rounded-[1.75rem] ${s.contain ? "bg-white" : "bg-ink"}`}>
                 <Image
                   src={s.src}
                   alt={s.alt}
                   width={1000}
                   height={1000}
                   sizes="(max-width: 640px) 92vw, 30vw"
-                  className="aspect-[4/3] w-full object-cover"
+                  className={`aspect-[4/3] w-full ${s.contain ? "object-contain" : "object-cover"}`}
                 />
               </div>
               <div className="mt-5 flex items-start gap-4">
