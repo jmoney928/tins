@@ -1,17 +1,18 @@
 "use client";
 
 import { useEffect } from "react";
-import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   XIcon,
   MinusIcon,
   PlusIcon,
   TrashIcon,
-  ArrowRightIcon,
+  WarningCircleIcon,
   SnowflakeIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { useCart } from "./cart-context";
+import { useExpressCheckout } from "./use-express-checkout";
+import { ExpressButton } from "../express-button";
 import { ProductArt } from "../product-art";
 import { BundleCard } from "../bundle-card";
 import { SHIPPING_FLAT, money, moneyExact } from "@/lib/catalog";
@@ -22,6 +23,7 @@ const GLIDE = [0.16, 1, 0.3, 1] as const;
 export function CartDrawer() {
   const cart = useCart();
   const { drawerOpen, closeDrawer } = cart;
+  const { go, busy, error } = useExpressCheckout();
 
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? "hidden" : "";
@@ -259,18 +261,22 @@ export function CartDrawer() {
                     </div>
                   </dl>
 
-                  <Link
-                    href="/checkout"
-                    onClick={closeDrawer}
-                    className="group mt-5 flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-4 text-sm font-medium text-paper transition-colors duration-300 hover:bg-ice-700 active:scale-[0.98]"
-                  >
-                    Checkout
-                    <ArrowRightIcon
-                      size={14}
-                      weight="bold"
-                      className="transition-transform duration-300 group-hover:translate-x-1"
-                    />
-                  </Link>
+                  {/* straight to the payment page — no page of ours in between */}
+                  <ExpressButton
+                    className="mt-5"
+                    busy={busy}
+                    label={`Checkout — ${moneyExact(cart.total)}`}
+                    onClick={() => void go()}
+                  />
+                  {error && (
+                    <p
+                      role="alert"
+                      className="mt-3 flex items-start gap-2 rounded-2xl border border-[#b4463f]/30 bg-[#b4463f]/8 px-4 py-3 text-sm text-[#a33e37]"
+                    >
+                      <WarningCircleIcon size={15} weight="fill" className="mt-0.5 shrink-0" />
+                      {error}
+                    </p>
+                  )}
                 </footer>
               </>
             )}

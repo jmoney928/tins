@@ -186,12 +186,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Malformed request." }, { status: 400 });
   }
 
-  // Collected on our page rather than left to Stripe's, which is the only way
-  // an abandoned checkout is reachable at all — Stripe only tells us an
-  // address once someone has already paid. It is passed straight through as
-  // `customer_email`, so nobody types it twice.
+  /**
+   * Required on the Stripe path, optional on the Shopify one.
+   *
+   * Stripe reveals an address only once someone has paid, so an abandoned
+   * Stripe checkout is unreachable unless we collected the email ourselves.
+   * Shopify's checkout asks for it on its own first screen and recovers its
+   * own abandoned carts — which is what lets the bag hand straight over
+   * instead of charging every shopper a form for a field they are about to
+   * fill in anyway.
+   */
   const email = typeof body.email === "string" ? body.email.trim() : "";
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 254) {
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) && email.length <= 254;
+  if (email ? !emailValid : !usingShopify) {
     return NextResponse.json(
       { error: "That email does not look right. Check it and try again." },
       { status: 400 },

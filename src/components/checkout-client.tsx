@@ -1,113 +1,59 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeftIcon,
-  ArrowRightIcon,
-  LockSimpleIcon,
   SnowflakeIcon,
   WarningCircleIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { useCart } from "./cart/cart-context";
+import { useExpressCheckout } from "./cart/use-express-checkout";
+import { ExpressButton } from "./express-button";
 import { ProductArt } from "./product-art";
 import { BundleCard } from "./bundle-card";
 import { BrandMark } from "./brand-mark";
-import { CURRENCY_LABEL, money, moneyExact } from "@/lib/catalog";
-import { GUARANTEE_SHORT } from "@/lib/guarantee";
-import { trackPixel } from "@/lib/pixel";
 import { AnimatedMoney } from "./animated-money";
+import { moneyExact } from "@/lib/catalog";
+import { GUARANTEE_SHORT } from "@/lib/guarantee";
 
+/**
+ * A handover, not a form.
+ *
+ * This page used to ask for an email and then send the shopper on. That put a
+ * keyboard in front of the one screen built to avoid one: Apple Pay and Shop
+ * Pay exist to skip typing, and they live on the payment page, so making
+ * people type here and meet the shortcut afterwards inverted the whole point.
+ * The payment page collects the email itself.
+ *
+ * The bag and the drawer now go straight there. What remains here is for
+ * anyone who arrives at the URL another way: it forwards on its own, and only
+ * stops to show the bag when there is a reason to — a failed handover, or a
+ * shopper who has just come back from an abandoned payment page and would
+ * bounce straight out again if it forwarded.
+ */
 export function CheckoutClient() {
   const cart = useCart();
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
+  const { go, busy, error } = useExpressCheckout();
   const [cancelled, setCancelled] = useState(false);
-  const [email, setEmail] = useState("");
-
   // read once on mount rather than useSearchParams, which would force a
   // Suspense boundary around an otherwise static page
+  const [read, setRead] = useState(false);
+  const started = useRef(false);
+
   useEffect(() => {
     setCancelled(new URLSearchParams(window.location.search).has("cancelled"));
+    setRead(true);
   }, []);
 
-  const pay = async () => {
-    if (busy) return;
+  useEffect(() => {
+    if (!read || started.current || cancelled) return;
+    if (!cart.ready || cart.lines.length === 0) return;
+    started.current = true;
+    void go();
+  }, [read, cancelled, cart.ready, cart.lines.length, go]);
 
-    // checked here as well as on the server, so a typo costs a glance rather
-    // than a round trip out to the payment page and back
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
-      setError("Enter the email your receipt should go to.");
-      return;
-    }
-
-    setBusy(true);
-    setError("");
-    setCancelled(false);
-
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          lines: cart.lines.map((l) => ({ id: l.id, qty: l.qty })),
-          email: email.trim(),
-        }),
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.url) {
-        setError(data.error ?? "Could not start checkout. Try again.");
-        setBusy(false);
-        return;
-      }
-
-      // Shopify keeps its own copy of this cart and recovers it by email if
-      // the shopper abandons, so clearing ours loses nothing they cannot get
-      // back — and prevents a stale bag greeting a customer who has paid.
-      if (data.provider === "shopify") cart.clear();
-
-      trackPixel("InitiateCheckout", {
-        lines: cart.lines.map((l) => ({ id: l.id, qty: l.qty })),
-        currency: CURRENCY_LABEL,
-        value: cart.total / 100,
-      });
-
-      // hand off to the payment page; on the Stripe path the bag is cleared
-      // on the success page rather than here, so backing out leaves it intact
-      window.location.href = data.url;
-    } catch {
-      setError("No connection. Check your network and try again.");
-      setBusy(false);
-    }
-  };
-
-  // tin in the bag: the offer is still available and still worth stating,
-  // because the total on this page is the one it changes — and once the
-  // pack is added the card becomes the line confirming what the pair cost
-  const showOffer = cart.lines.some((l) => l.id === "ice-tin");
-
-  if (cart.ready && cart.lines.length === 0) {
-    return (
-      <main className="mx-auto flex min-h-[100dvh] max-w-xl flex-col items-center justify-center gap-5 px-6 text-center">
-        <SnowflakeIcon size={30} weight="thin" className="text-ice-500" />
-        <h1 className="text-3xl leading-none tracking-tighter text-white-ice">
-          Your bag is empty.
-        </h1>
-        <p className="max-w-[36ch] text-sm leading-relaxed text-fog">
-          There is nothing to check out. Add a tin to continue.
-        </p>
-        <Link
-          href="/#collection"
-          className="mt-2 rounded-full bg-ink px-6 py-3.5 text-sm font-medium text-paper transition-colors duration-300 hover:bg-ice-700"
-        >
-          View the tin
-        </Link>
-      </main>
-    );
-  }
-
-  return (
+  const Shell = ({ children }: { children: React.ReactNode }) => (
     <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
       <div className="flex items-center justify-between">
         <Link
@@ -125,21 +71,65 @@ export function CheckoutClient() {
           Continue shopping
         </Link>
       </div>
+      {children}
+    </main>
+  );
 
+  // still handing over, or still reading the bag back
+  const forwarding = !read || !cart.ready || (started.current && !error);
+
+  if (forwarding) {
+    return (
+      <Shell>
+        <div className="flex min-h-[50dvh] flex-col items-center justify-center gap-4 text-center">
+          <span className="h-5 w-5 animate-spin rounded-full border-[1.5px] border-frost/25 border-t-frost" />
+          <p className="text-lg tracking-tight text-white-ice">
+            Taking you to checkout.
+          </p>
+          <p className="max-w-[34ch] text-sm leading-relaxed text-fog">
+            Apple Pay, Shop Pay or card on the next screen.
+          </p>
+        </div>
+      </Shell>
+    );
+  }
+
+  if (cart.lines.length === 0) {
+    return (
+      <Shell>
+        <div className="flex min-h-[50dvh] flex-col items-center justify-center gap-5 text-center">
+          <SnowflakeIcon size={30} weight="thin" className="text-ice-500" />
+          <h1 className="text-3xl leading-none tracking-tighter text-white-ice">
+            Your bag is empty.
+          </h1>
+          <p className="max-w-[36ch] text-sm leading-relaxed text-fog">
+            There is nothing to check out. Add a tin to continue.
+          </p>
+          <Link
+            href="/products/ice-tin"
+            className="mt-2 rounded-full bg-ink px-6 py-3.5 text-sm font-medium text-paper transition-colors duration-300 hover:bg-ice-700"
+          >
+            View the tin
+          </Link>
+        </div>
+      </Shell>
+    );
+  }
+
+  // tin in the bag: the offer is still available and still worth stating,
+  // because the total on this page is the one it changes
+  const showOffer = cart.lines.some((l) => l.id === "ice-tin");
+
+  return (
+    <Shell>
       <h1 className="mt-12 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
-        Checkout
+        Your bag
       </h1>
       <p className="mt-4 max-w-[52ch] text-sm leading-relaxed text-fog">
-        Payment, address and delivery are taken on our secure payment page.
-        You will be returned here once the payment clears.
+        {cancelled
+          ? "The payment was not completed and your bag has been kept as it was. Pick up where you left off whenever you are ready."
+          : "Payment, address and delivery are taken on our secure payment page."}
       </p>
-
-      {cancelled && (
-        <p className="mt-6 flex items-start gap-2 rounded-2xl border border-frost/12 bg-abyss/70 px-4 py-3 text-sm text-fog">
-          <WarningCircleIcon size={15} weight="fill" className="mt-0.5 shrink-0 text-ice-500" />
-          The payment was not completed. Your bag has been kept as it was.
-        </p>
-      )}
 
       {error && (
         <p
@@ -152,11 +142,7 @@ export function CheckoutClient() {
       )}
 
       <div className="glass-edge mt-10 rounded-[2rem] bg-paper/75 p-6 backdrop-blur-sm sm:p-8">
-        <p className="font-mono text-[11px] tracking-[0.28em] text-fog uppercase">
-          Your bag
-        </p>
-
-        <ul className="mt-6 flex flex-col gap-5">
+        <ul className="flex flex-col gap-5">
           {cart.lines.map((l) => (
             <li key={l.id} className="flex items-center gap-4">
               {/* the badge hangs outside the thumbnail, so the clipping has to
@@ -174,7 +160,10 @@ export function CheckoutClient() {
                 <p className="truncate text-sm text-white-ice">{l.product.name}</p>
                 <p className="truncate text-xs text-fog">{l.product.tagline}</p>
               </div>
-              <AnimatedMoney cents={l.total} className="font-mono text-sm text-white-ice tabular-nums" />
+              <AnimatedMoney
+                cents={l.total}
+                className="font-mono text-sm text-white-ice tabular-nums"
+              />
             </li>
           ))}
         </ul>
@@ -191,12 +180,12 @@ export function CheckoutClient() {
           {cart.saving > 0 && (
             <div className="flex justify-between text-ice-700">
               <dt>Tin + pack saving</dt>
-              <dd className="font-mono">−{moneyExact(cart.saving)}</dd>
+              <dd className="font-mono tabular-nums">−{moneyExact(cart.saving)}</dd>
             </div>
           )}
           <div className="flex justify-between text-fog">
             <dt>Shipping</dt>
-            <dd className="font-mono">
+            <dd className="font-mono tabular-nums">
               {cart.shipping === 0 ? "Free" : moneyExact(cart.shipping)}
             </dd>
           </div>
@@ -206,73 +195,19 @@ export function CheckoutClient() {
           </div>
         </dl>
 
-        {/* asked here rather than on the payment page, and passed through so it
-            arrives prefilled — one field earlier, not one field more */}
-        <div className="mt-7">
-          <label
-            htmlFor="checkout-email"
-            className="font-mono text-[11px] tracking-[0.18em] text-fog uppercase"
-          >
-            Email
-          </label>
-          <input
-            id="checkout-email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") pay();
-            }}
-            placeholder="you@example.com"
-            aria-describedby="checkout-email-note"
-            /* text-base, not text-sm: iOS Safari zooms the viewport whenever a
-               focused field is under 16px, and it does not zoom back out. On
-               the one form that takes money, that is a lurch at the worst
-               possible moment. */
-            className="mt-2 w-full rounded-2xl border border-frost/12 bg-paper/60 px-4 py-3.5 text-base text-frost outline-none transition-colors duration-300 placeholder:text-fog/60 focus:border-ice-500/60"
-          />
-          <p id="checkout-email-note" className="mt-2 text-xs leading-relaxed text-fog/80">
-            Your receipt and tracking details are sent to this address. If
-            the order is not completed, we will send a single reminder and
-            nothing further.
-          </p>
-        </div>
+        <ExpressButton
+          className="mt-7"
+          busy={busy}
+          label={`Checkout — ${moneyExact(cart.total)}`}
+          onClick={() => void go()}
+        />
 
-        <button
-          onClick={pay}
-          disabled={busy}
-          className="group mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-4 text-sm font-medium text-paper transition-all duration-300 ease-[var(--ease-glide)] hover:bg-ice-700 active:scale-[0.99] disabled:opacity-70"
-        >
-          {busy ? (
-            <>
-              <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-paper/35 border-t-paper" />
-              Opening secure checkout
-            </>
-          ) : (
-            <>
-              Pay <AnimatedMoney cents={cart.total} className="tabular-nums" />
-              <ArrowRightIcon
-                size={14}
-                weight="bold"
-                className="transition-transform duration-300 group-hover:translate-x-1"
-              />
-            </>
-          )}
-        </button>
-
-        <p className="mt-4 flex items-center justify-center gap-2 text-xs text-fog/80">
-          <LockSimpleIcon size={13} weight="fill" />
-          Encrypted checkout. Card details never touch our servers.
-        </p>
         {/* the last thing read before paying should be the way out, not the
             lock icon */}
-        <p className="mt-2 text-center text-xs leading-relaxed text-fog/80">
+        <p className="mt-3 text-center text-xs leading-relaxed text-fog/80">
           {GUARANTEE_SHORT}
         </p>
       </div>
-    </main>
+    </Shell>
   );
 }

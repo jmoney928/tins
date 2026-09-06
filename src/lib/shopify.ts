@@ -30,9 +30,10 @@ const API_VERSION = process.env.SHOPIFY_API_VERSION ?? "2026-01";
  *   private (Shopify-Storefront-Private-Token)  — server-only, and reads a
  *           password-protected store perfectly well
  *
- * icetins.myshopify.com is password-protected today, so the private token is
- * the one that works. Every call here is server-side regardless, so the
- * private token is preferred whenever it is present.
+ * The storefront's password page has since come down, so either token reads
+ * it. Every call here is server-side regardless, so the private token is
+ * preferred whenever it is present — it keeps working if the password page
+ * ever goes back up.
  */
 export function shopifyConfigured() {
   return Boolean(

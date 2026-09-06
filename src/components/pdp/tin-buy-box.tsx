@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   CheckIcon,
@@ -13,6 +12,7 @@ import {
   TruckIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { useCart } from "../cart/cart-context";
+import { useExpressCheckout } from "../cart/use-express-checkout";
 import { ProductArt } from "../product-art";
 import {
   CATALOG,
@@ -52,7 +52,7 @@ export function TinBuyBox({
 }) {
   const product = CATALOG["ice-tin"];
   const cart = useCart();
-  const router = useRouter();
+  const { go, busy: buying, error: buyError } = useExpressCheckout();
   // `shot` is the photograph asked for, `shown` the one settled underneath.
   // The new one fades in over the old only once it has decoded, so a click
   // never swaps a photograph for a black square while the file arrives.
@@ -61,7 +61,6 @@ export function TinBuyBox({
   const [loaded, setLoaded] = useState(true);
   const [qty, setQty] = useState(1);
   const [state, setState] = useState<State>("idle");
-  const [buying, setBuying] = useState(false);
   const [ctaVisible, setCtaVisible] = useState(true);
   const ctaRef = useRef<HTMLDivElement>(null);
   const timers = useRef<number[]>([]);
@@ -97,11 +96,17 @@ export function TinBuyBox({
     );
   };
 
+  /**
+   * Straight to the payment page, where the wallets are. The lines are built
+   * here rather than read back from the bag, because cart state has not
+   * settled by the time this fires.
+   */
   const buyNow = () => {
     if (buying) return;
-    setBuying(true);
+    const bag = new Map(cart.lines.map((l) => [l.id, l.qty] as const));
+    bag.set(product.id, (bag.get(product.id) ?? 0) + qty);
     cart.add(product.id, qty);
-    router.push("/checkout");
+    void go([...bag].map(([id, q]) => ({ id, qty: q })));
   };
 
   const promoToday = freeShippingToday();
@@ -290,8 +295,19 @@ export function TinBuyBox({
               {buying ? (
                 <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-frost/35 border-t-frost" />
               ) : null}
-              {buying ? "Taking you to checkout" : "Checkout now"}
+              {buying ? "Opening secure checkout" : "Buy it now"}
             </button>
+            {/* the wallets live on the payment page, so this names them where
+                the decision is made rather than two screens later */}
+            <p className="mt-2.5 flex items-center justify-center gap-1.5 text-xs text-fog">
+              <LockSimpleIcon size={12} weight="fill" className="shrink-0" />
+              Apple Pay, Shop Pay or card on the next screen
+            </p>
+            {buyError && (
+              <p role="alert" className="mt-3 text-xs text-[#a33e37]">
+                {buyError}
+              </p>
+            )}
 
             {/* The offer, priced out, at the moment the decision is made.
                 It used to be a clause on the shipping line — the one line a
