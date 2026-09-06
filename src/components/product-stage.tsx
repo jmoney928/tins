@@ -28,7 +28,7 @@ export const ProductStage = memo(function ProductStage({
   return (
     <div
       ref={ref}
-      className="relative mx-auto flex w-full max-w-[460px] items-center justify-center"
+      className="relative mx-auto flex w-full max-w-[460px] items-center justify-center lg:max-w-[340px]"
       onPointerMove={(e) => {
         if (e.pointerType !== "mouse") return;
         const r = ref.current?.getBoundingClientRect();
@@ -56,10 +56,10 @@ export const ProductStage = memo(function ProductStage({
         className="relative w-full"
       >
         <Image
-          src="/tin-exploded.png"
+          src="/tin-cut.png"
           alt="The Ice Tins can separated into its three pieces: engraved lid, pouch chamber with a perforated floor, and the ice pack tray"
-          width={1400}
-          height={1400}
+          width={700}
+          height={1160}
           priority
           sizes="(max-width: 1024px) 80vw, 42vw"
           className="h-auto w-full"
