@@ -95,8 +95,8 @@ export function Hero() {
           <p className="max-w-[50ch] text-base leading-relaxed text-ice-100/80">
             A solid aluminium tin with a slim ice pack underneath the
             pouches. Freeze the pack overnight, drop it in, and the last
-            pouch of the day is as cold as the first. Twenty-five of them,
-            fridge-cold for six hours.
+            pouch of the day is as cold as the first, six hours after you
+            left the house.
           </p>
 
           <div className="mt-9">
