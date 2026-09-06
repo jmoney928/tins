@@ -20,11 +20,6 @@ const FLOORS = [
   ["3", "Bottom: the ice pack", "Freeze it overnight. It keeps everything above it cold for six hours."],
 ];
 
-const PROOF = [
-  ["6 hours", "cold, from the first pouch to the last"],
-  ["25", "pouches in the tin"],
-  ["90 min", "to freeze the pack"],
-];
 
 /**
  * The first screen is the inside of an ice cave.
@@ -57,7 +52,7 @@ export function Hero() {
           className="object-cover object-[center_30%] sm:hidden"
         />
         <Image
-          src="/ice-cave.jpg"
+          src="/ice-cave-r.jpg"
           alt=""
           fill
           priority
@@ -66,15 +61,15 @@ export function Hero() {
         />
         {/* legibility for the type column, and the seam into the white page */}
         <div className="absolute inset-0 bg-[#07111f]/30" />
-        <div className="absolute inset-0 hidden bg-gradient-to-l from-[#07111f]/80 via-[#07111f]/40 to-transparent lg:block" />
+        <div className="absolute inset-0 hidden bg-gradient-to-r from-[#07111f]/80 via-[#07111f]/40 to-transparent lg:block" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#07111f]/75 via-[#07111f]/45 to-[#07111f]/70 lg:hidden" />
         <div className="absolute inset-x-0 top-0 hidden h-40 bg-gradient-to-b from-[#07111f]/65 to-transparent lg:block" />
         <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-b from-transparent via-paper/60 to-paper" />
       </div>
 
-      <section className="relative mx-auto grid min-h-[100dvh] w-full max-w-7xl grid-cols-1 content-center gap-8 px-4 pt-28 pb-36 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:grid-rows-[auto_auto] lg:gap-x-8 lg:pt-24 lg:pb-40">
+      <section className="relative mx-auto grid min-h-[100dvh] w-full max-w-7xl grid-cols-1 content-center gap-8 px-4 pt-28 pb-36 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:grid-rows-[auto_auto_auto] lg:gap-x-8 lg:gap-y-6 lg:pt-24 lg:pb-40">
         <div
-          className="cascade relative lg:col-start-2 lg:row-start-1 lg:self-end lg:pl-12"
+          className="cascade relative lg:col-start-1 lg:row-start-1 lg:self-end lg:pr-8"
           style={{ "--index": 0 } as React.CSSProperties}
         >
           <span className="flex items-center gap-3 font-mono text-[11px] tracking-[0.28em] text-ice-300 uppercase">
@@ -93,15 +88,20 @@ export function Hero() {
         </div>
 
         <div
-          className="cascade lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:-ml-4 lg:self-center"
+          className="cascade lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:self-center"
           style={{ "--index": 1 } as React.CSSProperties}
         >
           <ProductStage onDark />
+        </div>
 
-          {/* the three floors, top to bottom, in the order the photograph
-              shows them — the floating labels said what each part was
-              called and not what it did */}
-          <ol className="mx-auto mt-2 flex max-w-[460px] flex-col gap-3 sm:mt-4">
+        {/* the three floors, top to bottom, in the order the photograph
+            beside them shows them — the floating labels said what each
+            part was called and not what it did */}
+        <div
+          className="cascade lg:col-start-1 lg:row-start-2 lg:pr-8"
+          style={{ "--index": 1 } as React.CSSProperties}
+        >
+          <ol className="flex max-w-[460px] flex-col gap-3">
             {FLOORS.map(([n, title, body]) => (
               <li key={n} className="flex items-start gap-4">
                 <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full bg-ice-300 font-mono text-xs font-medium text-ink">
@@ -121,17 +121,16 @@ export function Hero() {
         </div>
 
         <div
-          className="cascade lg:col-start-2 lg:row-start-2 lg:pl-12"
+          className="cascade lg:col-start-1 lg:row-start-3 lg:pr-8"
           style={{ "--index": 2 } as React.CSSProperties}
         >
           <p className="max-w-[50ch] text-base leading-relaxed text-ice-100/80">
             The Ice Tin is a solid aluminium snus tin with a slim ice pack
             underneath the pouches. Freeze the pack overnight, drop it in,
-            and the last pouch of the day is as cold as the first, six hours
-            after you left the house.
+            and the last pouch of the day is as cold as the first.
           </p>
 
-          <div className="mt-9">
+          <div className="mt-7">
             {onSale && (
               <p className="font-mono text-[11px] tracking-[0.24em] text-ice-300 uppercase">
                 Launch price
@@ -200,14 +199,6 @@ export function Hero() {
             </li>
           </ul>
 
-          <dl className="mt-10 grid grid-cols-3 gap-6 border-t border-white/12 pt-7">
-            {PROOF.map(([n, label]) => (
-              <div key={n}>
-                <dt className="font-mono text-lg text-white">{n}</dt>
-                <dd className="mt-1 text-xs leading-snug text-ice-100/70">{label}</dd>
-              </div>
-            ))}
-          </dl>
         </div>
       </section>
     </div>
