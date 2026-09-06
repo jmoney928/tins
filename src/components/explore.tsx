@@ -19,14 +19,14 @@ const TOPICS = [
   {
     href: "/cold-system",
     eyebrow: "The cold system",
-    title: "Six hours, and how it is measured",
-    body: "A perforated tray of twenty-five pouches over a slim frozen pack, sealed on two O-rings, holding fridge temperature for six hours at room ambient — and the testing behind that figure.",
+    title: "Six hours, and how we know",
+    body: "Where the cold comes from, how long it lasts in a warm room, and what happens when the pack is left out. The testing behind the number, for anyone who wants to check it.",
   },
   {
     href: "/build",
     eyebrow: "The build",
-    title: "Materials and construction",
-    body: "Cerakote over bead-blasted 6061-T6 aluminium. 68 mm in diameter, 41 mm tall, with three floors of 8, 20 and 13 mm.",
+    title: "What it is made of",
+    body: "Cut from a solid block of aluminium and finished matte black. The size, the weight, the three floors and the seals, for anyone who likes to know exactly what they are holding.",
   },
   {
     href: "/field-notes",
