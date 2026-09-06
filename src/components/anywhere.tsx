@@ -20,8 +20,9 @@ export function Anywhere() {
             Anywhere you go, it stays cold.
           </h2>
           <p className="mt-5 max-w-[46ch] text-base leading-relaxed text-fog">
-            It is the same size as a normal can. Same pocket, same bag. The
-            only difference is what is inside when you open it.
+            It is the same width as a normal can and one floor taller. Same
+            pocket, same bag. The difference is what is inside when you open
+            it.
           </p>
         </Reveal>
 

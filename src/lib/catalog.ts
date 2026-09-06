@@ -51,7 +51,7 @@ export const CATALOG: Record<string, Product> = {
       "The Ice Tin surrounded by a burst of powdered ice and cold vapour",
     ],
     blurb:
-      "A can the size of the one in your pocket now, with a slim ice pack underneath and room for twenty-five pouches above it. Screw it shut and it holds fridge temperature for six hours, so the last pouch of the day is as cold as the first.",
+      "A can the same width as the one in your pocket now and one floor taller, with a slim ice pack underneath and room for twenty-five pouches above it. Screw it shut and it holds fridge temperature for six hours, so the last pouch of the day is as cold as the first.",
     // benefit first, engineering second — the order a buyer cares about
     points: [
       "Twenty-five pouches, cold for six hours",

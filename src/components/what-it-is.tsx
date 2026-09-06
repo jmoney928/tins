@@ -37,9 +37,9 @@ export function WhatItIs() {
             </p>
           </div>
           <p className="mt-6 max-w-[46ch] text-sm leading-relaxed text-fog">
-            That is the whole idea. The tin is solid aluminium, the ice pack
-            is the size of a coin, and the two together fit in the same
-            pocket your can does now.
+            That is the whole idea. The tin is solid aluminium and the ice
+            pack is a slim disc that sits flat in the base. It is the same
+            width as a normal can, one floor taller.
           </p>
         </Reveal>
       </div>

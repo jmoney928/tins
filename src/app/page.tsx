@@ -68,7 +68,7 @@ export default function Home() {
         <Why />
         <CtaBar />
         <Anywhere />
-        <CtaBar note="Same size as a normal can." />
+        <CtaBar note="Same width as a normal can, one floor taller." />
         <Collection />
         <Offer />
         <FieldNotes title="People who carry one." />
