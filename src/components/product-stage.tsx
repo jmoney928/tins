@@ -3,32 +3,34 @@
 import { memo, useRef } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { Splatter } from "./splatter";
+import { LAYERS, STAGE_ALT } from "@/lib/stage";
 
 const SPRING = { stiffness: 80, damping: 18, mass: 0.6 };
 
+const EASE = [0.16, 1, 0.3, 1] as const;
+
 /**
- * Hero object: the three pieces, shot separated. Parallax only — a photograph
- * tilted in 3D reads as a mistake, so the pointer nudges it instead.
- * Isolated leaf; the float loop never re-renders the page.
+ * Hero object. Each piece floats on its own period so the stack drifts the
+ * way a thing hanging in cold air would, and the pointer nudges the whole
+ * group a little. No 3D tilt: a photograph tilted in perspective reads as a
+ * mistake. Isolated leaf; the loops never re-render the page.
  */
 export const ProductStage = memo(function ProductStage({
-  onDark = false,
+  className = "",
 }: {
-  /** drops the multiply splatter, which only muddies a dark ground */
-  onDark?: boolean;
+  className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const px = useMotionValue(0);
   const py = useMotionValue(0);
 
-  const x = useSpring(useTransform(px, [-0.5, 0.5], [-14, 14]), SPRING);
-  const y = useSpring(useTransform(py, [-0.5, 0.5], [-10, 10]), SPRING);
+  const x = useSpring(useTransform(px, [-0.5, 0.5], [-12, 12]), SPRING);
+  const y = useSpring(useTransform(py, [-0.5, 0.5], [-8, 8]), SPRING);
 
   return (
     <div
       ref={ref}
-      className="relative mx-auto flex w-full max-w-[460px] items-center justify-center lg:max-w-[340px]"
+      className={`relative w-full ${className}`}
       onPointerMove={(e) => {
         if (e.pointerType !== "mouse") return;
         const r = ref.current?.getBoundingClientRect();
@@ -41,31 +43,44 @@ export const ProductStage = memo(function ProductStage({
         py.set(0);
       }}
     >
-      {!onDark && (
-        <Splatter
-          scope="hero-product"
-          rotate={-22}
-          className="pointer-events-none absolute inset-[-14%] opacity-[0.38] mix-blend-multiply"
-        />
-      )}
-
       <motion.div
         style={{ x, y }}
-        animate={{ translateY: [0, -9, 0] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-        className="relative w-full"
+        className="relative aspect-[415/705] w-full"
+        role="img"
+        aria-label={STAGE_ALT}
       >
-        <Image
-          src="/tin-cut.png"
-          alt="The Ice Tins can separated into its three pieces: engraved lid, pouch chamber with a perforated floor, and the ice pack tray"
-          width={700}
-          height={1160}
-          priority
-          sizes="(max-width: 1024px) 80vw, 42vw"
-          className="h-auto w-full"
-        />
+        {LAYERS.map((l, i) => (
+          <motion.div
+            key={l.src}
+            className="absolute inset-x-0"
+            style={{ top: `${l.top}%` }}
+            initial={{ y: l.lift, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1.3, ease: EASE, delay: 0.12 + i * 0.06 }}
+          >
+            <motion.div
+              animate={{ y: [0, -l.float, 0] }}
+              transition={{
+                duration: l.dur,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1.4 + i * 0.4,
+              }}
+            >
+              <Image
+                src={l.src}
+                alt=""
+                width={l.w}
+                height={l.h}
+                priority
+                sizes="(max-width: 640px) 52vw, (max-width: 1024px) 40vw, 360px"
+                className="h-auto w-full select-none"
+                draggable={false}
+              />
+            </motion.div>
+          </motion.div>
+        ))}
       </motion.div>
-
     </div>
   );
 });

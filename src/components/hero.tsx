@@ -7,6 +7,7 @@ import {
   WrenchIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { ProductStage } from "./product-stage";
+import { LAYER_ANCHORS } from "@/lib/stage";
 import { Magnetic } from "./magnetic";
 import { CATALOG, bundlePair, currentPrice, money, tinOnSale } from "@/lib/catalog";
 import { GUARANTEE_SHORT } from "@/lib/guarantee";
@@ -17,26 +18,37 @@ import { SELLING } from "@/lib/mode";
 import { buyVerb } from "@/lib/preorder";
 import { PreorderNote } from "./preorder-note";
 
-/** Top to bottom, as the photograph shows them. */
-const FLOORS = [
-  ["1", "Top: your spent pouches", "Done with one? It goes in here, away from the fresh ones."],
-  ["2", "Middle: your fresh pouches", "Twenty-five of them, sitting right on top of the cold."],
-  ["3", "Bottom: the ice pack", "Freeze it overnight. It keeps everything above it cold for six hours."],
+/**
+ * One fact per piece, top to bottom, each sitting level with the piece it
+ * describes. The title says what the part is; the line under it says what
+ * that does for the person holding the tin. Nothing here that the product
+ * page and the FAQ do not already claim.
+ */
+const LAYER_FACTS = [
+  {
+    title: "Machined aluminium lid",
+    body: "Screws shut on two O-rings. Rain and sweat stay out, cold stays in.",
+  },
+  {
+    title: "Your pouches",
+    body: "Sit on a perforated floor, so the cold comes straight up under them.",
+  },
+  {
+    title: "The ice pack",
+    body: "Freeze it overnight, drop it in. Six hours of cold.",
+  },
 ];
 
-
 /**
- * The first screen is the inside of an ice cave.
+ * The first screen, read in the order the eye takes it: the headline is the
+ * biggest thing on the page, the tin hangs directly beneath it, the three
+ * facts sit to the right of the tin with a line back to the piece each one
+ * describes, and the price and button close the loop below the facts.
  *
- * The photograph is mirrored so its bright opening sits behind the tin on
- * the left and the dark wall carries the type on the right. Two overlays do
- * the rest: a left-running darkening so the text column never depends on
- * the photograph's own contrast, and a fade to paper along the bottom so
- * the page below continues white without a seam.
- *
- * Three grid children rather than two columns of prose: on mobile the
- * object lands between the headline and the body copy instead of below the
- * fold.
+ * The background is the inside of an ice cave. Two overlays keep it out of
+ * the way: a darkening wash so the type never depends on the photograph's
+ * own contrast, and a fade to paper along the bottom so the page below
+ * continues white without a seam.
  */
 export function Hero() {
   const onSale = tinOnSale();
@@ -63,27 +75,24 @@ export function Hero() {
           sizes="100vw"
           className="hidden object-cover object-center sm:block"
         />
-        {/* legibility for the type column, and the seam into the white page */}
-        <div className="absolute inset-0 bg-[#07111f]/30" />
-        <div className="absolute inset-0 hidden bg-gradient-to-r from-[#07111f]/80 via-[#07111f]/40 to-transparent lg:block" />
+        <div className="absolute inset-0 bg-[#07111f]/40" />
+        <div className="absolute inset-0 hidden bg-gradient-to-r from-[#07111f]/70 via-[#07111f]/35 to-[#07111f]/60 lg:block" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#07111f]/75 via-[#07111f]/45 to-[#07111f]/70 lg:hidden" />
         <div className="absolute inset-x-0 top-0 hidden h-40 bg-gradient-to-b from-[#07111f]/65 to-transparent lg:block" />
         <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-b from-transparent via-paper/60 to-paper" />
       </div>
 
-      <section className="relative mx-auto grid min-h-[100dvh] w-full max-w-7xl grid-cols-1 content-center gap-8 px-4 pt-28 pb-36 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:grid-rows-[auto_auto_auto] lg:gap-x-8 lg:gap-y-6 lg:pt-24 lg:pb-40">
+      <section className="relative mx-auto grid min-h-[100dvh] w-full max-w-7xl grid-cols-1 content-center gap-y-6 px-4 pt-24 pb-32 sm:px-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-x-12 lg:gap-y-8 lg:pt-24 lg:pb-28">
+        {/* 1. The headline. Biggest thing on the screen, read first. */}
         <div
-          className="cascade relative lg:col-start-1 lg:row-start-1 lg:self-end lg:pr-8"
+          className="cascade lg:col-span-2"
           style={{ "--index": 0 } as React.CSSProperties}
         >
           <span className="flex items-center gap-3 font-mono text-[11px] tracking-[0.28em] text-ice-300 uppercase">
             <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-300" />
             Made in Vancouver. Ships worldwide.
           </span>
-
-          {/* what it is and what it does, in one line; the figures move to
-              the sentence below, where they support rather than lead */}
-          <h1 className="mt-6 text-[3.25rem] leading-[0.9] font-medium tracking-tighter text-balance text-white sm:text-7xl lg:text-[5.2rem]">
+          <h1 className="mt-5 text-[3.25rem] leading-[0.9] font-medium tracking-tighter text-balance text-white sm:text-7xl lg:text-[5.4rem]">
             Keep your snus{" "}
             <span className="bg-gradient-to-b from-white via-ice-300 to-ice-500 bg-clip-text font-semibold tracking-tight text-transparent uppercase">
               ice cold
@@ -91,55 +100,65 @@ export function Hero() {
           </h1>
         </div>
 
-        {/* on a phone the floors and the tin share a row, text left and tin
-            right; from lg the wrapper dissolves and each takes its own
-            cell in the outer grid */}
-        <div className="grid grid-cols-[minmax(0,1fr)_11rem] items-center gap-2 sm:grid-cols-[minmax(0,1fr)_16rem] sm:gap-6 lg:contents">
-          {/* the three floors, top to bottom, in the order the photograph
-              beside them shows them — the floating labels said what each
-              part was called and not what it did */}
-          <div
-            className="cascade lg:col-start-1 lg:row-start-2 lg:pr-8"
-            style={{ "--index": 1 } as React.CSSProperties}
-          >
-            <ol className="flex max-w-[460px] flex-col gap-3">
-              {FLOORS.map(([n, title, body]) => (
-                <li key={n} className="flex items-start gap-3 lg:gap-4">
-                  <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-ice-300 font-mono text-[11px] font-medium text-ink lg:size-7 lg:text-xs">
-                    {n}
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-sm leading-tight font-medium text-white lg:text-base">
-                      {title}
-                    </span>
-                    <span className="mt-0.5 block text-xs leading-snug text-ice-100/75 lg:text-sm">
-                      {body}
-                    </span>
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </div>
+        {/* 2. The tin, straight under the headline, and 3. a fact beside each
+            piece with a line back to it. The label column is as tall as the
+            stage, so a label placed at a percentage of its height lands
+            level with the rim it points at, at any width. */}
+        <div
+          className="cascade relative lg:self-center"
+          style={{ "--index": 1 } as React.CSSProperties}
+        >
+          <ProductStage className="max-w-[51%] lg:max-w-[290px] xl:max-w-[315px]" />
 
-          <div
-            className="cascade lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:self-center"
-            style={{ "--index": 1 } as React.CSSProperties}
+          {/* absolutely placed against the wrapper, whose height is the stage's,
+              so the percentage offsets below have something to resolve against */}
+          <ol
+            className="absolute inset-y-0 right-0 left-[51%] lg:left-[290px] xl:left-[315px]"
+            aria-label="The three parts of the tin"
           >
-            <ProductStage onDark />
-          </div>
+            {LAYER_FACTS.map((f, i) => (
+              <li
+                key={f.title}
+                className="cascade absolute inset-x-0 flex items-start gap-2 sm:gap-3"
+                style={
+                  {
+                    top: `calc(${LAYER_ANCHORS[i]}% - 0.7rem)`,
+                    "--index": 3 + i,
+                  } as React.CSSProperties
+                }
+              >
+                {/* the line back to the piece, arrowhead at the tin end */}
+                <span
+                  aria-hidden
+                  className="relative mt-[0.68rem] h-px w-5 shrink-0 bg-ice-300/85 sm:w-9 lg:mt-[0.72rem] lg:w-10 xl:mt-[0.8rem] xl:w-14"
+                >
+                  <span className="absolute top-1/2 -left-px size-[7px] -translate-y-1/2 rotate-45 border-b border-l border-ice-300" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-[13px] leading-tight font-medium text-white sm:text-sm lg:text-base xl:text-lg">
+                    {f.title}
+                  </span>
+                  <span className="mt-1 block text-[12px] leading-snug text-ice-100/80 sm:text-[13px] lg:text-sm lg:leading-relaxed xl:text-[15px]">
+                    {f.body}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ol>
         </div>
 
+        {/* 4. Why it matters, then the price and the button. */}
         <div
-          className="cascade lg:col-start-1 lg:row-start-3 lg:pr-8"
+          className="cascade lg:self-center"
           style={{ "--index": 2 } as React.CSSProperties}
         >
-          <p className="max-w-[50ch] text-base leading-relaxed text-ice-100/80">
-            The Ice Tin is a solid aluminium snus tin with a slim ice pack
-            underneath the pouches. Freeze the pack overnight, drop it in,
-            and the last pouch of the day is as cold as the first.
+          <p className="max-w-[46ch] text-[15px] leading-normal text-ice-100/85 sm:text-base sm:leading-relaxed lg:text-lg">
+            Warm snus is like warm beer: still snus, not what you paid for.
+            The Ice Tin holds every pouch at fridge temperature for six
+            hours, so the last one of the day is as cold as the first.
           </p>
 
-          <div className="mt-7">
+          <div className="mt-6">
             {onSale && (
               <p className="font-mono text-[11px] tracking-[0.24em] text-ice-300 uppercase">
                 Launch price
@@ -231,7 +250,6 @@ export function Hero() {
               Lifetime shell warranty
             </li>
           </ul>
-
         </div>
       </section>
     </div>
