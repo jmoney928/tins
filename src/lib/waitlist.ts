@@ -76,6 +76,22 @@ export async function saveSignup(input: Signup): Promise<SaveResult> {
     if (!error) return { saved: true, via: "database", count: await count() };
 
     console.error(`[waitlist] database write failed for ${email}:`, error.message);
+
+    // The address is the only part that matters. If the row was refused for
+    // anything else — a column this code knows about and the table does not,
+    // a missing unique constraint behind the upsert — try again with nothing
+    // but the address rather than losing the person over their referrer.
+    const bare = await db()
+      .from("waitlist")
+      .upsert({ email }, { onConflict: "email", ignoreDuplicates: true });
+    if (!bare.error) {
+      console.warn(`[waitlist] saved ${email} without its metadata:`, error.message);
+      return { saved: true, via: "database", count: await count() };
+    }
+
+    const plain = await db().from("waitlist").insert({ email });
+    if (!plain.error) return { saved: true, via: "database", count: await count() };
+    console.error(`[waitlist] every database write failed for ${email}:`, plain.error.message);
   }
 
   // the store could not take it, so it goes somewhere a person will see it

@@ -13,10 +13,34 @@ export const dynamic = "force-dynamic";
  * provider's own error text, which is what makes a misconfiguration fixable
  * without shell access to production.
  */
+/** Is the sending key real, and which domains may it send from? */
+async function resendDiagnostics() {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return { state: "not configured" };
+  try {
+    const res = await fetch("https://api.resend.com/domains", {
+      headers: { Authorization: `Bearer ${key}` },
+      signal: AbortSignal.timeout(6000),
+    });
+    const text = await res.text();
+    if (!res.ok) return { state: "rejected", status: res.status, said: text.slice(0, 200) };
+    const parsed = JSON.parse(text) as { data?: { name: string; status: string }[] };
+    return {
+      state: "ok",
+      from: process.env.ORDER_FROM_EMAIL ?? "Ice Tins Supply Co. <shop@icetins.com>",
+      noticeTo: process.env.WAITLIST_NOTIFY_EMAIL ?? process.env.ORDER_REPLY_TO ?? "shop@icetins.com",
+      domains: (parsed.data ?? []).map((d) => `${d.name}:${d.status}`),
+    };
+  } catch (err) {
+    return { state: "unreachable", said: err instanceof Error ? err.message : String(err) };
+  }
+}
+
 export async function GET() {
   const key = inspectKey();
   const cfg = dbConfig();
 
+  const resend = await resendDiagnostics();
   const supabase: Record<string, unknown> = { config: cfg.state };
   if (cfg.state === "partial") supabase.missing = cfg.missing;
   if (cfg.state === "malformed") supabase.problem = cfg.problem;
@@ -37,16 +61,37 @@ export async function GET() {
 
     // the waitlist is the only thing the site collects right now, so a
     // missing table is the most important thing this endpoint can report
-    const waitlist = await db().from("waitlist").select("email", { count: "exact", head: true });
-    supabase.waitlist = waitlist.error
-      ? {
-          state: "unavailable",
-          error: waitlist.error.message,
-          hint: /does not exist|schema cache/i.test(waitlist.error.message)
-            ? "Run supabase/schema.sql in the SQL editor to create it. Signups are being emailed to the shop inbox until then."
-            : undefined,
-        }
-      : { state: "present", signups: waitlist.count ?? 0 };
+    const read = await db().from("waitlist").select("email", { count: "exact", head: true });
+    if (read.error) {
+      supabase.waitlist = {
+        state: "unavailable",
+        error: read.error.message,
+        hint: /does not exist|schema cache/i.test(read.error.message)
+          ? "Run supabase/schema.sql in the SQL editor to create it."
+          : undefined,
+      };
+    } else {
+      const probe = "__healthcheck__@icetins.invalid";
+      const full = await db()
+        .from("waitlist")
+        .upsert(
+          { email: probe, source: "healthcheck", referrer: null, utm: null, fbp: null, fbc: null, user_agent: null, ip: null },
+          { onConflict: "email", ignoreDuplicates: true },
+        );
+      const minimal = full.error
+        ? await db().from("waitlist").upsert({ email: probe }, { onConflict: "email", ignoreDuplicates: true })
+        : null;
+      await db().from("waitlist").delete().eq("email", probe);
+
+      supabase.waitlist = {
+        state: "present",
+        signups: read.count ?? 0,
+        writable: !full.error,
+        fullRowError: full.error?.message,
+        minimalRowWritable: minimal ? !minimal.error : undefined,
+        minimalRowError: minimal?.error?.message,
+      };
+    }
 
     // does the settle_order function exist? call it with a bad payload on
     // purpose — a missing function and a rejected payload are different errors
@@ -92,7 +137,7 @@ export async function GET() {
     metaCapi: process.env.META_PIXEL_ID && process.env.META_CAPI_ACCESS_TOKEN
       ? "configured"
       : "missing META_PIXEL_ID or META_CAPI_ACCESS_TOKEN",
-    email: process.env.RESEND_API_KEY ? "configured" : "missing RESEND_API_KEY",
+    email: resend,
     cronSecret: process.env.CRON_SECRET ? "set" : "missing",
     shopify: await shopifyDiagnostics(),
     shopifyAdmin: await shopifyAdminDiagnostics(),
