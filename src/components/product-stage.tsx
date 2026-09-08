@@ -45,7 +45,7 @@ export const ProductStage = memo(function ProductStage({
     >
       <motion.div
         style={{ x, y }}
-        className="relative aspect-[416/706] w-full"
+        className="relative aspect-[416/702] w-full"
         role="img"
         aria-label={STAGE_ALT}
       >
