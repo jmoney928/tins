@@ -25,6 +25,26 @@ export function contactsKey() {
   return process.env.RESEND_CONTACTS_API_KEY ?? process.env.RESEND_API_KEY;
 }
 
+/**
+ * Which variable the key came from, and enough of it to tell two keys apart.
+ *
+ * Without this a missing RESEND_CONTACTS_API_KEY and a sending-only key are
+ * the same error, because the missing one silently falls back to the key that
+ * can only send. Never the key itself: the prefix every Resend key shares,
+ * plus its length, which identifies it without revealing it — the same shape
+ * the Stripe check here already reports.
+ */
+function keyOrigin() {
+  const scoped = process.env.RESEND_CONTACTS_API_KEY;
+  const key = scoped ?? process.env.RESEND_API_KEY;
+  return {
+    variable: scoped
+      ? "RESEND_CONTACTS_API_KEY"
+      : "RESEND_API_KEY (RESEND_CONTACTS_API_KEY is not reaching this function)",
+    looksLike: key ? `${key.slice(0, 5)}… ${key.length} chars` : "unset",
+  };
+}
+
 export function contactsConfigured() {
   return Boolean(contactsKey());
 }
@@ -69,7 +89,8 @@ export async function addContact(email: string): Promise<ContactResult> {
 /** For the health endpoint: can this key actually manage contacts? */
 export async function contactsDiagnostics(): Promise<Record<string, unknown>> {
   const key = contactsKey();
-  if (!key) return { state: "not configured", missing: "RESEND_API_KEY" };
+  const origin = keyOrigin();
+  if (!key) return { state: "not configured", missing: "RESEND_API_KEY", ...origin };
   try {
     const res = await fetch(`${ENDPOINT}?limit=1`, {
       headers: { Authorization: `Bearer ${key}` },
@@ -81,6 +102,7 @@ export async function contactsDiagnostics(): Promise<Record<string, unknown>> {
         state: "rejected",
         status: res.status,
         said,
+        ...origin,
         hint: /restricted/i.test(said)
           ? "That key may only send. Create a Full access key at resend.com/api-keys and set RESEND_CONTACTS_API_KEY."
           : undefined,
@@ -88,6 +110,7 @@ export async function contactsDiagnostics(): Promise<Record<string, unknown>> {
     }
     return {
       state: "ready",
+      ...origin,
       segment: process.env.RESEND_SEGMENT_ID ? "set" : "none (contacts are stored unsegmented)",
     };
   } catch (err) {
