@@ -27,6 +27,8 @@ import { BundleCard } from "../bundle-card";
 import { availabilityShort, dispatchSentence } from "@/lib/fulfilment";
 import { GuaranteeLine } from "../guarantee";
 import { ReviewBadge } from "../review-badge";
+import { WaitlistForm } from "../waitlist-form";
+import { SELLING } from "@/lib/mode";
 import { AnimatedMoney } from "../animated-money";
 
 type State = "idle" | "adding" | "added";
@@ -199,7 +201,7 @@ export function TinBuyBox({
               the checkout has already settled. */}
           <p className="flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-ice-700 uppercase">
             <span className="animate-breathe h-1.5 w-1.5 rounded-full bg-ice-500" />
-            {availabilityShort()}
+            {SELLING ? availabilityShort() : "Coming soon"}
           </p>
 
           <h1 className="mt-3 text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
@@ -245,75 +247,93 @@ export function TinBuyBox({
               <span className="text-xs text-fog">{CURRENCY_LABEL}</span>
             </div>
 
-            <div className="mt-4 flex items-stretch gap-3">
-              <div className="flex items-center rounded-full border border-frost/12">
-                <button
-                  onClick={() => setQty((q) => Math.max(1, q - 1))}
-                  aria-label="One fewer"
-                  className="flex min-h-11 items-center px-4 text-fog transition-colors hover:text-frost"
-                >
-                  <MinusIcon size={14} weight="bold" />
-                </button>
-                <span className="min-w-8 text-center font-mono text-sm text-frost">{qty}</span>
-                <button
-                  onClick={() => setQty((q) => Math.min(99, q + 1))}
-                  aria-label="One more"
-                  className="flex min-h-11 items-center px-4 text-fog transition-colors hover:text-frost"
-                >
-                  <PlusIcon size={14} weight="bold" />
-                </button>
-              </div>
+            {SELLING ? (
+              <>
+                <div className="mt-4 flex items-stretch gap-3">
+                  <div className="flex items-center rounded-full border border-frost/12">
+                    <button
+                      onClick={() => setQty((q) => Math.max(1, q - 1))}
+                      aria-label="One fewer"
+                      className="flex min-h-11 items-center px-4 text-fog transition-colors hover:text-frost"
+                    >
+                      <MinusIcon size={14} weight="bold" />
+                    </button>
+                    <span className="min-w-8 text-center font-mono text-sm text-frost">{qty}</span>
+                    <button
+                      onClick={() => setQty((q) => Math.min(99, q + 1))}
+                      aria-label="One more"
+                      className="flex min-h-11 items-center px-4 text-fog transition-colors hover:text-frost"
+                    >
+                      <PlusIcon size={14} weight="bold" />
+                    </button>
+                  </div>
 
-              <button
-                onClick={add}
-                disabled={state !== "idle"}
-                className={`flex flex-1 items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium transition-all duration-300 ease-[var(--ease-glide)] active:scale-[0.98] ${
-                  state === "added" ? "bg-ice-500 text-paper" : "bg-ink text-paper hover:bg-ice-700"
-                }`}
-              >
-                {state === "adding" ? (
-                  <>
-                    <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-paper/35 border-t-paper" />
-                    Adding
-                  </>
-                ) : state === "added" ? (
-                  <>
-                    <CheckIcon size={14} weight="bold" />
-                    In bag
-                  </>
-                ) : (
-                  "Add to bag"
+                  <button
+                    onClick={add}
+                    disabled={state !== "idle"}
+                    className={`flex flex-1 items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium transition-all duration-300 ease-[var(--ease-glide)] active:scale-[0.98] ${
+                      state === "added"
+                        ? "bg-ice-500 text-paper"
+                        : "bg-ink text-paper hover:bg-ice-700"
+                    }`}
+                  >
+                    {state === "adding" ? (
+                      <>
+                        <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-paper/35 border-t-paper" />
+                        Adding
+                      </>
+                    ) : state === "added" ? (
+                      <>
+                        <CheckIcon size={14} weight="bold" />
+                        In bag
+                      </>
+                    ) : (
+                      "Add to bag"
+                    )}
+                  </button>
+                </div>
+
+                <button
+                  onClick={buyNow}
+                  disabled={buying}
+                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-frost/15 px-6 py-3.5 text-sm font-medium text-frost transition-all duration-300 ease-[var(--ease-glide)] hover:border-ice-500/50 hover:bg-slate-deep/40 active:scale-[0.98] disabled:opacity-70"
+                >
+                  {buying ? (
+                    <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-frost/35 border-t-frost" />
+                  ) : null}
+                  {buying ? "Opening secure checkout" : "Buy it now"}
+                </button>
+                {/* the wallets live on the payment page, so this names them where
+                    the decision is made rather than two screens later */}
+                <p className="mt-2.5 flex items-center justify-center gap-1.5 text-xs text-fog">
+                  <LockSimpleIcon size={12} weight="fill" className="shrink-0" />
+                  Apple Pay, Google Pay, Shop Pay or card next
+                </p>
+                {buyError && (
+                  <p role="alert" className="mt-3 text-xs text-[#a33e37]">
+                    {buyError}
+                  </p>
                 )}
-              </button>
-            </div>
 
-            <button
-              onClick={buyNow}
-              disabled={buying}
-              className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-frost/15 px-6 py-3.5 text-sm font-medium text-frost transition-all duration-300 ease-[var(--ease-glide)] hover:border-ice-500/50 hover:bg-slate-deep/40 active:scale-[0.98] disabled:opacity-70"
-            >
-              {buying ? (
-                <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-frost/35 border-t-frost" />
-              ) : null}
-              {buying ? "Opening secure checkout" : "Buy it now"}
-            </button>
-            {/* the wallets live on the payment page, so this names them where
-                the decision is made rather than two screens later */}
-            <p className="mt-2.5 flex items-center justify-center gap-1.5 text-xs text-fog">
-              <LockSimpleIcon size={12} weight="fill" className="shrink-0" />
-              Apple Pay, Google Pay, Shop Pay or card next
-            </p>
-            {buyError && (
-              <p role="alert" className="mt-3 text-xs text-[#a33e37]">
-                {buyError}
-              </p>
+                {/* The offer, priced out, at the moment the decision is made.
+                    It used to be a clause on the shipping line — the one line a
+                    shopper skims — which meant the best-value option on the shop
+                    was also the least visible thing on the page. */}
+                {!promoToday && <BundleCard className="mt-6" />}
+              </>
+            ) : (
+              <div id="waitlist" className="mt-5 scroll-mt-28">
+                <p className="max-w-[46ch] text-sm leading-relaxed text-frost">
+                  The first run is being machined now. Leave your email and you
+                  will hear the day it goes on sale.
+                </p>
+                <WaitlistForm
+                  source="product-page"
+                  className="mt-4"
+                  note="One email the day it opens. Nothing else."
+                />
+              </div>
             )}
-
-            {/* The offer, priced out, at the moment the decision is made.
-                It used to be a clause on the shipping line — the one line a
-                shopper skims — which meant the best-value option on the shop
-                was also the least visible thing on the page. */}
-            {!promoToday && <BundleCard className="mt-6" />}
 
             <p className="mt-4 flex items-center gap-1.5 text-xs text-fog">
               <TruckIcon size={13} weight="light" />
@@ -364,22 +384,31 @@ export function TinBuyBox({
                 <AnimatedMoney cents={unitPrice * qty} format={money} />
               </p>
             </div>
-            <button
-              onClick={add}
-              disabled={state !== "idle"}
-              className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 active:scale-[0.97] ${
-                state === "added" ? "bg-ice-500 text-paper" : "bg-ink text-paper"
-              }`}
-            >
-              {state === "added" ? (
-                <>
-                  <CheckIcon size={14} weight="bold" />
-                  In bag
-                </>
-              ) : (
-                "Add to bag"
-              )}
-            </button>
+            {SELLING ? (
+              <button
+                onClick={add}
+                disabled={state !== "idle"}
+                className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 active:scale-[0.97] ${
+                  state === "added" ? "bg-ice-500 text-paper" : "bg-ink text-paper"
+                }`}
+              >
+                {state === "added" ? (
+                  <>
+                    <CheckIcon size={14} weight="bold" />
+                    In bag
+                  </>
+                ) : (
+                  "Add to bag"
+                )}
+              </button>
+            ) : (
+              <a
+                href="#waitlist"
+                className="flex shrink-0 items-center gap-2 rounded-full bg-ink px-5 py-3 text-sm font-medium text-paper transition-all duration-300 active:scale-[0.97]"
+              >
+                Join the waitlist
+              </a>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

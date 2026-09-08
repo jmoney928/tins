@@ -3,8 +3,22 @@ import { LEAD_TIME_WEEKS, TRANSIT_DAYS } from "./fulfilment";
 import { GUARANTEE_DAYS } from "./guarantee";
 import { aggregateRatingJsonLd } from "./social-proof";
 import { ORG_ID, ORG_NAME, PACK_ID, PRODUCT_ID, absoluteUrl } from "./seo";
+import { SELLING } from "./mode";
 
 const PDP_URL = absoluteUrl("/products/ice-tin");
+
+/**
+ * OutOfStock while the shop is a waitlist.
+ *
+ * Of the values schema.org offers this is the only unambiguously true one:
+ * it cannot be bought today. PreOrder and PreSale both say orders are being
+ * taken in advance, and none are — telling a shopping engine otherwise is
+ * how a listing gets pulled, and it would be a lie in a machine-readable
+ * field, which is the worst place to keep one.
+ */
+const AVAILABILITY = SELLING
+  ? "https://schema.org/InStock"
+  : "https://schema.org/OutOfStock";
 
 /**
  * The tin as a schema.org Product, shared by the product page and the home
@@ -44,7 +58,7 @@ export function productJsonLd(unitPriceCents: number) {
       url: PDP_URL,
       priceCurrency: "CAD",
       price: (unitPriceCents / 100).toFixed(2),
-      availability: "https://schema.org/InStock",
+      availability: AVAILABILITY,
       itemCondition: "https://schema.org/NewCondition",
       seller: { "@id": ORG_ID },
       shippingDetails: {
@@ -106,7 +120,7 @@ export function packJsonLd(priceCents: number) {
       url: PDP_URL,
       priceCurrency: "CAD",
       price: (priceCents / 100).toFixed(2),
-      availability: "https://schema.org/InStock",
+      availability: AVAILABILITY,
       itemCondition: "https://schema.org/NewCondition",
       seller: { "@id": ORG_ID },
     },

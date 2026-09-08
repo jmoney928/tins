@@ -12,6 +12,8 @@ import { CATALOG, bundlePair, currentPrice, money, tinOnSale } from "@/lib/catal
 import { GUARANTEE_SHORT } from "@/lib/guarantee";
 import { ReviewBadge } from "./review-badge";
 import { AddButton } from "./add-button";
+import { WaitlistForm } from "./waitlist-form";
+import { SELLING } from "@/lib/mode";
 
 /** Top to bottom, as the photograph shows them. */
 const FLOORS = [
@@ -160,28 +162,50 @@ export function Hero() {
             to act. The drawer that opens carries the pack offer, so the
             shortest route to checkout still passes the upsell.
           */}
-          <div className="mt-6 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
-            <Magnetic strength={0.4}>
-              <AddButton
-                productId="ice-tin"
-                tone="paper"
-                label={`Add to bag — ${money(currentPrice("ice-tin"))}`}
-                className="w-full px-7 py-4 sm:w-auto"
-              />
-            </Magnetic>
+          {SELLING ? (
+            <div className="mt-6 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
+              <Magnetic strength={0.4}>
+                <AddButton
+                  productId="ice-tin"
+                  tone="paper"
+                  label={`Add to bag — ${money(currentPrice("ice-tin"))}`}
+                  className="w-full px-7 py-4 sm:w-auto"
+                />
+              </Magnetic>
 
-            <Link
-              href="/products/ice-tin"
-              className="group flex items-center justify-center gap-2 rounded-full border border-white/20 px-7 py-4 text-sm text-ice-100 transition-all duration-300 ease-[var(--ease-glide)] hover:border-white/40 hover:bg-white/10 active:scale-[0.98]"
-            >
-              See the tin
-              <ArrowRightIcon
-                size={15}
-                weight="bold"
-                className="transition-transform duration-300 ease-[var(--ease-glide)] group-hover:translate-x-1"
+              <Link
+                href="/products/ice-tin"
+                className="group flex items-center justify-center gap-2 rounded-full border border-white/20 px-7 py-4 text-sm text-ice-100 transition-all duration-300 ease-[var(--ease-glide)] hover:border-white/40 hover:bg-white/10 active:scale-[0.98]"
+              >
+                See the tin
+                <ArrowRightIcon
+                  size={15}
+                  weight="bold"
+                  className="transition-transform duration-300 ease-[var(--ease-glide)] group-hover:translate-x-1"
+                />
+              </Link>
+            </div>
+          ) : (
+            /* the anchor every "join the waitlist" link on the site points at */
+            <div id="waitlist" className="mt-6 scroll-mt-28">
+              <WaitlistForm
+                source="hero"
+                tone="dark"
+                note="One email the day it opens. Nothing else."
               />
-            </Link>
-          </div>
+              <Link
+                href="/products/ice-tin"
+                className="group mt-4 inline-flex items-center gap-2 text-sm text-ice-100/80 underline underline-offset-4 transition-colors hover:text-white"
+              >
+                See the tin
+                <ArrowRightIcon
+                  size={13}
+                  weight="bold"
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </Link>
+            </div>
+          )}
 
           {/* Trust strip. ReviewBadge shows stars only when a real average is
               set, and the rating markup stays off until the reviews are

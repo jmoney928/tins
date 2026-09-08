@@ -1,6 +1,8 @@
 import { SHIPPING_FLAT, currentPrice, money } from "./catalog";
 import { dispatchShort, leadTimeLabel, transitLabel } from "./fulfilment";
 import { GUARANTEE_EXCEPTION, GUARANTEE_MEDIUM } from "./guarantee";
+import { SELLING } from "./mode";
+import { CATALOG, tinOnSale } from "./catalog";
 
 /** Named once so the shipping rule reads the same wherever it appears. */
 export const PACK_LABEL = "Chillcore pack";
@@ -14,7 +16,36 @@ export type Faq = { q: string; a: string };
  * visitor reads. A function of the shipping promo rather than a constant so
  * the shipping answer stays accurate on the day the promo expires.
  */
+/** Asked before anything else while there is nothing to buy. */
+function launchFaq(): Faq {
+  const price = tinOnSale()
+    ? `${money(currentPrice("ice-tin"))} CAD at launch, against ${money(CATALOG["ice-tin"].price)} after`
+    : `${money(currentPrice("ice-tin"))} CAD`;
+  return {
+    q: "Can I buy one yet?",
+    a: `Not yet. The first production run is being machined now, and the shop is a waitlist until it is finished. Leave your email and you will be sent a message the day it opens. It will be ${price}, with one ice pack in the box.`,
+  };
+}
+
 export function productFaqs(promoToday: boolean): Faq[] {
+  if (!SELLING) {
+    return [
+      launchFaq(),
+      ...sellingFaqs(promoToday).filter(
+        (f) =>
+          !/ship from, and how fast|actually arrive/i.test(f.q) &&
+          !/^Why is it/i.test(f.q),
+      ),
+      {
+        q: "How will it be delivered?",
+        a: `Everything will leave Vancouver, BC. ${dispatchShort()} Shipping will be ${money(SHIPPING_FLAT)} flat, and free on any order holding both a tin and a ${PACK_LABEL}.`,
+      },
+    ];
+  }
+  return sellingFaqs(promoToday);
+}
+
+function sellingFaqs(promoToday: boolean): Faq[] {
   return [
     {
       q: "What is inside The Ice Tin?",
@@ -77,6 +108,23 @@ export function productFaqs(promoToday: boolean): Faq[] {
  * full list, so the two URLs never carry the same answer.
  */
 export function homeFaqs(): Faq[] {
+  if (!SELLING) {
+    return [
+      launchFaq(),
+      {
+        q: "Does it really stay cold all day?",
+        a: "Six hours at fridge temperature with a frozen pack inside and the lid shut, which is a full shift. That is measured, not estimated: the same tin with the tray empty holds for about an hour, so the cold is the pack and not the metal.",
+      },
+      {
+        q: "What do I get for joining?",
+        a: "One email, the day it goes on sale. No newsletter, no drip campaign, and your address is never sold or passed on.",
+      },
+      {
+        q: "Is there anything in it?",
+        a: "No. Ice Tins Supply Co. sells empty machined cans and ice packs only, and does not sell, ship or supply nicotine or tobacco in any form.",
+      },
+    ];
+  }
   return [
     {
       q: "Does it really stay cold all day?",

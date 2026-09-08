@@ -24,7 +24,7 @@ declare global {
  * in, so the two copies of an event cannot drift apart.
  */
 
-export type PixelEvent = "ViewContent" | "AddToCart" | "InitiateCheckout" | "Purchase";
+export type PixelEvent = "ViewContent" | "AddToCart" | "InitiateCheckout" | "Lead" | "Purchase";
 
 export type TrackInput = {
   lines?: { id: string; qty: number }[];

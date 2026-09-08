@@ -9,6 +9,7 @@ import {
   money,
 } from "@/lib/catalog";
 import { AddButton } from "./add-button";
+import { SELLING } from "@/lib/mode";
 import { liveCatalog } from "@/lib/live-catalog";
 import { Reveal } from "./reveal";
 
@@ -119,7 +120,9 @@ export async function Collection() {
                     className="transition-transform duration-300 ease-[var(--ease-glide)] group-hover:translate-x-1"
                   />
                 </Link>
-                <AddButton productId="ice-tin" label="Add to bag" className="px-6 py-3" />
+                {SELLING && (
+                  <AddButton productId="ice-tin" label="Add to bag" className="px-6 py-3" />
+                )}
               </div>
             </div>
           </div>

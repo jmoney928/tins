@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { AddButton } from "./add-button";
+import { WaitlistForm } from "./waitlist-form";
+import { SELLING } from "@/lib/mode";
 import { Reveal } from "./reveal";
 import { CATALOG, money } from "@/lib/catalog";
 import { dispatchShort } from "@/lib/fulfilment";
@@ -29,7 +31,7 @@ export function FinalCta({
         <div className="pointer-events-none absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(46,157,200,0.22),transparent_65%)] blur-3xl" />
         <div className="relative">
           <h2 className="mx-auto max-w-[24ch] text-3xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-4xl">
-            Order the Ice Tin.
+            {SELLING ? "Order the Ice Tin." : "Be first to get one."}
           </h2>
           <p className="mx-auto mt-4 max-w-[46ch] text-sm leading-relaxed text-fog">
             {onSale ? (
@@ -45,6 +47,15 @@ export function FinalCta({
             )}
           </p>
 
+          {!SELLING && (
+            <WaitlistForm
+              source="final-cta"
+              className="mx-auto mt-8 max-w-xl text-left"
+              note="One email the day it opens. Nothing else."
+            />
+          )}
+
+          {SELLING && (
           <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
             {action === "add" ? (
               <>
@@ -79,6 +90,7 @@ export function FinalCta({
               </Link>
             )}
           </div>
+          )}
           <p className="mt-5 text-xs text-fog">{GUARANTEE_SHORT}</p>
         </div>
       </Reveal>

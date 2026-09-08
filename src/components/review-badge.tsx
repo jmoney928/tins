@@ -1,4 +1,5 @@
 import { StarIcon } from "@phosphor-icons/react/dist/ssr";
+import { WAITLIST } from "@/lib/mode";
 import {
   REVIEW_RATING,
   REVIEW_SOURCE_URL,
@@ -21,6 +22,9 @@ export function ReviewBadge({
 }) {
   const text = tone === "paper" ? "text-ice-100/75 hover:text-white" : "text-fog hover:text-frost";
   const empty = tone === "paper" ? "text-ice-100/30" : "text-fog/40";
+  // nobody has received one yet, so there is nothing to rate
+  if (WAITLIST) return null;
+
   const label = ratingLabel();
   const filled = REVIEW_RATING === null ? 0 : Math.round(REVIEW_RATING);
 

@@ -37,6 +37,7 @@ import { liveCatalog } from "@/lib/live-catalog";
 import { PACK_LABEL, faqJsonLd, productFaqs } from "@/lib/faq";
 import { packJsonLd, productJsonLd } from "@/lib/product-jsonld";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
+import { SELLING } from "@/lib/mode";
 
 // the description quotes the live price, so metadata is generated per
 // request rather than frozen at build time — this page is already
@@ -269,8 +270,12 @@ export default async function IceTinPage() {
                 <span className="ml-2 text-xs text-fog">{CURRENCY_LABEL}</span>
               </span>
               <div className="flex items-center gap-3">
-                <QuickView productId="chillcore-3" className="hidden sm:flex" />
-                <AddButton productId="chillcore-3" label="Add pack" openBag={false} />
+                {SELLING && (
+                  <>
+                    <QuickView productId="chillcore-3" className="hidden sm:flex" />
+                    <AddButton productId="chillcore-3" label="Add pack" openBag={false} />
+                  </>
+                )}
               </div>
             </div>
           </Reveal>

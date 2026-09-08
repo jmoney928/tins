@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeftIcon } from "@phosphor-icons/react/dist/ssr";
 import { BrandMark } from "../brand-mark";
 import { BagButton } from "../bag-button";
+import { SELLING } from "@/lib/mode";
 
 /**
  * Deliberately not the full SiteNav. A sales page has one job — every link
@@ -32,7 +33,7 @@ export function ProductNav() {
           <BrandMark size={24} />
         </span>
 
-        <BagButton className="ml-auto" />
+        {SELLING ? <BagButton className="ml-auto" /> : <span className="ml-auto" />}
       </nav>
     </header>
   );

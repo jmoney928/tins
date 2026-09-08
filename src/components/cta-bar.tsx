@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { AddButton } from "./add-button";
+import { WaitlistForm } from "./waitlist-form";
 import { Reveal } from "./reveal";
 import { currentPrice, money } from "@/lib/catalog";
 import { GUARANTEE_DAYS } from "@/lib/guarantee";
+import { SELLING } from "@/lib/mode";
 
 /**
  * The ask, repeated.
@@ -11,7 +13,26 @@ import { GUARANTEE_DAYS } from "@/lib/guarantee";
  * teaches one idea; this sits under it so the reader who is convinced at
  * that point never has to scroll to find the button.
  */
-export function CtaBar({ note }: { note?: string }) {
+export function CtaBar({ note, source = "page" }: { note?: string; source?: string }) {
+  if (!SELLING) {
+    return (
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <Reveal className="border-t border-frost/8 py-8">
+          <div className="mx-auto max-w-xl text-center">
+            <p className="text-base font-medium text-white-ice">
+              It is not on sale yet. Be first to know.
+            </p>
+            <WaitlistForm
+              source={source}
+              className="mt-4 text-left"
+              note={note ?? "One email the day it opens. Nothing else."}
+            />
+          </div>
+        </Reveal>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6">
       <Reveal className="flex flex-col items-center gap-3 border-t border-frost/8 py-8 text-center">

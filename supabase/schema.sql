@@ -231,3 +231,30 @@ begin
   return jsonb_build_object('applied', true, 'order_id', v_order_id);
 end;
 $$;
+
+-- ---------------------------------------------------------------------------
+-- Waitlist
+--
+-- One row per person, not per signup: the address is unique, so signing up
+-- twice does not create a second row and does not overwrite where the first
+-- one came from. Run this file again after adding it; every statement here is
+-- guarded, so re-running is safe.
+-- ---------------------------------------------------------------------------
+create table if not exists waitlist (
+  id          uuid primary key default gen_random_uuid(),
+  email       text        not null unique,
+  source      text,
+  referrer    text,
+  utm         text,
+  fbp         text,
+  fbc         text,
+  user_agent  text,
+  ip          text,
+  created_at  timestamptz not null default now()
+);
+
+create index if not exists waitlist_created_at_idx on waitlist (created_at desc);
+
+-- as with every other table here: RLS on, no policies, so only the
+-- service-role key used by the server can read or write it
+alter table waitlist enable row level security;

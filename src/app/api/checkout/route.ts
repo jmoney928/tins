@@ -15,6 +15,7 @@ import { TRANSIT_DAYS } from "@/lib/fulfilment";
 import { recordAbandoned } from "@/lib/abandoned";
 import { liveCatalog } from "@/lib/live-catalog";
 import { createCart } from "@/lib/shopify";
+import { WAITLIST } from "@/lib/mode";
 
 /**
  * Creates a Stripe Checkout Session and hands back its URL.
@@ -160,6 +161,16 @@ function attribution(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  // The buttons are gone from the site, but a route that still takes money
+  // is still a shop. Closing it here is what makes the waitlist true rather
+  // than merely apparent.
+  if (WAITLIST) {
+    return NextResponse.json(
+      { error: "The Ice Tin is not on sale yet. Join the waitlist and we will email you." },
+      { status: 503 },
+    );
+  }
+
   const usingShopify = provider() === "shopify";
 
   // Stripe's key only has to be present when Stripe is taking the money.

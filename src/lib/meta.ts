@@ -53,7 +53,7 @@ export type MetaUser = {
 };
 
 export type MetaEvent = {
-  eventName: "ViewContent" | "AddToCart" | "InitiateCheckout" | "Purchase";
+  eventName: "ViewContent" | "AddToCart" | "InitiateCheckout" | "Lead" | "Purchase";
   /** shared with the browser copy of the same event, so Meta de-duplicates */
   eventId: string;
   eventTime?: number;

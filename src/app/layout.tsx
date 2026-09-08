@@ -6,6 +6,7 @@ import { Attribution } from "@/components/attribution";
 import { CartProvider } from "@/components/cart/cart-context";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { SiteMotion } from "@/components/motion-config";
+import { SELLING } from "@/lib/mode";
 import { JsonLd } from "@/components/json-ld";
 import {
   CONTACT_EMAIL,
@@ -162,7 +163,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SiteMotion>
           <CartProvider>
             {children}
-            <CartDrawer />
+            {/* nothing to put in a bag while the shop is a waitlist */}
+            {SELLING && <CartDrawer />}
           </CartProvider>
         </SiteMotion>
       </body>

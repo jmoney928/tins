@@ -9,6 +9,7 @@ import {
   moneyExact,
 } from "@/lib/catalog";
 import { AddPairButton } from "./add-pair-button";
+import { SELLING } from "@/lib/mode";
 import { ProductArt } from "./product-art";
 import { CATALOG } from "@/lib/catalog";
 import { Reveal } from "./reveal";
@@ -73,6 +74,7 @@ export function Offer() {
             One pack ships inside every tin. Add the three-pack in the same
             order and the pair ships free with {money(BUNDLE_SAVING)} off, which
             is how three spare packs come to {money(pair.step)}.
+            {!SELLING && " These are the prices it opens at."}
           </p>
         </Reveal>
 
@@ -136,9 +138,11 @@ export function Offer() {
               worth {money(pair.pack)}: one in the tin, one in the freezer,
               one in reserve.
             </p>
-            <div className="mt-7">
-              <AddPairButton label={`Add both — ${moneyExact(pair.total)} delivered`} />
-            </div>
+            {SELLING && (
+              <div className="mt-7">
+                <AddPairButton label={`Add both — ${moneyExact(pair.total)} delivered`} />
+              </div>
+            )}
           </div>
           </Reveal>
         </div>

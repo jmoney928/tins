@@ -26,6 +26,45 @@ export function emailConfigured() {
   return Boolean(process.env.RESEND_API_KEY);
 }
 
+/** Where an operational notice goes when there is nobody else to tell. */
+const NOTICE_TO = process.env.WAITLIST_NOTIFY_EMAIL ?? REPLY_TO;
+
+/**
+ * A plain message to ourselves, not to a customer.
+ *
+ * Used as the last line of defence under a failed write: a waitlist address
+ * that cannot reach the database is mailed to the shop inbox rather than
+ * dropped. Never throws, for the same reason as everything else in this file.
+ */
+export async function sendNotice({
+  subject,
+  text,
+}: {
+  subject: string;
+  text: string;
+}): Promise<boolean> {
+  if (!emailConfigured()) return false;
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ from: FROM, to: [NOTICE_TO], subject, text }),
+      signal: AbortSignal.timeout(6000),
+    });
+    if (!res.ok) {
+      console.error(`[email] notice rejected (${res.status}):`, (await res.text()).slice(0, 200));
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("[email] notice failed:", err instanceof Error ? err.message : String(err));
+    return false;
+  }
+}
+
 type Line = { name: string; qty: number; total_amount: number };
 
 export type OrderEmail = {

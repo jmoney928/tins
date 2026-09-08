@@ -7,6 +7,7 @@ import { Magnetic } from "./magnetic";
 import { BrandMark } from "./brand-mark";
 import { BagButton } from "./bag-button";
 import { ShopMenu } from "./shop-menu";
+import { SELLING } from "@/lib/mode";
 
 const LINKS = [
   { label: "Shop", href: "/products/ice-tin" },
@@ -111,18 +112,18 @@ export function SiteNav({ tone = "light" }: { tone?: "light" | "dark" }) {
           </ul>
 
           <div className="ml-auto flex items-center gap-3 lg:ml-0">
-            <BagButton tone={onDark ? "paper" : "ink"} />
+            {SELLING && <BagButton tone={onDark ? "paper" : "ink"} />}
 
             <Magnetic className="hidden sm:block">
               <a
-                href="/products/ice-tin"
+                href={SELLING ? "/products/ice-tin" : "/#waitlist"}
                 className={`block rounded-full px-5 py-2.5 text-sm font-medium transition-colors duration-500 active:scale-[0.98] ${
                   onDark
                     ? "bg-ice-100 text-ink hover:bg-white"
                     : "bg-ink text-paper hover:bg-ice-700"
                 }`}
               >
-                See the tin
+                {SELLING ? "See the tin" : "Join the waitlist"}
               </a>
             </Magnetic>
 
@@ -167,7 +168,12 @@ export function SiteNav({ tone = "light" }: { tone?: "light" | "dark" }) {
               variants={{ show: { transition: { staggerChildren: 0.07, delayChildren: 0.08 } } }}
               className="mt-6 flex flex-col gap-2 px-6"
             >
-              {[...LINKS, { label: "See the tin", href: "/products/ice-tin" }].map((l) => (
+              {[
+                ...LINKS,
+                SELLING
+                  ? { label: "See the tin", href: "/products/ice-tin" }
+                  : { label: "Join the waitlist", href: "/#waitlist" },
+              ].map((l) => (
                 <motion.li
                   key={l.href}
                   variants={{

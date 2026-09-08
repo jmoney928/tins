@@ -35,6 +35,19 @@ export async function GET() {
       supabase.products = products.data;
     }
 
+    // the waitlist is the only thing the site collects right now, so a
+    // missing table is the most important thing this endpoint can report
+    const waitlist = await db().from("waitlist").select("email", { count: "exact", head: true });
+    supabase.waitlist = waitlist.error
+      ? {
+          state: "unavailable",
+          error: waitlist.error.message,
+          hint: /does not exist|schema cache/i.test(waitlist.error.message)
+            ? "Run supabase/schema.sql in the SQL editor to create it. Signups are being emailed to the shop inbox until then."
+            : undefined,
+        }
+      : { state: "present", signups: waitlist.count ?? 0 };
+
     // does the settle_order function exist? call it with a bad payload on
     // purpose — a missing function and a rejected payload are different errors
     const rpc = await db().rpc("settle_order", {

@@ -19,8 +19,8 @@ export const dynamic = "force-dynamic";
  * catalog, the same records Stripe is charged from.
  */
 
-const ALLOWED = new Set(["ViewContent", "AddToCart", "InitiateCheckout"] as const);
-type Allowed = "ViewContent" | "AddToCart" | "InitiateCheckout";
+const ALLOWED = new Set(["ViewContent", "AddToCart", "InitiateCheckout", "Lead"] as const);
+type Allowed = "ViewContent" | "AddToCart" | "InitiateCheckout" | "Lead";
 
 type Line = { id: string; qty: number };
 

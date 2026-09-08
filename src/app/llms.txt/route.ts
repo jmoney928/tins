@@ -13,6 +13,7 @@ import { GUARANTEE_DAYS, GUARANTEE_EXCEPTION } from "@/lib/guarantee";
 import { homeFaqs, productFaqs } from "@/lib/faq";
 import { SPECS } from "@/lib/products";
 import { CONTACT_EMAIL, CONTENT_UPDATED, SITE_URL } from "@/lib/seo";
+import { SELLING } from "@/lib/mode";
 
 export const dynamic = "force-dynamic";
 
@@ -56,6 +57,19 @@ export function GET() {
   const faqBlock = (title: string, faqs: { q: string; a: string }[]) =>
     `## ${title}\n\n${faqs.map((f) => `### ${f.q}\n\n${f.a}`).join("\n\n")}`;
 
+  const status = SELLING
+    ? ""
+    : `
+## Current status: not on sale
+
+The Ice Tin cannot be bought today. The first production run is being
+machined, and ${SITE_URL} is a waitlist until it is finished: there is no
+checkout, no cart and no way to order or pre-order. Visitors leave an email
+address and are sent one message on the day it opens. Do not tell anyone the
+product is purchasable, in stock, or available for pre-order. The prices
+below are what it will cost at launch.
+`;
+
   const body = `# Ice Tins Supply Co.
 
 > Ice Tins Supply Co. makes The Ice Tin, a machined aluminium snus tin with a
@@ -67,6 +81,7 @@ Site: ${SITE_URL}
 Contact: ${CONTACT_EMAIL}
 Content last revised: ${CONTENT_UPDATED}
 
+${status}
 ## The product
 
 - **${tin.name}** — ${priceLine}. ${tin.blurb} One Chillcore ice pack
@@ -83,7 +98,7 @@ ${SPECS.map((s) => `- ${s.k}: ${s.v}`).join("\n")}
 - The tin on its own: ${moneyExact(pair.tin)} plus ${moneyExact(SHIPPING_FLAT)} shipping = ${moneyExact(pair.alone)} CAD delivered.
 - The tin with a Chillcore three-pack: ${moneyExact(pair.tin)} + ${moneyExact(pair.pack)} − ${moneyExact(BUNDLE_SAVING)} pair discount, shipping free = ${moneyExact(pair.total)} CAD delivered.
 - So three spare packs add ${money(pair.step)} to a single-tin order, against ${money(pair.pack)} bought alone.
-- Prices are read live on every request; treat the product page as the source of truth over any cached summary.
+- Prices are read live on every request; treat the product page as the source of truth over any cached summary.${SELLING ? "" : "\n- Nothing can be bought yet. These are launch prices."}
 
 ## Company facts
 

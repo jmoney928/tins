@@ -16,6 +16,8 @@ import { BrandMark } from "./brand-mark";
 import { AnimatedMoney } from "./animated-money";
 import { moneyExact } from "@/lib/catalog";
 import { GUARANTEE_SHORT } from "@/lib/guarantee";
+import { WAITLIST } from "@/lib/mode";
+import { WaitlistForm } from "./waitlist-form";
 
 /**
  * A handover, not a form.
@@ -47,6 +49,7 @@ export function CheckoutClient() {
   }, []);
 
   useEffect(() => {
+    if (WAITLIST) return;
     if (!read || started.current || cancelled) return;
     if (!cart.ready || cart.lines.length === 0) return;
     started.current = true;
@@ -74,6 +77,29 @@ export function CheckoutClient() {
       {children}
     </main>
   );
+
+  // anyone who reaches this URL while the shop is a waitlist — a bookmark,
+  // a stale tab — meets the waitlist rather than a broken payment step
+  if (WAITLIST) {
+    return (
+      <Shell>
+        <div className="flex min-h-[50dvh] flex-col justify-center">
+          <h1 className="text-4xl leading-[0.95] font-medium tracking-tighter text-white-ice sm:text-5xl">
+            Not on sale yet.
+          </h1>
+          <p className="mt-5 max-w-[46ch] text-sm leading-relaxed text-fog">
+            The first run is being machined now. Leave your email and you will
+            hear the day it opens.
+          </p>
+          <WaitlistForm
+            source="checkout-page"
+            className="mt-7 max-w-xl"
+            note="One email the day it opens. Nothing else."
+          />
+        </div>
+      </Shell>
+    );
+  }
 
   // still handing over, or still reading the bag back
   const forwarding = !read || !cart.ready || (started.current && !error);
