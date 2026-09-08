@@ -83,8 +83,12 @@ export async function GET() {
         : null;
       await db().from("waitlist").delete().eq("email", probe);
 
+      const missing = /does not exist|schema cache/i.test(
+        full.error?.message ?? minimal?.error?.message ?? "",
+      );
       supabase.waitlist = {
-        state: "present",
+        state: missing ? "missing" : "present",
+        hint: missing ? "Run supabase/schema.sql in the SQL editor to create it." : undefined,
         signups: read.count ?? 0,
         writable: !full.error,
         fullRowError: full.error?.message,

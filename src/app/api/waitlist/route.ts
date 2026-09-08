@@ -81,9 +81,14 @@ export async function POST(request: NextRequest) {
   });
 
   if (!result.saved) {
-    // never tell someone they are on a list they are not on
+    // never tell someone they are on a list they are not on, and say what
+    // stopped it — a store nobody can see failing is a store that stays broken
+    console.error(`[waitlist] refused ${email}: ${result.reason ?? "unknown"}`);
     return NextResponse.json(
-      { error: "We could not save that just now. Try again in a moment." },
+      {
+        error: "We could not save that just now. Try again in a moment.",
+        diagnostic: result.reason,
+      },
       { status: 503 },
     );
   }

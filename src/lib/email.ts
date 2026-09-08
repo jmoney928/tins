@@ -42,8 +42,8 @@ export async function sendNotice({
 }: {
   subject: string;
   text: string;
-}): Promise<boolean> {
-  if (!emailConfigured()) return false;
+}): Promise<{ sent: boolean; reason?: string }> {
+  if (!emailConfigured()) return { sent: false, reason: "RESEND_API_KEY is not set" };
   try {
     const res = await fetch(ENDPOINT, {
       method: "POST",
@@ -55,13 +55,15 @@ export async function sendNotice({
       signal: AbortSignal.timeout(6000),
     });
     if (!res.ok) {
-      console.error(`[email] notice rejected (${res.status}):`, (await res.text()).slice(0, 200));
-      return false;
+      const said = (await res.text()).slice(0, 200);
+      console.error(`[email] notice rejected (${res.status}):`, said);
+      return { sent: false, reason: `Resend ${res.status}: ${said}` };
     }
-    return true;
+    return { sent: true };
   } catch (err) {
-    console.error("[email] notice failed:", err instanceof Error ? err.message : String(err));
-    return false;
+    const reason = err instanceof Error ? err.message : String(err);
+    console.error("[email] notice failed:", reason);
+    return { sent: false, reason };
   }
 }
 

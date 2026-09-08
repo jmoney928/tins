@@ -35,6 +35,8 @@ export type SaveResult = {
   via: "database" | "email" | "log" | "none";
   /** total on the list, when the store could answer */
   count: number | null;
+  /** why nothing took it, when nothing did */
+  reason?: string;
 };
 
 const ready = () => dbConfig().state === "ready";
@@ -110,10 +112,10 @@ export async function saveSignup(input: Signup): Promise<SaveResult> {
       .join("\n"),
   });
 
-  if (mailed) return { saved: true, via: "email", count: null };
+  if (mailed.sent) return { saved: true, via: "email", count: null };
 
   console.error(`[waitlist] NOT SAVED anywhere but the log: ${email}`);
-  return { saved: false, via: "log", count: null };
+  return { saved: false, via: "log", count: null, reason: mailed.reason };
 }
 
 /** How many are on the list. Null when the store cannot answer. */
