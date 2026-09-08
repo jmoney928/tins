@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { dbConfig, db } from "@/lib/db";
 import { inspectKey } from "@/lib/stripe";
 import { shopifyDiagnostics, shopifyAdminDiagnostics } from "@/lib/shopify";
+import { audienceDiagnostics } from "@/lib/resend-audience";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +42,7 @@ export async function GET() {
   const cfg = dbConfig();
 
   const resend = await resendDiagnostics();
+  const audience = await audienceDiagnostics();
   const supabase: Record<string, unknown> = { config: cfg.state };
   if (cfg.state === "partial") supabase.missing = cfg.missing;
   if (cfg.state === "malformed") supabase.problem = cfg.problem;
@@ -142,6 +144,7 @@ export async function GET() {
       ? "configured"
       : "missing META_PIXEL_ID or META_CAPI_ACCESS_TOKEN",
     email: resend,
+    waitlistAudience: audience,
     cronSecret: process.env.CRON_SECRET ? "set" : "missing",
     shopify: await shopifyDiagnostics(),
     shopifyAdmin: await shopifyAdminDiagnostics(),
