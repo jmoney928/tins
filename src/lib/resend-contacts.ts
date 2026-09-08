@@ -21,8 +21,14 @@ import "server-only";
 
 const ENDPOINT = "https://api.resend.com/contacts";
 
+/**
+ * Trimmed, because a key pasted into a dashboard field arrives with the
+ * whitespace that came with it, and a leading space in an Authorization
+ * header is a authentication failure that looks like a permissions one.
+ */
 export function contactsKey() {
-  return process.env.RESEND_CONTACTS_API_KEY ?? process.env.RESEND_API_KEY;
+  const key = process.env.RESEND_CONTACTS_API_KEY ?? process.env.RESEND_API_KEY;
+  return key?.trim() || undefined;
 }
 
 /**
@@ -35,13 +41,18 @@ export function contactsKey() {
  * the Stripe check here already reports.
  */
 function keyOrigin() {
-  const scoped = process.env.RESEND_CONTACTS_API_KEY;
-  const key = scoped ?? process.env.RESEND_API_KEY;
+  const scoped = process.env.RESEND_CONTACTS_API_KEY?.trim() || undefined;
+  const key = scoped ?? process.env.RESEND_API_KEY?.trim();
   return {
     variable: scoped
       ? "RESEND_CONTACTS_API_KEY"
       : "RESEND_API_KEY (RESEND_CONTACTS_API_KEY is not reaching this function)",
     looksLike: key ? `${key.slice(0, 5)}… ${key.length} chars` : "unset",
+    // reported separately: a value that needed trimming is worth correcting
+    // at the source even once the code stops caring
+    hadWhitespace:
+      (process.env.RESEND_CONTACTS_API_KEY ?? process.env.RESEND_API_KEY ?? "") !==
+      (key ?? ""),
   };
 }
 

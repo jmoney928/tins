@@ -22,8 +22,11 @@ const ENDPOINT = "https://api.resend.com/emails";
 const FROM = process.env.ORDER_FROM_EMAIL ?? "Ice Tins Supply Co. <shop@icetins.com>";
 const REPLY_TO = process.env.ORDER_REPLY_TO ?? "shop@icetins.com";
 
+/** Trimmed for the same reason as the contacts key: pasted values carry whitespace. */
+export const resendKey = () => process.env.RESEND_API_KEY?.trim() || undefined;
+
 export function emailConfigured() {
-  return Boolean(process.env.RESEND_API_KEY);
+  return Boolean(resendKey());
 }
 
 /** Where an operational notice goes when there is nobody else to tell. */
@@ -48,7 +51,7 @@ export async function sendNotice({
     const res = await fetch(ENDPOINT, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        Authorization: `Bearer ${resendKey()}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ from: FROM, to: [NOTICE_TO], subject, text }),
@@ -88,7 +91,7 @@ export async function sendOrderEmail(order: OrderEmail): Promise<boolean> {
     const res = await fetch(ENDPOINT, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        Authorization: `Bearer ${resendKey()}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -285,7 +288,7 @@ export async function sendRecoveryEmail(o: RecoveryEmail): Promise<boolean> {
     const res = await fetch(ENDPOINT, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        Authorization: `Bearer ${resendKey()}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ from: FROM, to: [o.to], reply_to: REPLY_TO, subject, text, html }),
