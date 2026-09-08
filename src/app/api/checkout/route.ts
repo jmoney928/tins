@@ -16,6 +16,7 @@ import { recordAbandoned } from "@/lib/abandoned";
 import { liveCatalog } from "@/lib/live-catalog";
 import { createCart } from "@/lib/shopify";
 import { WAITLIST } from "@/lib/mode";
+import { PREORDER, preorderPromiseText } from "@/lib/preorder";
 
 /**
  * Creates a Stripe Checkout Session and hands back its URL.
@@ -144,6 +145,10 @@ function attribution(request: NextRequest) {
   const put = (key: string, value?: string) => {
     if (value) meta[key] = value.slice(0, 500);
   };
+
+  // carried onto the Shopify order, so a pre-order is identifiable in the
+  // admin months later without anyone having to remember which week it was
+  if (PREORDER) meta.preorder = preorderPromiseText();
 
   put("fbp", request.cookies.get(COOKIE.fbp)?.value);
   put("fbc", request.cookies.get(COOKIE.fbc)?.value);

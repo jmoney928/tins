@@ -13,6 +13,7 @@ import {
 import { useCart } from "./cart-context";
 import { useExpressCheckout } from "./use-express-checkout";
 import { ExpressButton } from "../express-button";
+import { PreorderNote } from "../preorder-note";
 import { ProductArt } from "../product-art";
 import { BundleCard } from "../bundle-card";
 import { SHIPPING_FLAT, money, moneyExact } from "@/lib/catalog";
@@ -260,6 +261,8 @@ export function CartDrawer() {
                       <AnimatedMoney cents={cart.total} className="font-mono text-lg tabular-nums" />
                     </div>
                   </dl>
+
+                  <PreorderNote className="mb-4" />
 
                   {/* straight to the payment page — no page of ours in between */}
                   <ExpressButton

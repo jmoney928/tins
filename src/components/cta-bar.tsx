@@ -5,6 +5,7 @@ import { Reveal } from "./reveal";
 import { currentPrice, money } from "@/lib/catalog";
 import { GUARANTEE_DAYS } from "@/lib/guarantee";
 import { SELLING } from "@/lib/mode";
+import { buyVerb } from "@/lib/preorder";
 
 /**
  * The ask, repeated.
@@ -38,9 +39,12 @@ export function CtaBar({ note, source = "page" }: { note?: string; source?: stri
       <Reveal className="flex flex-col items-center gap-3 border-t border-frost/8 py-8 text-center">
         <AddButton
           productId="ice-tin"
-          label={`Get the tin — ${money(currentPrice("ice-tin"))}`}
+          label={`${buyVerb} — ${money(currentPrice("ice-tin"))}`}
           className="w-full px-8 py-4 sm:w-auto"
         />
+        {/* no note here: these buttons open the bag, and the bag carries the
+            dispatch window immediately above its checkout button. Repeating
+            it under all six of these turned one promise into wallpaper. */}
         <p className="text-xs text-fog">
           {note ?? `Ships worldwide. ${GUARANTEE_DAYS} days to change your mind.`}{" "}
           <Link href="/products/ice-tin" className="text-ice-700 underline underline-offset-2">

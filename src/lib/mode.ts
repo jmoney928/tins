@@ -1,15 +1,26 @@
 /**
- * Waitlist mode.
+ * What the shop is doing today.
  *
- * True: the site shows the product and collects email addresses, and nothing
- * can be bought. Every buying affordance reads this one constant — the
- * buttons, the bag, the drawer, the checkout page and the checkout route
- * itself — so the switch is complete in both directions and there is no
- * corner of the site left selling something the shop will not take money for.
+ *   "selling"   — in stock, ordered and dispatched on the normal lead time
+ *   "preorder"  — money is taken now, against a stated dispatch window
+ *   "waitlist"  — nothing can be bought; addresses are collected instead
  *
- * Set it to false to sell again. Nothing else has to change.
+ * Every buying affordance reads these, and so does the checkout route, the
+ * structured data, the questions and llms.txt. Changing this one line moves
+ * the whole site, in any direction, with nothing left behind still making
+ * the previous claim.
  */
-export const WAITLIST: boolean = true;
+export type ShopMode = "selling" | "preorder" | "waitlist";
 
-/** Selling is on. Reads better at a call site than `!WAITLIST`. */
-export const SELLING: boolean = !WAITLIST;
+// widened deliberately: the comparisons below stay meaningful to the type
+// checker, so switching this line never leaves dead branches behind
+export const MODE = "preorder" as ShopMode;
+
+/** Can money be taken at all. True for both selling and pre-order. */
+export const SELLING: boolean = MODE !== "waitlist";
+
+/** Taking money now for something not yet made. */
+export const PREORDER: boolean = MODE === "preorder";
+
+/** Collecting addresses, selling nothing. */
+export const WAITLIST: boolean = MODE === "waitlist";

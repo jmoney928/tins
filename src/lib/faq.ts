@@ -1,7 +1,7 @@
 import { SHIPPING_FLAT, currentPrice, money } from "./catalog";
 import { dispatchShort, leadTimeLabel, transitLabel } from "./fulfilment";
 import { GUARANTEE_EXCEPTION, GUARANTEE_MEDIUM } from "./guarantee";
-import { SELLING } from "./mode";
+import { PREORDER, SELLING } from "./mode";
 import { CATALOG, tinOnSale } from "./catalog";
 
 /** Named once so the shipping rule reads the same wherever it appears. */
@@ -16,6 +16,15 @@ export type Faq = { q: string; a: string };
  * visitor reads. A function of the shipping promo rather than a constant so
  * the shipping answer stays accurate on the day the promo expires.
  */
+/** Asked before anything else while the tin is sold before it is made. */
+function preorderFaq(): Faq {
+  return {
+    q: "Is this a pre-order?",
+    a: `Yes. The tin is machined in batches and your order joins the next run, so you are paying now for something not yet built. Your tin is dispatched within ${leadTimeLabel()} of ordering, then ${transitLabel()} in transit, and a tracking number is emailed the morning it leaves. The ${GUARANTEE_MEDIUM.replace(/^Use the tin for /, "")
+      .replace(/\.$/, "")} applies from the day it arrives, not the day you ordered.`,
+  };
+}
+
 /** Asked before anything else while there is nothing to buy. */
 function launchFaq(): Faq {
   const price = tinOnSale()
@@ -28,6 +37,7 @@ function launchFaq(): Faq {
 }
 
 export function productFaqs(promoToday: boolean): Faq[] {
+  if (PREORDER) return [preorderFaq(), ...sellingFaqs(promoToday)];
   if (!SELLING) {
     return [
       launchFaq(),
@@ -108,6 +118,23 @@ function sellingFaqs(promoToday: boolean): Faq[] {
  * full list, so the two URLs never carry the same answer.
  */
 export function homeFaqs(): Faq[] {
+  if (PREORDER) {
+    return [
+      preorderFaq(),
+      {
+        q: "Does it really stay cold all day?",
+        a: "Six hours at fridge temperature with a frozen pack inside and the lid shut, which is a full shift. The same tin with the tray empty holds for about an hour, so the cold is the pack, not the metal.",
+      },
+      {
+        q: "What if it is not for me?",
+        a: GUARANTEE_MEDIUM,
+      },
+      {
+        q: "Is there anything in it?",
+        a: "No. Ice Tins Supply Co. sells empty machined cans and ice packs only, and does not sell, ship or supply nicotine or tobacco in any form.",
+      },
+    ];
+  }
   if (!SELLING) {
     return [
       launchFaq(),

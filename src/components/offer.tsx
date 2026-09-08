@@ -10,6 +10,8 @@ import {
 } from "@/lib/catalog";
 import { AddPairButton } from "./add-pair-button";
 import { SELLING } from "@/lib/mode";
+import { PREORDER } from "@/lib/preorder";
+import { PreorderNote } from "./preorder-note";
 import { ProductArt } from "./product-art";
 import { CATALOG } from "@/lib/catalog";
 import { Reveal } from "./reveal";
@@ -140,7 +142,10 @@ export function Offer() {
             </p>
             {SELLING && (
               <div className="mt-7">
-                <AddPairButton label={`Add both — ${moneyExact(pair.total)} delivered`} />
+                <AddPairButton
+                  label={`${PREORDER ? "Pre-order both" : "Add both"} — ${moneyExact(pair.total)} delivered`}
+                />
+                <PreorderNote className="mt-3" />
               </div>
             )}
           </div>

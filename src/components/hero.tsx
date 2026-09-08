@@ -14,6 +14,8 @@ import { ReviewBadge } from "./review-badge";
 import { AddButton } from "./add-button";
 import { WaitlistForm } from "./waitlist-form";
 import { SELLING } from "@/lib/mode";
+import { buyVerb } from "@/lib/preorder";
+import { PreorderNote } from "./preorder-note";
 
 /** Top to bottom, as the photograph shows them. */
 const FLOORS = [
@@ -168,7 +170,7 @@ export function Hero() {
                 <AddButton
                   productId="ice-tin"
                   tone="paper"
-                  label={`Add to bag — ${money(currentPrice("ice-tin"))}`}
+                  label={`${buyVerb} — ${money(currentPrice("ice-tin"))}`}
                   className="w-full px-7 py-4 sm:w-auto"
                 />
               </Magnetic>
@@ -206,6 +208,8 @@ export function Hero() {
               </Link>
             </div>
           )}
+
+          <PreorderNote className="mt-4" tone="dark" />
 
           {/* Trust strip. ReviewBadge shows stars only when a real average is
               set, and the rating markup stays off until the reviews are

@@ -3,22 +3,23 @@ import { LEAD_TIME_WEEKS, TRANSIT_DAYS } from "./fulfilment";
 import { GUARANTEE_DAYS } from "./guarantee";
 import { aggregateRatingJsonLd } from "./social-proof";
 import { ORG_ID, ORG_NAME, PACK_ID, PRODUCT_ID, absoluteUrl } from "./seo";
-import { SELLING } from "./mode";
+import { PREORDER, SELLING } from "./mode";
 
 const PDP_URL = absoluteUrl("/products/ice-tin");
 
 /**
- * OutOfStock while the shop is a waitlist.
+ * The availability claim, matched to what the shop is actually doing.
  *
- * Of the values schema.org offers this is the only unambiguously true one:
- * it cannot be bought today. PreOrder and PreSale both say orders are being
- * taken in advance, and none are — telling a shopping engine otherwise is
- * how a listing gets pulled, and it would be a lie in a machine-readable
- * field, which is the worst place to keep one.
+ * PreOrder means exactly what it says: orders are taken in advance of the
+ * goods existing. That is true now, and it is the value a shopping engine
+ * needs to show the right badge instead of implying same-day dispatch.
+ * OutOfStock is kept for waitlist mode, where nothing can be ordered at all.
  */
-const AVAILABILITY = SELLING
-  ? "https://schema.org/InStock"
-  : "https://schema.org/OutOfStock";
+const AVAILABILITY = !SELLING
+  ? "https://schema.org/OutOfStock"
+  : PREORDER
+    ? "https://schema.org/PreOrder"
+    : "https://schema.org/InStock";
 
 /**
  * The tin as a schema.org Product, shared by the product page and the home

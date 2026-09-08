@@ -18,6 +18,7 @@ import { moneyExact } from "@/lib/catalog";
 import { GUARANTEE_SHORT } from "@/lib/guarantee";
 import { WAITLIST } from "@/lib/mode";
 import { WaitlistForm } from "./waitlist-form";
+import { PreorderNote } from "./preorder-note";
 
 /**
  * A handover, not a form.
@@ -221,8 +222,10 @@ export function CheckoutClient() {
           </div>
         </dl>
 
+        <PreorderNote className="mt-7" />
+
         <ExpressButton
-          className="mt-7"
+          className="mt-4"
           busy={busy}
           label={`Checkout — ${moneyExact(cart.total)}`}
           onClick={() => void go()}

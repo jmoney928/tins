@@ -10,6 +10,7 @@ import {
 } from "@/lib/catalog";
 import { AddButton } from "./add-button";
 import { SELLING } from "@/lib/mode";
+import { buyVerb } from "@/lib/preorder";
 import { liveCatalog } from "@/lib/live-catalog";
 import { Reveal } from "./reveal";
 
@@ -121,7 +122,7 @@ export async function Collection() {
                   />
                 </Link>
                 {SELLING && (
-                  <AddButton productId="ice-tin" label="Add to bag" className="px-6 py-3" />
+                  <AddButton productId="ice-tin" label={buyVerb} className="px-6 py-3" />
                 )}
               </div>
             </div>

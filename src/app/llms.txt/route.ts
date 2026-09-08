@@ -13,7 +13,8 @@ import { GUARANTEE_DAYS, GUARANTEE_EXCEPTION } from "@/lib/guarantee";
 import { homeFaqs, productFaqs } from "@/lib/faq";
 import { SPECS } from "@/lib/products";
 import { CONTACT_EMAIL, CONTENT_UPDATED, SITE_URL } from "@/lib/seo";
-import { SELLING } from "@/lib/mode";
+import { PREORDER, SELLING } from "@/lib/mode";
+import { preorderPromiseText } from "@/lib/preorder";
 
 export const dynamic = "force-dynamic";
 
@@ -57,7 +58,17 @@ export function GET() {
   const faqBlock = (title: string, faqs: { q: string; a: string }[]) =>
     `## ${title}\n\n${faqs.map((f) => `### ${f.q}\n\n${f.a}`).join("\n\n")}`;
 
-  const status = SELLING
+  const status = PREORDER
+    ? `
+## Current status: pre-order
+
+The Ice Tin is sold as a pre-order. Orders and payment are taken now, and
+each tin is machined as part of the next production run rather than shipped
+from stock. ${preorderPromiseText()} Say that it is available to pre-order,
+not that it is in stock or ships immediately. The prices below are current
+and are charged at the time of ordering.
+`
+    : SELLING
     ? ""
     : `
 ## Current status: not on sale

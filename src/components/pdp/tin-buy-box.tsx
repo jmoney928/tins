@@ -29,6 +29,8 @@ import { GuaranteeLine } from "../guarantee";
 import { ReviewBadge } from "../review-badge";
 import { WaitlistForm } from "../waitlist-form";
 import { SELLING } from "@/lib/mode";
+import { PREORDER, buyVerb } from "@/lib/preorder";
+import { PreorderNote } from "../preorder-note";
 import { AnimatedMoney } from "../animated-money";
 
 type State = "idle" | "adding" | "added";
@@ -288,7 +290,7 @@ export function TinBuyBox({
                         In bag
                       </>
                     ) : (
-                      "Add to bag"
+                      buyVerb
                     )}
                   </button>
                 </div>
@@ -301,8 +303,11 @@ export function TinBuyBox({
                   {buying ? (
                     <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-frost/35 border-t-frost" />
                   ) : null}
-                  {buying ? "Opening secure checkout" : "Buy it now"}
+                  {buying ? "Opening secure checkout" : PREORDER ? "Pre-order now" : "Buy it now"}
                 </button>
+                {/* the window a buyer is agreeing to, beside the button that
+                    takes the money rather than on a policy page */}
+                <PreorderNote className="mt-3" />
                 {/* the wallets live on the payment page, so this names them where
                     the decision is made rather than two screens later */}
                 <p className="mt-2.5 flex items-center justify-center gap-1.5 text-xs text-fog">
@@ -398,7 +403,7 @@ export function TinBuyBox({
                     In bag
                   </>
                 ) : (
-                  "Add to bag"
+                  buyVerb
                 )}
               </button>
             ) : (

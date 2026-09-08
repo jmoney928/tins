@@ -21,7 +21,28 @@
  * back to shipping from stock, in one place.
  */
 
+import { PREORDER } from "./mode";
+
 export const LEAD_TIME_WEEKS: { min: number; max: number } = { min: 2, max: 3 };
+
+/**
+ * The dispatch window a pre-order is sold against.
+ *
+ * Taken from the lead time above rather than invented, because that is the
+ * figure the shop already stands behind everywhere else and two different
+ * promises would be worse than none. If the first production run will take
+ * longer than a normal batch, change LEAD_TIME_WEEKS — every surface follows
+ * it, and a pre-order sold against a window that turns out to be wrong is
+ * the failure this whole file exists to prevent.
+ */
+export function preorderWindow() {
+  return leadTimeLabel();
+}
+
+/** The sentence a buyer must meet before paying for something unmade. */
+export function preorderPromise() {
+  return `This is a pre-order. Your tin is dispatched within ${leadTimeLabel()} of ordering, then ${transitLabel()} in transit.`;
+}
 
 export const TRANSIT_DAYS = { min: 3, max: 8 } as const;
 
@@ -49,6 +70,7 @@ export function dispatchSentence() {
 
 /** The headline a buyer sees before paying — never rosier than the receipt. */
 export function availabilityHeadline() {
+  if (PREORDER) return "Pre-order from the first run.";
   return SHIPS_FROM_STOCK ? "In stock and ready to ship." : "Made to order, in batches.";
 }
 
@@ -72,5 +94,6 @@ export function dispatchShort() {
  * of a complaint rather than a sale.
  */
 export function availabilityShort() {
+  if (PREORDER) return "Pre-order";
   return SHIPS_FROM_STOCK ? "In stock" : "Made to order";
 }

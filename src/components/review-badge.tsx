@@ -1,5 +1,5 @@
 import { StarIcon } from "@phosphor-icons/react/dist/ssr";
-import { WAITLIST } from "@/lib/mode";
+import { MODE } from "@/lib/mode";
 import {
   REVIEW_RATING,
   REVIEW_SOURCE_URL,
@@ -22,8 +22,11 @@ export function ReviewBadge({
 }) {
   const text = tone === "paper" ? "text-ice-100/75 hover:text-white" : "text-fog hover:text-frost";
   const empty = tone === "paper" ? "text-ice-100/30" : "text-fog/40";
-  // nobody has received one yet, so there is nothing to rate
-  if (WAITLIST) return null;
+  // Nobody has received one yet, so there is nothing to rate. That is true
+  // of a pre-order as much as a waitlist: a first production run cannot have
+  // three hundred customer reviews behind it, and printing both claims on
+  // one page is the sort of contradiction a buyer notices before we do.
+  if (MODE !== "selling") return null;
 
   const label = ratingLabel();
   const filled = REVIEW_RATING === null ? 0 : Math.round(REVIEW_RATING);
