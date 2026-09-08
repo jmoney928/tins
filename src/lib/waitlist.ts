@@ -1,7 +1,7 @@
 import "server-only";
 import { db, dbConfig } from "./db";
 import { sendNotice } from "./email";
-import { addContact, audienceConfigured } from "./resend-audience";
+import { addContact, contactsConfigured } from "./resend-contacts";
 
 /**
  * The waitlist, and the promise that an address given to us is not lost.
@@ -11,8 +11,8 @@ import { addContact, audienceConfigured } from "./resend-audience";
  *
  * A single store would make every signup only as reliable as that store, so
  * the address is offered to every store that is configured and the signup
- * counts as saved if any of them took it: the Resend audience the launch
- * email will be sent to, and the database that can be queried and segmented.
+ * counts as saved if any of them took it: Resend, which is what will send
+ * the launch email, and the database, which can be queried and segmented.
  * If none can take it, it is emailed to the shop inbox instead, and it is
  * logged under a fixed prefix regardless. Only when all of that fails does
  * the visitor get an error, because only then have we actually lost it.
@@ -103,7 +103,7 @@ export async function saveSignup(input: Signup): Promise<SaveResult> {
   const kept: string[] = [];
   const failures: string[] = [];
 
-  if (audienceConfigured()) {
+  if (contactsConfigured()) {
     const r = await addContact(email);
     if (r.ok) kept.push("resend");
     else failures.push(r.reason ?? "resend refused the contact");
