@@ -112,7 +112,13 @@ export function CartDrawer() {
                   </div>
                 )}
 
-                <ul className="flex-1 divide-y divide-frost/8 overflow-y-auto px-6">
+                {/* Everything between the header and the checkout button scrolls
+                    as one. When only the list scrolled, a short screen let the
+                    offer card and the totals take the height first and clipped
+                    the bag's own line to a sliver — the one row the drawer is
+                    for. */}
+                <div className="min-h-0 flex-1 overflow-y-auto">
+                <ul className="divide-y divide-frost/8 px-6">
                   <AnimatePresence initial={false}>
                   {cart.lines.map((line) => (
                     <motion.li
@@ -200,7 +206,7 @@ export function CartDrawer() {
                   )}
                 </AnimatePresence>
 
-                <footer className="border-t border-frost/8 px-6 py-6">
+                <div className="border-t border-frost/8 px-6 py-6">
                   {/* silent while the card above is showing, which already says
                       shipping is free on the pair — stacked twice it read as a
                       nag rather than an offer */}
@@ -261,12 +267,15 @@ export function CartDrawer() {
                       <AnimatedMoney cents={cart.total} className="font-mono text-lg tabular-nums" />
                     </div>
                   </dl>
+                </div>
+                </div>
 
-                  <PreorderNote className="mb-4" />
+                <footer className="shrink-0 border-t border-frost/8 px-6 py-5">
+                  <PreorderNote className="mb-3" />
 
                   {/* straight to the payment page — no page of ours in between */}
                   <ExpressButton
-                    className="mt-5"
+                    className=""
                     busy={busy}
                     label={`Checkout — ${moneyExact(cart.total)}`}
                     onClick={() => void go()}
