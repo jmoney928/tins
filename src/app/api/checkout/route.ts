@@ -55,6 +55,7 @@ async function shopifyCheckout(
   request: NextRequest,
   bag: Line[],
   email: string,
+  code: string,
 ): Promise<
   | {
       url: string;
@@ -78,7 +79,20 @@ async function shopifyCheckout(
     lines.push({ variantId: item.variantId, quantity: l.qty });
   }
 
-  const cart = await createCart(lines, attribution(request), email);
+  const cart = await createCart(lines, attribution(request), email, code ? [code] : []);
+
+  // The bag showed a saving it checked against Shopify. If Shopify now says
+  // the code does not apply, the checkout would charge more than the bag
+  // displayed — the one failure worth refusing the sale over.
+  if (code) {
+    const hit = cart.discountCodes.find((c) => c.code.toUpperCase() === code);
+    if (!hit?.applicable) {
+      return {
+        error: `The code ${code} no longer applies. Remove it from your bag and try again.`,
+        status: 409,
+      };
+    }
+  }
 
   // Returned so the total Shopify intends to charge can be read directly,
   // rather than inferred from a checkout page that computes it in the browser.
@@ -195,9 +209,9 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  let body: { lines?: unknown; email?: unknown };
+  let body: { lines?: unknown; email?: unknown; code?: unknown };
   try {
-    body = (await request.json()) as { lines?: unknown; email?: unknown };
+    body = (await request.json()) as { lines?: unknown; email?: unknown; code?: unknown };
   } catch {
     return NextResponse.json({ error: "Malformed request." }, { status: 400 });
   }
@@ -220,6 +234,10 @@ export async function POST(request: NextRequest) {
       { status: 400 },
     );
   }
+
+  // uppercased and shape-checked; anything else is simply not a code
+  const rawCode = typeof body.code === "string" ? body.code.trim().toUpperCase() : "";
+  const code = /^[A-Z0-9][A-Z0-9_-]{1,39}$/.test(rawCode) ? rawCode : "";
 
   const lines = Array.isArray(body.lines) ? (body.lines as Line[]) : [];
   if (!lines.length)
@@ -278,7 +296,7 @@ export async function POST(request: NextRequest) {
 
   if (usingShopify) {
     try {
-      const result = await shopifyCheckout(request, bag, email);
+      const result = await shopifyCheckout(request, bag, email, code);
       if ("error" in result) {
         return NextResponse.json({ error: result.error }, { status: result.status });
       }

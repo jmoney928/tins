@@ -204,10 +204,14 @@ export function CheckoutClient() {
             <dt>Subtotal</dt>
             <AnimatedMoney cents={cart.subtotal} className="font-mono tabular-nums" />
           </div>
-          {cart.saving > 0 && (
+          {cart.discount > 0 && (
             <div className="flex justify-between text-ice-700">
-              <dt>Tin + pack saving</dt>
-              <dd className="font-mono tabular-nums">−{moneyExact(cart.saving)}</dd>
+              <dt>
+                {cart.code?.status === "applied"
+                  ? `You save (${cart.code.code})`
+                  : "Tin + pack saving"}
+              </dt>
+              <dd className="font-mono tabular-nums">−{moneyExact(cart.discount)}</dd>
             </div>
           )}
           <div className="flex justify-between text-fog">

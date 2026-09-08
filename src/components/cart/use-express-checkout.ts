@@ -49,7 +49,7 @@ export function useExpressCheckout() {
         const res = await fetch("/api/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ lines }),
+          body: JSON.stringify({ lines, code: cart.code?.status === "applied" ? cart.code.code : undefined }),
         });
         const data = await res.json();
 

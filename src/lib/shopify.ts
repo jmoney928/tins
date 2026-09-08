@@ -448,8 +448,10 @@ export async function createCart(
   lines: CartLine[],
   attributes: CartAttributes = {},
   buyerEmail?: string | null,
+  /** a code the shopper typed, on top of any configured ones */
+  extraCodes: string[] = [],
 ): Promise<ShopifyCart> {
-  const codes = configuredDiscountCodes();
+  const codes = [...new Set([...configuredDiscountCodes(), ...extraCodes])];
   const data = await shopifyFetch<{
     cartCreate: {
       cart: ShopifyCart | null;

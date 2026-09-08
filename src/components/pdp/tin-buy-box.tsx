@@ -31,6 +31,11 @@ import { WaitlistForm } from "../waitlist-form";
 import { SELLING } from "@/lib/mode";
 import { PREORDER, buyVerb } from "@/lib/preorder";
 import { PreorderNote } from "../preorder-note";
+import { TagIcon } from "@phosphor-icons/react/dist/ssr";
+
+/** Public on purpose: a code is meant to be seen. It must also exist in Shopify. */
+const PROMO_CODE = (process.env.NEXT_PUBLIC_PROMO_CODE ?? "").trim().toUpperCase();
+const PROMO_LABEL = (process.env.NEXT_PUBLIC_PROMO_LABEL ?? "").trim();
 import { AnimatedMoney } from "../animated-money";
 
 type State = "idle" | "adding" | "added";
@@ -248,6 +253,24 @@ export function TinBuyBox({
               )}
               <span className="text-xs text-fog">{CURRENCY_LABEL}</span>
             </div>
+
+            {/* The code lives here, on the page that makes the offer, and is
+                applied by the shopper in the bag, where Shopify's own figure
+                for the saving appears next to it. Shown only when one has
+                been configured — and it has to exist in Shopify too, or the
+                bag would promise a saving the checkout will not honour. */}
+            {PROMO_CODE && (
+              <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-fog">
+                <TagIcon size={13} weight="fill" className="text-ice-500" />
+                <span>
+                  Use code{" "}
+                  <span className="rounded-md border border-dashed border-ice-500/50 bg-ice-100/60 px-1.5 py-0.5 font-mono text-[11px] tracking-wider text-ice-700">
+                    {PROMO_CODE}
+                  </span>
+                  {PROMO_LABEL ? ` — ${PROMO_LABEL}.` : "."} Apply it in your bag.
+                </span>
+              </p>
+            )}
 
             {SELLING ? (
               <>
